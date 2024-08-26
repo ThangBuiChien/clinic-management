@@ -1,4 +1,3 @@
 package com.example.clinic_management.entities;
 
-public class Patient {
-}
+public class Patient {}
