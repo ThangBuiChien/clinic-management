@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import lombok.NonNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -16,6 +15,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import lombok.NonNull;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -54,7 +55,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     // For handle, when the request is not valid, using @Valid and java validation
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex, @NonNull HttpHeaders headers, @NonNull HttpStatusCode status, @NonNull WebRequest request) {
+            MethodArgumentNotValidException ex,
+            @NonNull HttpHeaders headers,
+            @NonNull HttpStatusCode status,
+            @NonNull WebRequest request) {
         Map<String, String> listErrors = new HashMap<>();
 
         ex.getBindingResult().getFieldErrors().forEach((error) -> {
@@ -67,7 +71,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     // Handle invalid type of enum request
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(
-            HttpMessageNotReadableException ex, @NonNull HttpHeaders headers, @NonNull HttpStatusCode status, WebRequest request) {
+            HttpMessageNotReadableException ex,
+            @NonNull HttpHeaders headers,
+            @NonNull HttpStatusCode status,
+            WebRequest request) {
         ErrorDetails errorDetails =
                 new ErrorDetails(LocalDateTime.now(), ex.getMessage(), request.getDescription(false), "BAD_REQUEST");
 
