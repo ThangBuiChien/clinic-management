@@ -1,26 +1,17 @@
-package com.example.clinic_management.entities;
+package com.example.clinic_management.dtos.requests;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
-import com.example.clinic_management.enums.AccountStatus;
 import com.example.clinic_management.enums.Gender;
-import com.example.clinic_management.enums.Role;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@MappedSuperclass
-public abstract class UserAbstractEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "full_name")
+public class DoctorRequestDTO {
     @NotBlank(message = "Full name is required")
     @Size(max = 100)
     private String fullName;
@@ -30,26 +21,20 @@ public abstract class UserAbstractEntity {
     @Max(value = 9999999999L, message = "Citizen ID must be 10 digits")
     private long citizenId;
 
-    @Column(name = "email")
     @NotBlank(message = "Email is required")
     @Size(max = 20)
     @Email
     private String email;
 
-    @Column(name = "gender")
-    @NotNull(message = "gender is required")
-    @Enumerated(EnumType.STRING)
+    @NotNull(message = "Gender is required")
     private Gender gender;
 
-    @Column(name = "address")
     @Size(max = 100, message = "Address must be less than 100 characters")
     private String address;
 
-    @Column(name = "birth_date")
     @Past(message = "Birth date must be in the past")
     private LocalDate birthDate;
 
-    private Role role;
-
-    private AccountStatus status;
+    @NotNull(message = "Department ID is required")
+    private Long departmentId;
 }
