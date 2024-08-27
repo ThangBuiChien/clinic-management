@@ -1,35 +1,22 @@
-package com.example.clinic_management.entities;
+package com.example.clinic_management.dtos.requests;
 
 import java.util.List;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity
-@Table(name = "drug")
-public class Drug {
+import lombok.Data;
 
-    @Id
-    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-    private Long id;
+@Data
+public class DrugRequestDTO {
 
     @NotBlank(message = "Drug name is required")
-    @Size(max = 100, message = "Service name must be less than 100 characters")
-    @Pattern(regexp = "^[a-zA-Z0-9\\s]*$", message = "Service name can only contain letters, numbers and spaces")
-    @Column(unique = true)
+    @Size(max = 100, message = "Drug name must be less than 100 characters")
+    @Pattern(regexp = "^[a-zA-Z0-9\\s]*$", message = "Drug name can only contain letters, numbers and spaces")
     @Length(min = 1, max = 100, message = "Drug name must be between 1 and 100 characters")
     private String name;
 
