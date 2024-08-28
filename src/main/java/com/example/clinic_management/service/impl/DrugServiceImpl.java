@@ -68,6 +68,8 @@ public class DrugServiceImpl implements DrugService {
 
     @Override
     public void deleteDrug(Long id) {
-
+        drugRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Drug", "id", id));
+        drugRepository.deleteById(id);
+    
     }
 }
