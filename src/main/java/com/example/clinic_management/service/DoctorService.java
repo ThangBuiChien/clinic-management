@@ -3,6 +3,7 @@ package com.example.clinic_management.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.example.clinic_management.dtos.requests.DoctorPartialUpdateDTO;
 import com.example.clinic_management.dtos.requests.DoctorRequestDTO;
 import com.example.clinic_management.dtos.responses.DoctorResponseDTO;
 
@@ -17,6 +18,8 @@ public interface DoctorService {
     DoctorResponseDTO addDoctor(DoctorRequestDTO doctorRequestDTO);
 
     DoctorResponseDTO updateDoctor(Long id, DoctorRequestDTO doctorRequestDTO);
+
+    DoctorResponseDTO updatePartialDoctor(Long id, DoctorPartialUpdateDTO doctorPartialUpdateDTO);
 
     void deleteDoctor(Long id);
 }

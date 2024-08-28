@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.clinic_management.dtos.requests.DoctorPartialUpdateDTO;
 import com.example.clinic_management.dtos.requests.DoctorRequestDTO;
 import com.example.clinic_management.dtos.responses.ApiResponse;
 import com.example.clinic_management.service.DoctorService;
@@ -71,6 +72,15 @@ public class DoctorController {
         return ResponseEntity.ok(ApiResponse.builder()
                 .message("Doctor updated successfully")
                 .result(doctorService.updateDoctor(id, doctorRequestDTO))
+                .build());
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ApiResponse> updatePartialDoctor(
+            @PathVariable Long id, @RequestBody @Valid DoctorPartialUpdateDTO doctorPartialUpdateDTO) {
+        return ResponseEntity.ok(ApiResponse.builder()
+                .message("Doctor updated partially successfully")
+                .result(doctorService.updatePartialDoctor(id, doctorPartialUpdateDTO))
                 .build());
     }
 

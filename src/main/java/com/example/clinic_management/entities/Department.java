@@ -32,4 +32,9 @@ public class Department {
 
     @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Doctor> doctors;
+
+    public void addDoctor(Doctor doctor) {
+        this.doctors.add(doctor);
+        doctor.setDepartment(this);
+    }
 }
