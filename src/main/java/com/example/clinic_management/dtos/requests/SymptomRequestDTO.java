@@ -13,7 +13,7 @@ public class SymptomRequestDTO {
     @Size(max = 100)
     private String name;
 
-    @NotNull(message = "Symptom description is required")
+//    @NotNull(message = "Symptom description is required")
     @Size(max = 3070)
     private String description;
 }

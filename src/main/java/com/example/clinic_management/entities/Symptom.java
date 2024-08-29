@@ -27,7 +27,7 @@ public class Symptom {
     @Column(unique = true)
     private String name;
 
-    @NotBlank(message = "Symptom description is required")
+//    @NotBlank(message = "Symptom description is required")
     @Size(max = 3070, message = "Symptom description must be less than 3070 characters")
     @Pattern(regexp = "^[a-zA-Z0-9\\s.,!?\"'()-]*$", message = "Symptom description can only contain letters, numbers, space and basic punctuations")
     @Column(unique = true)
