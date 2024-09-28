@@ -1,5 +1,12 @@
 package com.example.clinic_management.service.impl;
 
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
 import com.example.clinic_management.dtos.requests.SymptomRequestDTO;
 import com.example.clinic_management.dtos.responses.SymptomResponseDTO;
 import com.example.clinic_management.entities.Symptom;
@@ -7,13 +14,8 @@ import com.example.clinic_management.exception.ResourceNotFoundException;
 import com.example.clinic_management.mapper.AutoSymptomMapper;
 import com.example.clinic_management.repository.SymptomRepository;
 import com.example.clinic_management.service.SymptomService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -53,9 +55,8 @@ public class SymptomServiceImpl implements SymptomService {
 
     @Override
     public SymptomResponseDTO updateSymptom(Long id, SymptomRequestDTO symptomRequestDTO) {
-        Symptom oldSymptom = symptomRepository
-                .findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Symptom", "id", id));
+        Symptom oldSymptom =
+                symptomRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Symptom", "id", id));
         Symptom newSymptom = autoSymptomMapper.toEntity(symptomRequestDTO);
         newSymptom.setId(oldSymptom.getId());
         symptomRepository.save(newSymptom);
@@ -67,30 +68,4 @@ public class SymptomServiceImpl implements SymptomService {
         symptomRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Symptom", "id", id));
         symptomRepository.deleteById(id);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
