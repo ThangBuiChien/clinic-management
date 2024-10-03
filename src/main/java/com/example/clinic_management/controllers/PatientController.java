@@ -2,10 +2,7 @@ package com.example.clinic_management.controllers;
 
 import jakarta.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -23,19 +20,8 @@ public class PatientController {
 
     private final PatientService patientService;
 
-    @Value("${paging.default-page-size}")
-    private int defaultPageSize;
-
-    @Value("${paging.default-page-number}")
-    private int defaultPageNumber;
-
-    @ModelAttribute("pageable")
-    public Pageable getDefaultPageable() {
-        return PageRequest.of(defaultPageNumber, defaultPageSize);
-    }
-
     @GetMapping("")
-    public ResponseEntity<ApiResponse> getAllPatients(@PageableDefault(page = 0, size = 10) Pageable pageable) {
+    public ResponseEntity<ApiResponse> getAllPatients(Pageable pageable) {
         return ResponseEntity.ok(ApiResponse.builder()
                 .message("All patients fetched successfully")
                 .result(patientService.getAllPatients(pageable))
