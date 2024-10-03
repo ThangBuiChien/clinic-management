@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.example.clinic_management.dtos.requests.AppointmentRequestDTO;
 import com.example.clinic_management.dtos.responses.AppointmentResponseDTO;
 import com.example.clinic_management.entities.Appointment;
+import com.example.clinic_management.exception.ResourceNotFoundException;
 import com.example.clinic_management.mapper.AutoAppointmentMapper;
 import com.example.clinic_management.repository.AppointmentRepository;
 import com.example.clinic_management.service.AppointmentService;
@@ -30,11 +31,16 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public AppointmentResponseDTO getAppointmentById(Long id) {
-        return null;
+        Appointment appointment = appointmentRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Appointment", "id", id));
+
+        return autoAppointmentMapper.toResponseDTO(appointment);
     }
 
     @Override
     public AppointmentResponseDTO getAppointmentByDoctorIdAndDate(Long doctorId, LocalDate date) {
-        return null;
+        Appointment appointment = appointmentRepository.findByDoctorIdAndAppointmentDate(doctorId, date);
+        return autoAppointmentMapper.toResponseDTO(appointment);
     }
 }
