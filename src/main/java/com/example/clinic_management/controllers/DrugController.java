@@ -2,15 +2,15 @@ package com.example.clinic_management.controllers;
 
 import jakarta.validation.Valid;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.clinic_management.dtos.requests.DrugRequestDTO;
 import com.example.clinic_management.dtos.responses.ApiResponse;
 import com.example.clinic_management.service.DrugService;
-import com.example.clinic_management.dtos.requests.DrugRequestDTO;
 
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/drug")
@@ -66,5 +66,4 @@ public class DrugController {
                 .message("Drug with id " + id + " deleted successfully")
                 .build());
     }
-
 }

@@ -1,7 +1,5 @@
 package com.example.clinic_management.dtos.requests;
 
-import java.util.List;
-
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

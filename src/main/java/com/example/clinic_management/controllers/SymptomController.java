@@ -1,14 +1,16 @@
 package com.example.clinic_management.controllers;
 
-import com.example.clinic_management.dtos.requests.SymptomRequestDTO;
-import com.example.clinic_management.dtos.responses.ApiResponse;
-import com.example.clinic_management.entities.Symptom;
-import com.example.clinic_management.service.SymptomService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.example.clinic_management.dtos.requests.SymptomRequestDTO;
+import com.example.clinic_management.dtos.responses.ApiResponse;
+import com.example.clinic_management.service.SymptomService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/symptom")
@@ -42,14 +44,15 @@ public class SymptomController {
 
     @PostMapping("")
     public ResponseEntity<ApiResponse> addSymptom(@Valid @RequestBody SymptomRequestDTO symptomRequestDTO) {
-     return ResponseEntity.ok(ApiResponse.builder()
-             .message("Symptom created successfully")
-             .result(symptomService.addSymptom(symptomRequestDTO))
-             .build());
+        return ResponseEntity.ok(ApiResponse.builder()
+                .message("Symptom created successfully")
+                .result(symptomService.addSymptom(symptomRequestDTO))
+                .build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> updateSymptom(@PathVariable Long id, @Valid @RequestBody SymptomRequestDTO symptomRequestDTO) {
+    public ResponseEntity<ApiResponse> updateSymptom(
+            @PathVariable Long id, @Valid @RequestBody SymptomRequestDTO symptomRequestDTO) {
         return ResponseEntity.ok(ApiResponse.builder()
                 .message("Symptom updated successfully")
                 .result(symptomService.updateSymptom(id, symptomRequestDTO))

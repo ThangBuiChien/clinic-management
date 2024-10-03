@@ -57,9 +57,7 @@ public class DrugServiceImpl implements DrugService {
 
     @Override
     public DrugResponseDTO updateDrug(Long id, DrugRequestDTO drugResponseDTO) {
-        Drug oldDrug = drugRepository
-                .findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Drug", "id", id));
+        Drug oldDrug = drugRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Drug", "id", id));
         Drug newDrug = autoDrugMapper.toEntity(drugResponseDTO);
         newDrug.setId(oldDrug.getId());
         drugRepository.save(newDrug);
@@ -70,6 +68,5 @@ public class DrugServiceImpl implements DrugService {
     public void deleteDrug(Long id) {
         drugRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Drug", "id", id));
         drugRepository.deleteById(id);
-    
     }
 }
