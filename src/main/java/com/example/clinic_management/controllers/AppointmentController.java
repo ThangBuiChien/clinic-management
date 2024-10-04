@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 
 import jakarta.validation.Valid;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,14 @@ public class AppointmentController {
         return ResponseEntity.ok(ApiResponse.builder()
                 .message("Appointment created successfully")
                 .result(appointmentService.addAppointment(appointmentRequestDTO))
+                .build());
+    }
+
+    @GetMapping("")
+    public ResponseEntity<ApiResponse> getAllAppointments(Pageable pageable) {
+        return ResponseEntity.ok(ApiResponse.builder()
+                .message("All appointments fetched successfully")
+                .result(appointmentService.getAllAppointments(pageable))
                 .build());
     }
 

@@ -2,6 +2,8 @@ package com.example.clinic_management.service.impl;
 
 import java.time.LocalDate;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.clinic_management.dtos.requests.AppointmentRequestDTO;
@@ -27,6 +29,12 @@ public class AppointmentServiceImpl implements AppointmentService {
         Appointment appointment = autoAppointmentMapper.toEntity(appointmentRequestDTO);
         appointmentRepository.save(appointment);
         return autoAppointmentMapper.toResponseDTO(appointment);
+    }
+
+    @Override
+    public Page<AppointmentResponseDTO> getAllAppointments(Pageable pageable) {
+        Page<Appointment> appointments = appointmentRepository.findAll(pageable);
+        return appointments.map(autoAppointmentMapper::toResponseDTO);
     }
 
     @Override
