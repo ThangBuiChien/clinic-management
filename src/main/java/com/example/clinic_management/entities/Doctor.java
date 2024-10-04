@@ -1,5 +1,8 @@
 package com.example.clinic_management.entities;
 
+import java.time.DayOfWeek;
+import java.util.Set;
+
 import jakarta.persistence.*;
 
 import org.hibernate.annotations.OnDelete;
@@ -23,6 +26,14 @@ public class Doctor extends UserAbstractEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Department department;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = true)
-    private Schedule schedule;
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    private Set<DayOfWeek> workingDays;
+
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
+    private Set<Schedule> schedules;
+
+    public boolean isWorkingDay(DayOfWeek dayOfWeek) {
+        return workingDays.contains(dayOfWeek);
+    }
 }

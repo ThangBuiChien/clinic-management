@@ -1,9 +1,12 @@
 package com.example.clinic_management.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import java.time.LocalDate;
+import java.util.Set;
+
+import jakarta.persistence.*;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,4 +24,14 @@ public class Schedule {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
+
+    private LocalDate date;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "doctor_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Doctor doctor;
+
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
+    private Set<DoctorTimeslotCapacity> doctorTimeslotCapacitySet;
 }

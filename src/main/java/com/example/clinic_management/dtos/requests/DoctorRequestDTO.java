@@ -1,6 +1,8 @@
 package com.example.clinic_management.dtos.requests;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.Set;
 
 import jakarta.validation.constraints.*;
 
@@ -37,4 +39,7 @@ public class DoctorRequestDTO {
 
     @NotNull(message = "Department ID is required")
     private Long departmentId;
+
+    @NotNull(message = "Working days are required")
+    private Set<DayOfWeek> workingDays;
 }

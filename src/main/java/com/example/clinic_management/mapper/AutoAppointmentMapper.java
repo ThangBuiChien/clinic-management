@@ -16,5 +16,7 @@ public interface AutoAppointmentMapper {
     @Mapping(source = "patientId", target = "patient")
     Appointment toEntity(AppointmentRequestDTO appointmentRequestDTO);
 
+    @Mapping(source = "doctor.fullName", target = "doctorName")
+    @Mapping(source = "patient.fullName", target = "patientName")
     AppointmentResponseDTO toResponseDTO(Appointment appointment);
 }

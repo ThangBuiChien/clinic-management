@@ -11,9 +11,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AppointmentRequestDTO {
-    private LocalDate appointmentDate;
     private Long doctorId;
     private Long patientId;
     private AppointmentStatus appointmentStatus;
+    private LocalDate appointmentDate;
     private TimeSlot timeSlot;
 }
