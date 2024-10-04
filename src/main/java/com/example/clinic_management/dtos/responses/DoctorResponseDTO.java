@@ -1,6 +1,8 @@
 package com.example.clinic_management.dtos.responses;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.Set;
 
 import com.example.clinic_management.enums.AccountStatus;
 import com.example.clinic_management.enums.Gender;
@@ -22,4 +24,5 @@ public class DoctorResponseDTO {
     private Role role;
     private AccountStatus status;
     private Long departmentId;
+    private Set<DayOfWeek> workingDays;
 }
