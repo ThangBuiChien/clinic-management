@@ -16,4 +16,5 @@ public class AppointmentRequestDTO {
     private AppointmentStatus appointmentStatus;
     private LocalDate appointmentDate;
     private TimeSlot timeSlot;
+    private Long departmentId;
 }
