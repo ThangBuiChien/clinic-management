@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.example.clinic_management.dtos.requests.AppointmentRequestDTO;
 import com.example.clinic_management.dtos.responses.AppointmentResponseDTO;
+import com.example.clinic_management.enums.AppointmentStatus;
 
 public interface AppointmentService {
 
@@ -17,4 +18,6 @@ public interface AppointmentService {
     AppointmentResponseDTO getAppointmentById(Long id);
 
     AppointmentResponseDTO getAppointmentByDoctorIdAndDate(Long doctorId, LocalDate date);
+
+    AppointmentResponseDTO updateAppointmentStatus(Long id, AppointmentStatus appointmentStatus);
 }

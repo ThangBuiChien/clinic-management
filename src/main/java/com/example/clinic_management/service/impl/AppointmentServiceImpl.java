@@ -11,6 +11,7 @@ import com.example.clinic_management.dtos.requests.AppointmentRequestDTO;
 import com.example.clinic_management.dtos.responses.AppointmentResponseDTO;
 import com.example.clinic_management.entities.Appointment;
 import com.example.clinic_management.entities.Doctor;
+import com.example.clinic_management.enums.AppointmentStatus;
 import com.example.clinic_management.exception.ResourceNotFoundException;
 import com.example.clinic_management.mapper.AutoAppointmentMapper;
 import com.example.clinic_management.repository.AppointmentRepository;
@@ -89,5 +90,17 @@ public class AppointmentServiceImpl implements AppointmentService {
     public AppointmentResponseDTO getAppointmentByDoctorIdAndDate(Long doctorId, LocalDate date) {
         Appointment appointment = appointmentRepository.findByDoctorIdAndAppointmentDate(doctorId, date);
         return autoAppointmentMapper.toResponseDTO(appointment);
+    }
+
+    @Override
+    public AppointmentResponseDTO updateAppointmentStatus(Long id, AppointmentStatus appointmentStatus) {
+        return appointmentRepository
+                .findById(id)
+                .map(appointment -> {
+                    appointment.setAppointmentStatus(appointmentStatus);
+                    return appointmentRepository.save(appointment);
+                })
+                .map(autoAppointmentMapper::toResponseDTO)
+                .orElseThrow(() -> new ResourceNotFoundException("Appointment", "id", id));
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.clinic_management.dtos.requests.AppointmentRequestDTO;
 import com.example.clinic_management.dtos.responses.ApiResponse;
+import com.example.clinic_management.enums.AppointmentStatus;
 import com.example.clinic_management.service.AppointmentService;
 
 import lombok.RequiredArgsConstructor;
@@ -57,6 +58,15 @@ public class AppointmentController {
         return ResponseEntity.ok(ApiResponse.builder()
                 .message("Appointment fetched successfully")
                 .result(appointmentService.getAppointmentByDoctorIdAndDate(doctorId, localDate))
+                .build());
+    }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<ApiResponse> updateAppointmentStatus(
+            @PathVariable Long id, @RequestBody AppointmentStatus newStatus) {
+        return ResponseEntity.ok(ApiResponse.builder()
+                .message("Appointment status updated successfully")
+                .result(appointmentService.updateAppointmentStatus(id, newStatus))
                 .build());
     }
 }
