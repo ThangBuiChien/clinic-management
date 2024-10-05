@@ -10,9 +10,7 @@ import com.example.clinic_management.dtos.responses.AppointmentResponseDTO;
 
 public interface AppointmentService {
 
-    AppointmentResponseDTO addAppointmentBySelectDoctor(AppointmentRequestDTO appointmentRequestDTO);
-
-    AppointmentResponseDTO addAppointmentBySelectDepartment(AppointmentRequestDTO appointmentRequestDTO);
+    AppointmentResponseDTO addAppointment(AppointmentRequestDTO appointmentRequestDTO);
 
     Page<AppointmentResponseDTO> getAllAppointments(Pageable pageable);
 

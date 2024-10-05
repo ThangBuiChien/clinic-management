@@ -11,11 +11,11 @@ import com.example.clinic_management.dtos.requests.AppointmentRequestDTO;
 import com.example.clinic_management.dtos.responses.AppointmentResponseDTO;
 import com.example.clinic_management.entities.Appointment;
 import com.example.clinic_management.entities.Doctor;
-import com.example.clinic_management.exception.EmailAlreadyExistedException;
 import com.example.clinic_management.exception.ResourceNotFoundException;
 import com.example.clinic_management.mapper.AutoAppointmentMapper;
 import com.example.clinic_management.repository.AppointmentRepository;
 import com.example.clinic_management.repository.DoctorTimeSlotCapacityRepository;
+import com.example.clinic_management.repository.ScheduleRepository;
 import com.example.clinic_management.service.AppointmentService;
 
 import lombok.RequiredArgsConstructor;
@@ -32,19 +32,24 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     private final DoctorTimeSlotCapacityRepository doctorTimeSlotCapacityRepository;
 
+    private final ScheduleRepository scheduleRepository;
+
     @Override
-    public AppointmentResponseDTO addAppointmentBySelectDoctor(AppointmentRequestDTO appointmentRequestDTO) {
+    public AppointmentResponseDTO addAppointment(AppointmentRequestDTO appointmentRequestDTO) {
         if (appointmentRequestDTO.getDoctorId() != null
                 && !bookingProcessorImpl.checkAvailability(
                         appointmentRequestDTO.getDoctorId(),
                         appointmentRequestDTO.getAppointmentDate(),
                         appointmentRequestDTO.getTimeSlot())) {
-            throw new EmailAlreadyExistedException("Doctor is not available for this date and time");
+            throw new RuntimeException("No available doctors for this date and time");
         } else {
             List<Doctor> doctors = bookingProcessorImpl.findAvailableDoctors(
                     appointmentRequestDTO.getDepartmentId(),
                     appointmentRequestDTO.getAppointmentDate(),
                     appointmentRequestDTO.getTimeSlot());
+            if (doctors.isEmpty()) {
+                throw new RuntimeException("No available doctors for this date and time");
+            }
             appointmentRequestDTO.setDoctorId(doctors.get(0).getId());
             bookingProcessorImpl.checkAvailability(
                     appointmentRequestDTO.getDoctorId(),
@@ -52,14 +57,17 @@ public class AppointmentServiceImpl implements AppointmentService {
                     appointmentRequestDTO.getTimeSlot());
         }
 
+        doctorTimeSlotCapacityRepository
+                .findByScheduleIdAndTimeSlot(
+                        scheduleRepository
+                                .findByDoctorIdAndDate(
+                                        appointmentRequestDTO.getDoctorId(), appointmentRequestDTO.getAppointmentDate())
+                                .getId(),
+                        appointmentRequestDTO.getTimeSlot())
+                .addPatient();
         Appointment appointment = autoAppointmentMapper.toEntity(appointmentRequestDTO);
         appointmentRepository.save(appointment);
         return autoAppointmentMapper.toResponseDTO(appointment);
-    }
-
-    @Override
-    public AppointmentResponseDTO addAppointmentBySelectDepartment(AppointmentRequestDTO appointmentRequestDTO) {
-        return null;
     }
 
     @Override

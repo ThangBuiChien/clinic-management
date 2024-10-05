@@ -26,7 +26,7 @@ public class AppointmentController {
     public ResponseEntity<ApiResponse> addDepartment(@Valid @RequestBody AppointmentRequestDTO appointmentRequestDTO) {
         return ResponseEntity.ok(ApiResponse.builder()
                 .message("Appointment created successfully")
-                .result(appointmentService.addAppointmentBySelectDoctor(appointmentRequestDTO))
+                .result(appointmentService.addAppointment(appointmentRequestDTO))
                 .build());
     }
 

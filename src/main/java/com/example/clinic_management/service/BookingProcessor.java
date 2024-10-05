@@ -13,4 +13,6 @@ public interface BookingProcessor {
     List<Doctor> findAvailableDoctors(Long departmentId, LocalDate date, TimeSlot timeSlot);
 
     Schedule createScheduleWithFullTimeSlot(Doctor doctor, LocalDate date);
+
+    void createScheduleIfNotExistedWithFullTimeSlot(List<Doctor> doctor, LocalDate date);
 }

@@ -50,9 +50,9 @@ public class BookingProcessorImpl implements BookingProcessor {
         }
 
         // Increase current patients for the given timeslot
-        doctorTimeSlotCapacityRepository
-                .findByScheduleIdAndTimeSlot(schedule.getId(), timeSlot)
-                .addPatient();
+        //        doctorTimeSlotCapacityRepository
+        //                .findByScheduleIdAndTimeSlot(schedule.getId(), timeSlot)
+        //                .addPatient();
 
         return doctorTimeSlotCapacityRepository
                 .findByScheduleIdAndTimeSlot(schedule.getId(), timeSlot)
@@ -114,5 +114,14 @@ public class BookingProcessorImpl implements BookingProcessor {
             doctorTimeSlotCapacityRepository.save(capacity);
         }
         return schedule;
+    }
+
+    @Override
+    public void createScheduleIfNotExistedWithFullTimeSlot(List<Doctor> doctor, LocalDate date) {
+        List<Doctor> workingDoctors =
+                doctor.stream().filter(d -> d.isWorkingDay(date.getDayOfWeek())).toList();
+        workingDoctors.stream()
+                .filter(d -> scheduleRepository.findByDoctorIdAndDate(d.getId(), date) == null)
+                .forEach(d -> createScheduleWithFullTimeSlot(d, date));
     }
 }
