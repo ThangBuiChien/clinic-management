@@ -4,9 +4,6 @@ import java.time.LocalDate;
 
 import jakarta.persistence.*;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import com.example.clinic_management.enums.AppointmentStatus;
 import com.example.clinic_management.enums.TimeSlot;
 
@@ -31,12 +28,10 @@ public class Appointment {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "doctor_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Doctor doctor;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "patient_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Patient patient;
 
     private AppointmentStatus appointmentStatus;

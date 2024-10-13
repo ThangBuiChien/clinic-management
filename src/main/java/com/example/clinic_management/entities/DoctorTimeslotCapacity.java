@@ -29,7 +29,7 @@ public class DoctorTimeslotCapacity {
     private Schedule schedule;
 
     public boolean canAcceptMorePatients() {
-        return currentPatients <= maxPatients;
+        return currentPatients < maxPatients;
     }
 
     public void addPatient() {

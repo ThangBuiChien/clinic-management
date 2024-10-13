@@ -1,20 +1,17 @@
 package com.example.clinic_management.dtos.requests;
 
-import java.time.LocalDate;
-
 import com.example.clinic_management.enums.AppointmentStatus;
 import com.example.clinic_management.enums.TimeSlot;
-
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
-public class AppointmentRequestDTO {
-    private Long doctorId;
+public class AddAppointmentRequestByDepartmentDTO {
     private Long patientId;
-    private AppointmentStatus appointmentStatus;
+    private Long departmentId;
     private LocalDate appointmentDate;
     private TimeSlot timeSlot;
-    private Long departmentId;
 }
