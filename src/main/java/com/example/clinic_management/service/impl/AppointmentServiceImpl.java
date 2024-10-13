@@ -87,9 +87,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public AppointmentResponseDTO getAppointmentByDoctorIdAndDate(Long doctorId, LocalDate date) {
-        Appointment appointment = appointmentRepository.findByDoctorIdAndAppointmentDate(doctorId, date);
-        return autoAppointmentMapper.toResponseDTO(appointment);
+    public List<AppointmentResponseDTO> getAppointmentByDoctorIdAndDate(Long doctorId, LocalDate date) {
+        List<Appointment> appointment = appointmentRepository.findByDoctorIdAndAppointmentDate(doctorId, date);
+        return appointment.stream().map(autoAppointmentMapper::toResponseDTO).toList();
     }
 
     @Override
