@@ -20,4 +20,6 @@ public class AppointmentResponseDTO {
     private String patientName;
     private AppointmentStatus appointmentStatus;
     private TimeSlot timeSlot;
+
+    private Long payId;
 }

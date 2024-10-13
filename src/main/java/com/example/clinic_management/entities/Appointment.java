@@ -37,4 +37,6 @@ public class Appointment {
     private AppointmentStatus appointmentStatus;
 
     private TimeSlot timeSlot;
+
+    private Long payId;
 }
