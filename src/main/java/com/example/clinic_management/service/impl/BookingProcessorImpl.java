@@ -60,6 +60,32 @@ public class BookingProcessorImpl implements BookingProcessor {
     }
 
     @Override
+    public DoctorTimeslotCapacity getOrCreateDoctorTimeSlotCapacityIfInWorkingDay(Long doctorId, LocalDate date, TimeSlot timeSlot) {
+        Doctor doctor = doctorRepository
+                .findById(doctorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Doctor", "id", doctorId));
+
+        Schedule schedule = scheduleRepository.findByDoctorIdAndDate(doctorId, date);
+
+        if (schedule == null && !doctor.isWorkingDay(date.getDayOfWeek())) {
+            throw new RuntimeException("Doctor don't have working day in this day");
+        }
+
+        // Create schedule if doctor in working day and not exists
+        if (schedule == null) {
+            schedule = createScheduleWithFullTimeSlot(doctor, date);
+        }
+
+        // Increase current patients for the given timeslot
+        //        doctorTimeSlotCapacityRepository
+        //                .findByScheduleIdAndTimeSlot(schedule.getId(), timeSlot)
+        //                .addPatient();
+
+        return doctorTimeSlotCapacityRepository
+                .findByScheduleIdAndTimeSlot(schedule.getId(), timeSlot);
+    }
+
+    @Override
     public List<Doctor> findAvailableDoctors(Long departmentId, LocalDate date, TimeSlot timeSlot) {
         departmentRepository
                 .findById(departmentId)

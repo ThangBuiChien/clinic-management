@@ -3,6 +3,9 @@ package com.example.clinic_management.service.impl;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.example.clinic_management.dtos.requests.AddAppointmentRequestByDepartmentDTO;
+import com.example.clinic_management.dtos.requests.AddAppointmentRequestByDoctorDTO;
+import com.example.clinic_management.entities.DoctorTimeslotCapacity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -69,6 +72,46 @@ public class AppointmentServiceImpl implements AppointmentService {
         Appointment appointment = autoAppointmentMapper.toEntity(appointmentRequestDTO);
         appointmentRepository.save(appointment);
         return autoAppointmentMapper.toResponseDTO(appointment);
+    }
+
+    @Override
+    public AppointmentResponseDTO addAppointmentBySelectDoctor(AddAppointmentRequestByDoctorDTO addAppointmentRequestByDoctorDTO) {
+
+        DoctorTimeslotCapacity doctorTimeslotCapacity = bookingProcessorImpl.getOrCreateDoctorTimeSlotCapacityIfInWorkingDay(
+                addAppointmentRequestByDoctorDTO.getDoctorId(),
+                addAppointmentRequestByDoctorDTO.getAppointmentDate(),
+                addAppointmentRequestByDoctorDTO.getTimeSlot());
+        if(!doctorTimeslotCapacity.canAcceptMorePatients()){
+            throw new RuntimeException("Doctors is busy in this date and time");
+        }
+
+        //Increase slot capacity in doctor_timeslot_capacity
+        doctorTimeslotCapacity.addPatient();
+
+        Appointment appointment = autoAppointmentMapper.toEntity(addAppointmentRequestByDoctorDTO);
+        appointment.setAppointmentStatus(AppointmentStatus.PENDING);
+        appointmentRepository.save(appointment);
+        return autoAppointmentMapper.toResponseDTO(appointment);
+
+    }
+
+    @Override
+    public AppointmentResponseDTO addAppointmentBySelectDepartment(AddAppointmentRequestByDepartmentDTO addAppointmentRequestByDepartmentDTO) {
+        List<Doctor> doctors = bookingProcessorImpl.findAvailableDoctors(
+                addAppointmentRequestByDepartmentDTO.getDepartmentId(),
+                addAppointmentRequestByDepartmentDTO.getAppointmentDate(),
+                addAppointmentRequestByDepartmentDTO.getTimeSlot());
+        if (doctors.isEmpty()) {
+            throw new RuntimeException("No available doctors for this date and time");
+        }
+//        addAppointmentRequestByDepartmentDTO.setDoctorId(doctors.get(0).getId());
+        AddAppointmentRequestByDoctorDTO addAppointmentRequestByDoctorDTO = new AddAppointmentRequestByDoctorDTO();
+        addAppointmentRequestByDoctorDTO.setAppointmentDate(addAppointmentRequestByDepartmentDTO.getAppointmentDate());
+        addAppointmentRequestByDoctorDTO.setDoctorId(doctors.get(0).getId());
+        addAppointmentRequestByDoctorDTO.setPatientId(addAppointmentRequestByDepartmentDTO.getPatientId());
+        addAppointmentRequestByDoctorDTO.setTimeSlot(addAppointmentRequestByDepartmentDTO.getTimeSlot());
+
+        return addAppointmentBySelectDoctor(addAppointmentRequestByDoctorDTO);
     }
 
     @Override
