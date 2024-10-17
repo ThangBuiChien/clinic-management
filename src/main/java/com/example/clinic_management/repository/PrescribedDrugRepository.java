@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface PrescribedDrugRepository extends JpaRepository<PrescribedDrug, Long> {
-    List<PrescribedDrug> findByTemplateName(String templateName);
+
 }

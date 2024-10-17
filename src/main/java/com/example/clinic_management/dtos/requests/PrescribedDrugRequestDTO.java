@@ -5,11 +5,15 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class PrescribedDrugRequestDTO {
-    @NotNull(message = "Drug ID is required")
-    @Positive(message = "Drug ID must be a positive number")
-    private Long drugId;
+    @NotNull(message = "At least one Drug ID is required")
+    private List<Long> drugIds; // List of existing drug IDs
+
+    private String newDrugName; // For adding a new drug
+    private String newDrugDescription; // Description for the new drug
 
     @NotNull(message = "Template Name is required")
     @Size(min = 1, max = 50, message = "Template Name must be between 1 and 50 characters")

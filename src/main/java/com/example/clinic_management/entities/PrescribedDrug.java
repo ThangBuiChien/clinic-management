@@ -11,22 +11,13 @@ public class PrescribedDrug {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "drug_id")
+    private Drug drug;
+
     private String templateName;
-
-    @ManyToOne
-    @JoinColumn(name = "drug_id", nullable = false)
-    private Drug drug; // Assuming you have a Drug entity
-
-    @Column(nullable = false)
     private Integer dosage;
-
-    @Column(nullable = false)
     private Integer duration;
-
-    @Column(nullable = false)
     private String frequency;
-
-    @Column(length = 200)
     private String specialInstructions;
 }

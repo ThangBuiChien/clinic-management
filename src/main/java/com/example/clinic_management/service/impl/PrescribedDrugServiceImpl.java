@@ -1,7 +1,6 @@
 package com.example.clinic_management.service.impl;
 
 import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -9,9 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.example.clinic_management.dtos.requests.PrescribedDrugRequestDTO;
 import com.example.clinic_management.dtos.responses.PrescribedDrugResponseDTO;
+import com.example.clinic_management.entities.Drug;
 import com.example.clinic_management.entities.PrescribedDrug;
 import com.example.clinic_management.exception.ResourceNotFoundException;
 import com.example.clinic_management.mapper.AutoPrescribedDrugMapper; // Assuming you have a mapper for PrescribedDrug
+import com.example.clinic_management.repository.DrugRepository; // Assuming you have a Drug repository
 import com.example.clinic_management.repository.PrescribedDrugRepository;
 import com.example.clinic_management.service.PrescribedDrugService;
 
@@ -22,12 +23,8 @@ import lombok.RequiredArgsConstructor;
 public class PrescribedDrugServiceImpl implements PrescribedDrugService {
 
     private final PrescribedDrugRepository prescribedDrugRepository;
+    private final DrugRepository drugRepository; // Injecting DrugRepository
     private final AutoPrescribedDrugMapper autoPrescribedDrugMapper; // Mapper for PrescribedDrug
-
-    public boolean isTemplateDuplicate(String templateName) {
-        List<PrescribedDrug> prescribedDrugs = prescribedDrugRepository.findByTemplateName(templateName);
-        return !prescribedDrugs.isEmpty(); // Returns true if duplicates exist
-    }
 
     @Override
     public List<PrescribedDrugResponseDTO> getAllPrescribedDrugs() {
@@ -54,19 +51,45 @@ public class PrescribedDrugServiceImpl implements PrescribedDrugService {
 
     @Override
     public PrescribedDrugResponseDTO addPrescribedDrug(PrescribedDrugRequestDTO prescribedDrugRequestDTO) {
-        PrescribedDrug newPrescribedDrug = autoPrescribedDrugMapper.toEntity(prescribedDrugRequestDTO);
-        prescribedDrugRepository.save(newPrescribedDrug);
-        return autoPrescribedDrugMapper.toResponseDTO(newPrescribedDrug);
+        // Validate and retrieve drugs from the repository
+        List<Drug> drugs = drugRepository.findAllById(prescribedDrugRequestDTO.getDrugIds());
+        if (drugs.size() != prescribedDrugRequestDTO.getDrugIds().size()) {
+            throw new ResourceNotFoundException("Some drugs not found");
+        }
+
+        // Create and save new PrescribedDrug instances
+        for (Drug drug : drugs) {
+            PrescribedDrug newPrescribedDrug = new PrescribedDrug();
+            newPrescribedDrug.setDrug(drug);
+            newPrescribedDrug.setTemplateName(prescribedDrugRequestDTO.getTemplateName());
+            newPrescribedDrug.setDosage(prescribedDrugRequestDTO.getDosage());
+            newPrescribedDrug.setDuration(prescribedDrugRequestDTO.getDuration());
+            newPrescribedDrug.setFrequency(prescribedDrugRequestDTO.getFrequency());
+            newPrescribedDrug.setSpecialInstructions(prescribedDrugRequestDTO.getSpecialInstructions());
+
+            prescribedDrugRepository.save(newPrescribedDrug);
+        }
+
+        // Return the response for the first saved prescribed drug (or adjust as needed)
+        return autoPrescribedDrugMapper.toResponseDTO(prescribedDrugRepository.findAll().get(0));
     }
 
     @Override
     public PrescribedDrugResponseDTO updatePrescribedDrug(Long id, PrescribedDrugRequestDTO prescribedDrugRequestDTO) {
         PrescribedDrug oldPrescribedDrug = prescribedDrugRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("PrescribedDrug", "id", id));
-        PrescribedDrug updatedPrescribedDrug = autoPrescribedDrugMapper.toEntity(prescribedDrugRequestDTO);
-        updatedPrescribedDrug.setId(oldPrescribedDrug.getId());
-        prescribedDrugRepository.save(updatedPrescribedDrug);
-        return autoPrescribedDrugMapper.toResponseDTO(updatedPrescribedDrug);
+
+
+        oldPrescribedDrug.setTemplateName(prescribedDrugRequestDTO.getTemplateName());
+        oldPrescribedDrug.setDosage(prescribedDrugRequestDTO.getDosage());
+        oldPrescribedDrug.setDuration(prescribedDrugRequestDTO.getDuration());
+        oldPrescribedDrug.setFrequency(prescribedDrugRequestDTO.getFrequency());
+        oldPrescribedDrug.setSpecialInstructions(prescribedDrugRequestDTO.getSpecialInstructions());
+
+
+
+        prescribedDrugRepository.save(oldPrescribedDrug);
+        return autoPrescribedDrugMapper.toResponseDTO(oldPrescribedDrug);
     }
 
     @Override
