@@ -61,10 +61,8 @@ public class PrescribedDrugServiceImpl implements PrescribedDrugService {
         for (Drug drug : drugs) {
             PrescribedDrug newPrescribedDrug = new PrescribedDrug();
             newPrescribedDrug.setDrug(drug);
-            newPrescribedDrug.setTemplateName(prescribedDrugRequestDTO.getTemplateName());
+            newPrescribedDrug.setSymtomName(prescribedDrugRequestDTO.getSymtomName());
             newPrescribedDrug.setDosage(prescribedDrugRequestDTO.getDosage());
-            newPrescribedDrug.setDuration(prescribedDrugRequestDTO.getDuration());
-            newPrescribedDrug.setFrequency(prescribedDrugRequestDTO.getFrequency());
             newPrescribedDrug.setSpecialInstructions(prescribedDrugRequestDTO.getSpecialInstructions());
 
             prescribedDrugRepository.save(newPrescribedDrug);
@@ -80,10 +78,8 @@ public class PrescribedDrugServiceImpl implements PrescribedDrugService {
                 .orElseThrow(() -> new ResourceNotFoundException("PrescribedDrug", "id", id));
 
 
-        oldPrescribedDrug.setTemplateName(prescribedDrugRequestDTO.getTemplateName());
+        oldPrescribedDrug.setSymtomName(prescribedDrugRequestDTO.getSymtomName());
         oldPrescribedDrug.setDosage(prescribedDrugRequestDTO.getDosage());
-        oldPrescribedDrug.setDuration(prescribedDrugRequestDTO.getDuration());
-        oldPrescribedDrug.setFrequency(prescribedDrugRequestDTO.getFrequency());
         oldPrescribedDrug.setSpecialInstructions(prescribedDrugRequestDTO.getSpecialInstructions());
 
 

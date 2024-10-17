@@ -12,24 +12,14 @@ public class PrescribedDrugRequestDTO {
     @NotNull(message = "At least one Drug ID is required")
     private List<Long> drugIds; // List of existing drug IDs
 
-    private String newDrugName; // For adding a new drug
-    private String newDrugDescription; // Description for the new drug
 
     @NotNull(message = "Template Name is required")
     @Size(min = 1, max = 50, message = "Template Name must be between 1 and 50 characters")
-    private String templateName;
+    private String symtomName;
 
     @NotNull(message = "Dosage is required")
-    @Positive(message = "Dosage must be a positive number")
-    private Integer dosage;
-
-    @NotNull(message = "Duration is required")
-    @Positive(message = "Duration must be a positive number")
-    private Integer duration;
-
-    @NotNull(message = "Frequency is required")
     @Size(min = 1, max = 50, message = "Frequency must be between 1 and 50 characters")
-    private String frequency;
+    private String dosage;
 
     @Size(max = 200, message = "Special instructions must be up to 200 characters")
     private String specialInstructions;

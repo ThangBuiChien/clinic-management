@@ -15,9 +15,7 @@ public class PrescribedDrug {
     @JoinColumn(name = "drug_id")
     private Drug drug;
 
-    private String templateName;
-    private Integer dosage;
-    private Integer duration;
-    private String frequency;
+    private String symtomName;
+    private String dosage;
     private String specialInstructions;
 }
