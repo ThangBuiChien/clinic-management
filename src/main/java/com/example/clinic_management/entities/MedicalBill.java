@@ -1,6 +1,5 @@
 package com.example.clinic_management.entities;
 
-import com.example.clinic_management.enums.Gender;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -9,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -24,13 +22,24 @@ public class MedicalBill {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "symptom_name")
+    @Column(name = "patient_name", nullable = false)
+    private String patientName;
+
+    @Column(name = "patient_dob", nullable = false)
+    private String patientDob;
+
+    @Column(name = "patient_gender", nullable = false)
+    private String patientGender;
+
+    @Column(name = "symptom_name", nullable = false)
     private String symptomName;
 
     @Size(max = 3070, message = "Syndrome description must be less than 3070 characters")
     @Pattern(
             regexp = "^[a-zA-Z0-9\\s.,!?\"'()-]*$",
-            message = "Syndrome description can only contain letters, numbers, space and basic punctuations")
+            message = "Syndrome description can only contain letters, numbers, space and basic punctuations"
+    )
+    @Column(name = "syndrome")
     private String syndrome;
 
     @ElementCollection
@@ -47,53 +56,26 @@ public class MedicalBill {
     @Column(name = "special_instructions")
     private String specialInstructions;
 
-    @ManyToOne
-    @JoinColumn(name = "patient_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient_id")
     private Patient patient;
 
-    @ManyToOne
-    @JoinColumn(name = "prescribed_drugs_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "prescribed_drugs_id")
     private PrescribedDrug prescribedDrug;
 
-    // Convenience methods for patient info
-    public String getPatientName() {
-        return patient.getFullName();
-    }
-
-    public LocalDate getPatientBirthDate() {
-        return patient.getBirthDate();
-    }
-
-    public Gender getPatientGender() {
-        return patient.getGender();
-    }
-
-    // Convenience methods for prescribed drug info
-    public Drug getPrescribedDrug() {
-        return prescribedDrug.getDrug();
-    }
-
-    public String getPrescribedDrugSymptom() {
-        return prescribedDrug.getSymtomName();
-    }
-
-    public String getPrescribedDrugDosage() {
-        return prescribedDrug.getDosage();
-    }
-
-    public String getPrescribedDrugSpeIns() {
-        return prescribedDrug.getSpecialInstructions();
-    }
-
-    // Helper methods to set prescribed drug info from direct fields
-    public void copyPrescribedDrugInfo() {
-        if (prescribedDrug != null) {
-            this.symptomName = prescribedDrug.getSymtomName();
-//            this.syndrome = prescribedDrug.getSyndrome();
-            // Assuming Drug entity has a name field
-            this.drugName = List.of(prescribedDrug.getDrug().getName());
-            this.dosage = prescribedDrug.getDosage();
-            this.specialInstructions = prescribedDrug.getSpecialInstructions();
-        }
-    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

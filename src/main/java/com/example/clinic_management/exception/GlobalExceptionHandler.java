@@ -44,25 +44,25 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(PatientNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handlePatientNotFoundException(PatientNotFoundException ex) {
-        ErrorResponse error = new ErrorResponse(
-                HttpStatus.NOT_FOUND.value(),
-                "Patient Not Found",
-                ex.getMessage()
-        );
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(PrescriptionValidationException.class)
-    public ResponseEntity<ErrorResponse> handlePrescriptionValidationException(PrescriptionValidationException ex) {
-        ErrorResponse error = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                "Prescription Validation Error",
-                ex.getMessage()
-        );
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-    }
+//    @ExceptionHandler(PatientNotFoundException.class)
+//    public ResponseEntity<ErrorResponse> handlePatientNotFoundException(PatientNotFoundException ex) {
+//        ErrorResponse error = new ErrorResponse(
+//                HttpStatus.NOT_FOUND.value(),
+//                "Patient Not Found",
+//                ex.getMessage()
+//        );
+//        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+//    }
+//
+//    @ExceptionHandler(PrescriptionValidationException.class)
+//    public ResponseEntity<ErrorResponse> handlePrescriptionValidationException(PrescriptionValidationException ex) {
+//        ErrorResponse error = new ErrorResponse(
+//                HttpStatus.BAD_REQUEST.value(),
+//                "Prescription Validation Error",
+//                ex.getMessage()
+//        );
+//        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+//    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetails> handleGlobalException(Exception exception, WebRequest request) {
