@@ -25,7 +25,7 @@ public class PrescribedDrug {
     )
     private List<Drug> drugs;
 
-    private String symtomName;
+    private String symptomName;
     private String dosage;
     private String specialInstructions;
 

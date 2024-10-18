@@ -13,7 +13,7 @@ public class PrescribedDrugRequestDTO {
 
     @NotNull(message = "Symptom Name is required")
     @Size(min = 1, max = 50, message = "Template Name must be between 1 and 50 characters")
-    private String symtomName;
+    private String symptomName;
 
     @NotNull(message = "Dosage is required")
     @Size(max = 50, message = "Dosage must be up to 50 characters") // Adjusting validation
