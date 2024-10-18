@@ -1,8 +1,12 @@
 package com.example.clinic_management.entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Entity
 @Table(name = "prescribed_drugs")
@@ -18,4 +22,7 @@ public class PrescribedDrug {
     private String symtomName;
     private String dosage;
     private String specialInstructions;
+
+
+
 }
