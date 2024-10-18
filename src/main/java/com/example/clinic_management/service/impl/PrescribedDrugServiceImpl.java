@@ -58,7 +58,7 @@ public class PrescribedDrugServiceImpl implements PrescribedDrugService {
 
         PrescribedDrug newPrescribedDrug = new PrescribedDrug();
         newPrescribedDrug.setDrugs(drugs);
-        newPrescribedDrug.setSymtomName(prescribedDrugRequestDTO.getSymtomName());
+        newPrescribedDrug.setSymptomName(prescribedDrugRequestDTO.getSymptomName());
         newPrescribedDrug.setDosage(prescribedDrugRequestDTO.getDosage());
         newPrescribedDrug.setSpecialInstructions(prescribedDrugRequestDTO.getSpecialInstructions());
 
@@ -78,7 +78,7 @@ public class PrescribedDrugServiceImpl implements PrescribedDrugService {
         }
 
         existingPrescribedDrug.setDrugs(drugs);
-        existingPrescribedDrug.setSymtomName(prescribedDrugRequestDTO.getSymtomName());
+        existingPrescribedDrug.setSymptomName(prescribedDrugRequestDTO.getSymptomName());
         existingPrescribedDrug.setDosage(prescribedDrugRequestDTO.getDosage());
         existingPrescribedDrug.setSpecialInstructions(prescribedDrugRequestDTO.getSpecialInstructions());
 

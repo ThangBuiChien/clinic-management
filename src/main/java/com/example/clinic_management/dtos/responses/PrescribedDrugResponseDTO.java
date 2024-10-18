@@ -7,7 +7,7 @@ import java.util.List;
 @Data
 public class PrescribedDrugResponseDTO {
     private Long id;
-    private String symtomName;
+    private String symptomName;
     private List<String> drugNames;
     private String dosage;
     private String specialInstructions;
