@@ -14,7 +14,7 @@ public class MedicalBillResponseDTO {
     private String patientGender;
     private String symptomName;
     private String syndrome;
-    private List<String> drugName;
+//    private List<String> drugName;
     private String dosage;
     private String specialInstructions;
 }

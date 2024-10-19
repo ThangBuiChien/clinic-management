@@ -10,5 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface PrescribedDrugRepository extends JpaRepository<PrescribedDrug, Long> {
-    Optional<PrescribedDrug> findSymptomName(String symptomName);
+    Optional<PrescribedDrug> findBySymptomName(String symptomName);
 }

@@ -42,13 +42,13 @@ public class MedicalBill {
     @Column(name = "syndrome")
     private String syndrome;
 
-    @ElementCollection
-    @CollectionTable(
-            name = "medical_bill_drug_names",
-            joinColumns = @JoinColumn(name = "medical_bill_id")
-    )
-    @Column(name = "drug_name")
-    private List<String> drugName;
+//    @ElementCollection
+//    @CollectionTable(
+//            name = "medical_bill_drug_names",
+//            joinColumns = @JoinColumn(name = "medical_bill_id")
+//    )
+//    @Column(name = "drug_name")
+//    private List<String> drugName;
 
     @Column(name = "dosage")
     private String dosage;

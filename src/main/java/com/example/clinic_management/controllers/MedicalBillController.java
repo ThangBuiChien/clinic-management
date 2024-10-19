@@ -11,26 +11,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/medical_bills")
+@RequestMapping("/api/medical_bill")
 @RequiredArgsConstructor
 public class MedicalBillController {
     private final MedicalBillService medicalBillService;
 
-    @PostMapping
+    @PostMapping("")
     public ResponseEntity<MedicalBillResponseDTO> createMedicalBill(@RequestBody MedicalBillRequestDTO medicalBillRequestDTO) {
         MedicalBillResponseDTO responseDTO = medicalBillService.createMedicalBill(medicalBillRequestDTO);
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<MedicalBillResponseDTO> getMedicalBill(@PathVariable Long id) {
-        MedicalBillResponseDTO responseDTO = medicalBillService.getMedicalBillById(id);
-        return ResponseEntity.ok(responseDTO);
-    }
-
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<List<MedicalBillResponseDTO>> getMedicalBills() {
-        List<MedicalBillResponseDTO> responseDTOS = medicalBillService.getAllMedicalBill();
+        List<MedicalBillResponseDTO> responseDTOS = medicalBillService.getAllMedicalBills();
         return ResponseEntity.ok(responseDTOS);
     }
 }

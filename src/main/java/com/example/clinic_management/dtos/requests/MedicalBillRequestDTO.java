@@ -17,7 +17,7 @@ public class MedicalBillRequestDTO {
 
     // Optional fields for new prescription
     private String syndrome;
-    private List<String> drugName;
+//    private List<String> drugName;
     private String dosage;
     private String specialInstructions;
 }
