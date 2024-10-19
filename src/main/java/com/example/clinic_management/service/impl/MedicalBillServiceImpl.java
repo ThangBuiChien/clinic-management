@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,9 +36,19 @@ public class MedicalBillServiceImpl implements MedicalBillService {
 
         // 2. Check if prescription exists for the symptom
         PrescribedDrug prescribedDrug;
+        List<String> drugNames = new ArrayList<>(medicalBillRequestDTO.getDrugNames());
+
         if (medicalBillRequestDTO.getPrescribedDrugId() != null) {
             prescribedDrug = prescribedDrugRepository.findById(medicalBillRequestDTO.getPrescribedDrugId())
                     .orElseThrow(() -> new IllegalArgumentException("Prescribed drug not found"));
+
+            // Merge drug names from the existing prescribed drug with the new input
+            if (prescribedDrug.getDrugs() != null) {
+                drugNames.addAll(prescribedDrug.getDrugs().stream()
+                        .map(Drug::getName)
+                        .filter(name -> !drugNames.contains(name))
+                        .collect(Collectors.toList()));
+            }
         } else {
             validateNewPrescriptionFields(medicalBillRequestDTO);
             prescribedDrug = createNewPrescribedDrug(medicalBillRequestDTO);
@@ -46,8 +57,8 @@ public class MedicalBillServiceImpl implements MedicalBillService {
         MedicalBill medicalBill = new MedicalBill();
         setMedicalBillFromPrescription(medicalBill, patient, prescribedDrug, medicalBillRequestDTO);
 
-        // Set drug names directly to the medical bill
-        medicalBill.setDrugNames(medicalBillRequestDTO.getDrugNames());
+        // Set the merged drug names
+        medicalBill.setDrugNames(drugNames);
 
         MedicalBill savedMedicalBill = medicalBillRepository.save(medicalBill);
         return convertToResponseDTO(savedMedicalBill);
@@ -127,7 +138,7 @@ private void setMedicalBillFromPrescription(MedicalBill medicalBill, Patient pat
     medicalBill.setSyndrome(medicalBillRequestDTO.getSyndrome());
     medicalBill.setDosage(prescribedDrug.getDosage());
     medicalBill.setSpecialInstructions(prescribedDrug.getSpecialInstructions());
-    medicalBill.setDrugNames(medicalBillRequestDTO.getDrugNames()); // Set drug names here
+    // Drug names are now set in the createMedicalBill method
 }
 
     private MedicalBillResponseDTO convertToResponseDTO(MedicalBill medicalBill) {
