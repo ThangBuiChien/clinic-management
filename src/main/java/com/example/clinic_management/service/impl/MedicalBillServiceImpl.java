@@ -2,6 +2,7 @@ package com.example.clinic_management.service.impl;
 
 import com.example.clinic_management.dtos.requests.MedicalBillRequestDTO;
 import com.example.clinic_management.dtos.responses.MedicalBillResponseDTO;
+import com.example.clinic_management.entities.Drug;
 import com.example.clinic_management.entities.MedicalBill;
 import com.example.clinic_management.entities.Patient;
 import com.example.clinic_management.entities.PrescribedDrug;
@@ -11,6 +12,7 @@ import com.example.clinic_management.repository.PrescribedDrugRepository;
 import com.example.clinic_management.service.MedicalBillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,33 +23,42 @@ import java.util.stream.Collectors;
 public class MedicalBillServiceImpl implements MedicalBillService {
     private final MedicalBillRepository medicalBillRepository;
     private final PatientRepository patientRepository;
-    private final PrescribedDrugRepository prdRepository;
+    private final PrescribedDrugRepository prescribedDrugRepository;
 
 
-
+    @Override
+    @Transactional
     public MedicalBillResponseDTO createMedicalBill(MedicalBillRequestDTO medicalBillRequestDTO) {
         // 1. Validate patient exists
         Patient patient = patientRepository.findById(medicalBillRequestDTO.getPatientId())
                 .orElseThrow(() -> new IllegalArgumentException("Patient not found"));
 
         // 2. Check if prescription exists for the symptom
-        Optional<PrescribedDrug> existingPrecription = prdRepository
-                .findBySymptomName(medicalBillRequestDTO.getSymptomName());
+        PrescribedDrug prescribedDrug;
+        if (medicalBillRequestDTO.getPrescribedDrugId() != null) {
+            prescribedDrug = prescribedDrugRepository.findById(medicalBillRequestDTO.getPrescribedDrugId())
+                    .orElseThrow(() -> new IllegalArgumentException("Prescribed drug not found"));
+        } else {
+            validateNewPrescriptionFields(medicalBillRequestDTO);
+            prescribedDrug = createNewPrescribedDrug(medicalBillRequestDTO);
+        }
 
         MedicalBill medicalBill = new MedicalBill();
+        setMedicalBillFromPrescription(medicalBill, patient, prescribedDrug, medicalBillRequestDTO);
 
-        if (existingPrecription.isPresent()) {
-            // Use existing prescription
-            PrescribedDrug prescribedDrug = existingPrecription.get();
-            setMedicalBillFromExistingPrescription(medicalBill, patient, prescribedDrug, medicalBillRequestDTO);
-        } else {
-            // Validate new prescription data
-            validateNewPrescriptionFields(medicalBillRequestDTO);
-            setMedicalBillFromNewPresciption(medicalBill, patient, medicalBillRequestDTO);
-        }
+        // Set drug names directly to the medical bill
+        medicalBill.setDrugNames(medicalBillRequestDTO.getDrugNames());
 
         MedicalBill savedMedicalBill = medicalBillRepository.save(medicalBill);
         return convertToResponseDTO(savedMedicalBill);
+    }
+
+    private PrescribedDrug createNewPrescribedDrug(MedicalBillRequestDTO medicalBillRequestDTO) {
+        PrescribedDrug newPrescribedDrug = new PrescribedDrug();
+        newPrescribedDrug.setSymptomName(medicalBillRequestDTO.getSymptomName());
+        newPrescribedDrug.setDosage(medicalBillRequestDTO.getDosage());
+        newPrescribedDrug.setSpecialInstructions(medicalBillRequestDTO.getSpecialInstructions());
+        return prescribedDrugRepository.save(newPrescribedDrug);
     }
 
     private void validateNewPrescriptionFields(MedicalBillRequestDTO requestDTO) {
@@ -79,44 +90,58 @@ public class MedicalBillServiceImpl implements MedicalBillService {
     }
 
 
-    private void setMedicalBillFromExistingPrescription(MedicalBill medicalBill, Patient patient, PrescribedDrug prescribedDrug, MedicalBillRequestDTO medicalBillRequestDTO) {
-        medicalBill.setPatient(patient);
-        medicalBill.setPatientName(patient.getFullName());
-        medicalBill.setPatientDob(String.valueOf(patient.getBirthDate()));
-        medicalBill.setPatientGender(String.valueOf(patient.getGender()));
+//    private void setMedicalBillFromExistingPrescription(MedicalBill medicalBill, Patient patient, PrescribedDrug prescribedDrug, MedicalBillRequestDTO medicalBillRequestDTO) {
+//        medicalBill.setPatient(patient);
+//        medicalBill.setPatientName(patient.getFullName());
+//        medicalBill.setPatientDob(String.valueOf(patient.getBirthDate()));
+//        medicalBill.setPatientGender(String.valueOf(patient.getGender()));
+//
+//        medicalBill.setSymptomName(prescribedDrug.getSymptomName());
+//        medicalBill.setSyndrome(medicalBillRequestDTO.getSyndrome());
+////        medicalBill.setDrugName(prescribedDrug.getDrugs());
+//        medicalBill.setDosage(prescribedDrug.getDosage());
+//        medicalBill.setSpecialInstructions(prescribedDrug.getSpecialInstructions());
+//    }
+//
+//    private void setMedicalBillFromNewPresciption(MedicalBill medicalBill, Patient patient, MedicalBillRequestDTO medicalBillRequestDTO) {
+//
+//        medicalBill.setPatient(patient);
+//        medicalBill.setPatientName(patient.getFullName());
+//        medicalBill.setPatientDob(String.valueOf(patient.getBirthDate()));
+//        medicalBill.setPatientGender(String.valueOf(patient.getGender()));
+//
+//        medicalBill.setSymptomName(medicalBillRequestDTO.getSymptomName());
+////        medicalBill.setDrugName(medicalBillRequestDTO.getDrugName());
+//        medicalBill.setDosage(medicalBillRequestDTO.getDosage());
+//        medicalBill.setSpecialInstructions(medicalBillRequestDTO.getSpecialInstructions());
+//        medicalBill.setSyndrome(medicalBillRequestDTO.getSyndrome());
+//    }
+private void setMedicalBillFromPrescription(MedicalBill medicalBill, Patient patient, PrescribedDrug prescribedDrug, MedicalBillRequestDTO medicalBillRequestDTO) {
+    medicalBill.setPatient(patient);
+    medicalBill.setPatientName(patient.getFullName());
+    medicalBill.setPatientDob(String.valueOf(patient.getBirthDate()));
+    medicalBill.setPatientGender(String.valueOf(patient.getGender()));
 
-        medicalBill.setSymptomName(prescribedDrug.getSymptomName());
-        medicalBill.setSyndrome(medicalBillRequestDTO.getSyndrome());
-//        medicalBill.setDrugName(prescribedDrug.getDrugs());
-        medicalBill.setDosage(prescribedDrug.getDosage());
-        medicalBill.setSpecialInstructions(prescribedDrug.getSpecialInstructions());
-    }
-
-    private void setMedicalBillFromNewPresciption(MedicalBill medicalBill, Patient patient, MedicalBillRequestDTO medicalBillRequestDTO) {
-
-        medicalBill.setPatient(patient);
-        medicalBill.setPatientName(patient.getFullName());
-        medicalBill.setPatientDob(String.valueOf(patient.getBirthDate()));
-        medicalBill.setPatientGender(String.valueOf(patient.getGender()));
-
-        medicalBill.setSymptomName(medicalBillRequestDTO.getSymptomName());
-//        medicalBill.setDrugName(medicalBillRequestDTO.getDrugName());
-        medicalBill.setDosage(medicalBillRequestDTO.getDosage());
-        medicalBill.setSpecialInstructions(medicalBillRequestDTO.getSpecialInstructions());
-        medicalBill.setSyndrome(medicalBillRequestDTO.getSyndrome());
-    }
+    medicalBill.setPrescribedDrug(prescribedDrug);
+    medicalBill.setSymptomName(prescribedDrug.getSymptomName());
+    medicalBill.setSyndrome(medicalBillRequestDTO.getSyndrome());
+    medicalBill.setDosage(prescribedDrug.getDosage());
+    medicalBill.setSpecialInstructions(prescribedDrug.getSpecialInstructions());
+    medicalBill.setDrugNames(medicalBillRequestDTO.getDrugNames()); // Set drug names here
+}
 
     private MedicalBillResponseDTO convertToResponseDTO(MedicalBill medicalBill) {
-        MedicalBillResponseDTO medicalBillResponseDTO = new MedicalBillResponseDTO();
-        medicalBillResponseDTO.setId(medicalBill.getId());
-        medicalBillResponseDTO.setPatientName(medicalBill.getPatientName());
-        medicalBillResponseDTO.setPatientDoB(medicalBill.getPatientDob());
-        medicalBillResponseDTO.setPatientGender(medicalBill.getPatientGender());
-        medicalBillResponseDTO.setSymptomName(medicalBill.getSymptomName());
-        medicalBillResponseDTO.setSyndrome(medicalBill.getSyndrome());
-//        medicalBillResponseDTO.setDrugName(medicalBill.getDrugName());
-        medicalBillResponseDTO.setDosage(medicalBill.getDosage());
-        medicalBillResponseDTO.setSpecialInstructions(medicalBill.getSpecialInstructions());
-        return medicalBillResponseDTO;
+        MedicalBillResponseDTO responseDTO = new MedicalBillResponseDTO();
+        responseDTO.setId(medicalBill.getId());
+        responseDTO.setPatientName(medicalBill.getPatientName());
+        responseDTO.setPatientDoB(medicalBill.getPatientDob());
+        responseDTO.setPatientGender(medicalBill.getPatientGender());
+        responseDTO.setSymptomName(medicalBill.getSymptomName());
+        responseDTO.setSyndrome(medicalBill.getSyndrome());
+        responseDTO.setDosage(medicalBill.getDosage());
+        responseDTO.setSpecialInstructions(medicalBill.getSpecialInstructions());
+        responseDTO.setDrugNames(medicalBill.getDrugNames()); // Set drug names here
+
+        return responseDTO;
     }
 }
