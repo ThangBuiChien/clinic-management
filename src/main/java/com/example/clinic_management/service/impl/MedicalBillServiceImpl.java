@@ -100,6 +100,13 @@ public class MedicalBillServiceImpl implements MedicalBillService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public MedicalBillResponseDTO getMedicalBillById(Long id) {
+        MedicalBill medicalBill = medicalBillRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Medical bill not found with id: " + id));
+        return convertToResponseDTO(medicalBill);
+    }
+
 
 //    private void setMedicalBillFromExistingPrescription(MedicalBill medicalBill, Patient patient, PrescribedDrug prescribedDrug, MedicalBillRequestDTO medicalBillRequestDTO) {
 //        medicalBill.setPatient(patient);

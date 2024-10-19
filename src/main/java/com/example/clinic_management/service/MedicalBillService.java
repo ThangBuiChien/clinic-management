@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface MedicalBillService {
     MedicalBillResponseDTO createMedicalBill(MedicalBillRequestDTO medicalBillRequestDTO);
-
+    MedicalBillResponseDTO getMedicalBillById(Long id);
     List<MedicalBillResponseDTO> getAllMedicalBills();
 }

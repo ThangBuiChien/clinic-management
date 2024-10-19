@@ -27,4 +27,9 @@ public class MedicalBillController {
         List<MedicalBillResponseDTO> responseDTOS = medicalBillService.getAllMedicalBills();
         return ResponseEntity.ok(responseDTOS);
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<MedicalBillResponseDTO> getMedicalBillById(@PathVariable Long id) {
+        MedicalBillResponseDTO responseDTO = medicalBillService.getMedicalBillById(id);
+        return ResponseEntity.ok(responseDTO);
+    }
 }
