@@ -39,7 +39,7 @@ public class MedicalBillServiceImpl implements MedicalBillService {
         if (existingPrecription.isPresent()) {
             // Use existing prescription
             PrescribedDrug prescribedDrug = existingPrecription.get();
-            setMedicalBillFromExistingPrescription(medicalBill, patient, prescribedDrug);
+            setMedicalBillFromExistingPrescription(medicalBill, patient, prescribedDrug, medicalBillRequestDTO);
         } else {
             // Validate new prescription data
             validateNewPrescriptionFields(medicalBillRequestDTO);
@@ -79,14 +79,14 @@ public class MedicalBillServiceImpl implements MedicalBillService {
     }
 
 
-    private void setMedicalBillFromExistingPrescription(MedicalBill medicalBill, Patient patient, PrescribedDrug prescribedDrug) {
+    private void setMedicalBillFromExistingPrescription(MedicalBill medicalBill, Patient patient, PrescribedDrug prescribedDrug, MedicalBillRequestDTO medicalBillRequestDTO) {
         medicalBill.setPatient(patient);
         medicalBill.setPatientName(patient.getFullName());
         medicalBill.setPatientDob(String.valueOf(patient.getBirthDate()));
         medicalBill.setPatientGender(String.valueOf(patient.getGender()));
 
         medicalBill.setSymptomName(prescribedDrug.getSymptomName());
-        medicalBill.setSyndrome(medicalBill.getSyndrome());
+        medicalBill.setSyndrome(medicalBillRequestDTO.getSyndrome());
 //        medicalBill.setDrugName(prescribedDrug.getDrugs());
         medicalBill.setDosage(prescribedDrug.getDosage());
         medicalBill.setSpecialInstructions(prescribedDrug.getSpecialInstructions());
