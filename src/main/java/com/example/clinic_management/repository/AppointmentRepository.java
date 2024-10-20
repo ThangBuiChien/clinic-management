@@ -12,5 +12,6 @@ import com.example.clinic_management.entities.Appointment;
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
     List<Appointment> findByDoctorIdAndAppointmentDate(Long doctorId, LocalDate date);
+
     Optional<Appointment> findByPayId(Long payId);
 }

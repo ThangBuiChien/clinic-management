@@ -1,15 +1,15 @@
 package com.example.clinic_management.mapper;
 
-import com.example.clinic_management.entities.Drug;
-import com.example.clinic_management.repository.DrugRepository;
 import org.springframework.stereotype.Service;
 
 import com.example.clinic_management.entities.Department;
 import com.example.clinic_management.entities.Doctor;
+import com.example.clinic_management.entities.Drug;
 import com.example.clinic_management.entities.Patient;
 import com.example.clinic_management.exception.ResourceNotFoundException;
 import com.example.clinic_management.repository.DepartmentRepository;
 import com.example.clinic_management.repository.DoctorRepository;
+import com.example.clinic_management.repository.DrugRepository;
 import com.example.clinic_management.repository.PatientRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class MapperService {
         return patientRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Patient", "id", id));
     }
 
-    public Drug findDrugById(Long id){
+    public Drug findDrugById(Long id) {
         return drugRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Drug", "id", id));
     }
 }

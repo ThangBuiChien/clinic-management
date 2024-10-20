@@ -1,14 +1,16 @@
 package com.example.clinic_management.mapper;
 
+import org.mapstruct.*;
+
 import com.example.clinic_management.dtos.requests.MedicalBillRequestDTO;
 import com.example.clinic_management.dtos.responses.MedicalBillResponseDTO;
 import com.example.clinic_management.entities.ExaminationDetail;
 import com.example.clinic_management.entities.MedicalBill;
 import com.example.clinic_management.entities.PrescribedDrug;
-import org.mapstruct.*;
 
-@Mapper(componentModel = "spring", uses = {AutoPrescribedDrugMapper.class,
-        AutoExaminationDetailMapper.class, MapperService.class})
+@Mapper(
+        componentModel = "spring",
+        uses = {AutoPrescribedDrugMapper.class, AutoExaminationDetailMapper.class, MapperService.class})
 public interface AutoMedicalBillMapper {
 
     @Mapping(target = "patientId", source = "patient.id")
@@ -20,9 +22,9 @@ public interface AutoMedicalBillMapper {
     @Mapping(target = "prescribedDrugs", source = "drugs")
     MedicalBillResponseDTO toResponseDTO(MedicalBill medicalBill);
 
-//    @Mapping(target = "patient", ignore = true)
-//    @Mapping(target = "doctor", ignore = true)
-//    @Mapping(target = "drugs", ignore = true)
+    //    @Mapping(target = "patient", ignore = true)
+    //    @Mapping(target = "doctor", ignore = true)
+    //    @Mapping(target = "drugs", ignore = true)
     @Mapping(target = "doctor", source = "doctorId")
     @Mapping(target = "patient", source = "patientId")
     @Mapping(target = "drugs", source = "prescribedDrugRequestDTOS")
@@ -39,8 +41,8 @@ public interface AutoMedicalBillMapper {
                 drug.setMedicalBill(medicalBill);
             }
         }
-        if(medicalBill.getExaminationDetails()!=null){
-            for(ExaminationDetail examinationDetail : medicalBill.getExaminationDetails()){
+        if (medicalBill.getExaminationDetails() != null) {
+            for (ExaminationDetail examinationDetail : medicalBill.getExaminationDetails()) {
                 examinationDetail.setPatientName(medicalBill.getPatient().getFullName());
                 examinationDetail.setDoctorName(medicalBill.getDoctor().getFullName());
                 examinationDetail.setMedicalBill(medicalBill);

@@ -1,11 +1,11 @@
 package com.example.clinic_management.dtos.requests;
 
-import com.example.clinic_management.enums.AppointmentStatus;
+import java.time.LocalDate;
+
 import com.example.clinic_management.enums.TimeSlot;
+
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDate;
 
 @Getter
 @Setter

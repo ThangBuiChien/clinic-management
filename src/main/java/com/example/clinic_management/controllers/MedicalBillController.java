@@ -1,17 +1,20 @@
 package com.example.clinic_management.controllers;
 
-import com.example.clinic_management.dtos.requests.MedicalBillRequestDTO;
-import com.example.clinic_management.dtos.responses.MedicalBillResponseDTO;
-import com.example.clinic_management.service.MedicalBillService;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
+import jakarta.validation.Valid;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
-import java.util.List;
+import com.example.clinic_management.dtos.requests.MedicalBillRequestDTO;
+import com.example.clinic_management.dtos.responses.MedicalBillResponseDTO;
+import com.example.clinic_management.service.MedicalBillService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/medical-bills")
@@ -20,7 +23,8 @@ public class MedicalBillController {
     private final MedicalBillService medicalBillService;
 
     @PostMapping
-    public ResponseEntity<MedicalBillResponseDTO> createMedicalBill(@Valid @RequestBody MedicalBillRequestDTO medicalBillRequestDTO) {
+    public ResponseEntity<MedicalBillResponseDTO> createMedicalBill(
+            @Valid @RequestBody MedicalBillRequestDTO medicalBillRequestDTO) {
         MedicalBillResponseDTO responseDTO = medicalBillService.createMedicalBill(medicalBillRequestDTO);
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
@@ -38,7 +42,8 @@ public class MedicalBillController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MedicalBillResponseDTO> updateMedicalBill(@PathVariable Long id, @Valid @RequestBody MedicalBillRequestDTO medicalBillRequestDTO) {
+    public ResponseEntity<MedicalBillResponseDTO> updateMedicalBill(
+            @PathVariable Long id, @Valid @RequestBody MedicalBillRequestDTO medicalBillRequestDTO) {
         MedicalBillResponseDTO responseDTO = medicalBillService.updateMedicalBill(id, medicalBillRequestDTO);
         return ResponseEntity.ok(responseDTO);
     }

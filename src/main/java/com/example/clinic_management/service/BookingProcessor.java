@@ -11,7 +11,8 @@ import com.example.clinic_management.enums.TimeSlot;
 public interface BookingProcessor {
     boolean checkAvailability(Long doctorId, LocalDate date, TimeSlot timeSlot);
 
-    DoctorTimeslotCapacity getOrCreateDoctorTimeSlotCapacityIfInWorkingDay(Long doctorId, LocalDate date, TimeSlot timeSlot);
+    DoctorTimeslotCapacity getOrCreateDoctorTimeSlotCapacityIfInWorkingDay(
+            Long doctorId, LocalDate date, TimeSlot timeSlot);
 
     List<Doctor> findAvailableDoctors(Long departmentId, LocalDate date, TimeSlot timeSlot);
 

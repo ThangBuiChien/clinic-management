@@ -1,16 +1,17 @@
 package com.example.clinic_management.entities;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -47,8 +48,7 @@ public class MedicalBill {
     @Size(max = 3070, message = "Syndrome description must be less than 3070 characters")
     @Pattern(
             regexp = "^[a-zA-Z0-9\\s.,!?\"'()-]*$",
-            message = "Syndrome description can only contain letters, numbers, space and basic punctuations"
-    )
+            message = "Syndrome description can only contain letters, numbers, space and basic punctuations")
     @Column(name = "syndrome")
     private String syndrome;
 
@@ -61,8 +61,4 @@ public class MedicalBill {
         drugs.remove(prescribedDrug);
         prescribedDrug.setMedicalBill(null);
     }
-
-
-
-
 }

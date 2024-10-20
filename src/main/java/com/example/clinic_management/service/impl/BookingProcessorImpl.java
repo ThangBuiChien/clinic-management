@@ -60,7 +60,8 @@ public class BookingProcessorImpl implements BookingProcessor {
     }
 
     @Override
-    public DoctorTimeslotCapacity getOrCreateDoctorTimeSlotCapacityIfInWorkingDay(Long doctorId, LocalDate date, TimeSlot timeSlot) {
+    public DoctorTimeslotCapacity getOrCreateDoctorTimeSlotCapacityIfInWorkingDay(
+            Long doctorId, LocalDate date, TimeSlot timeSlot) {
         Doctor doctor = doctorRepository
                 .findById(doctorId)
                 .orElseThrow(() -> new ResourceNotFoundException("Doctor", "id", doctorId));
@@ -81,8 +82,7 @@ public class BookingProcessorImpl implements BookingProcessor {
         //                .findByScheduleIdAndTimeSlot(schedule.getId(), timeSlot)
         //                .addPatient();
 
-        return doctorTimeSlotCapacityRepository
-                .findByScheduleIdAndTimeSlot(schedule.getId(), timeSlot);
+        return doctorTimeSlotCapacityRepository.findByScheduleIdAndTimeSlot(schedule.getId(), timeSlot);
     }
 
     @Override

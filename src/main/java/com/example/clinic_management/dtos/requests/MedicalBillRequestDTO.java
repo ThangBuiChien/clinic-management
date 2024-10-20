@@ -1,13 +1,14 @@
 package com.example.clinic_management.dtos.requests;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 @Setter
@@ -27,7 +28,7 @@ public class MedicalBillRequestDTO {
 
     private String note;
 
-//    private List<Long> prescribedDrugIds;
+    //    private List<Long> prescribedDrugIds;
     private List<PrescribedDrugRequestDTO> prescribedDrugRequestDTOS;
 
     private List<ExaminationDetailRequestDTO> examinationDetailRequestDTOS;
