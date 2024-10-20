@@ -27,5 +27,6 @@ public class MedicalBillRequestDTO {
 
     private String note;
 
-    private List<Long> prescribedDrugIds;
+//    private List<Long> prescribedDrugIds;
+    private List<PrescribedDrugRequestDTO> prescribedDrugRequestDTOS;
 }

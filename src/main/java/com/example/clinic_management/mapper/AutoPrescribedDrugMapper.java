@@ -9,16 +9,17 @@ import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {MapperService.class})
 public interface AutoPrescribedDrugMapper {
 
 
     @Mapping(target = "drugName", source = "drug.name")
     PrescribedDrugResponseDTO toResponseDTO(PrescribedDrug prescribedDrug);
 
-    @Mapping(target = "drug", ignore = true)
-    @Mapping(target = "id", ignore = true)
+//    @Mapping(target = "drug", ignore = true)
+//    @Mapping(target = "id", ignore = true)
     @Mapping(target = "medicalBill", ignore = true)
+    @Mapping(target = "drug", source = "drugId")
     PrescribedDrug toEntity(PrescribedDrugRequestDTO prescribedDrugRequestDTO);
 
     List<PrescribedDrugResponseDTO> toResponseDTOs(List<PrescribedDrug> prescribedDrugs);

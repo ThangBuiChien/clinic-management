@@ -31,7 +31,7 @@ public class MedicalBill {
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
 
-    @OneToMany(mappedBy = "medicalBill", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "medicalBill", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<PrescribedDrug> drugs = new ArrayList<>();
 
     @Column(name = "note")
