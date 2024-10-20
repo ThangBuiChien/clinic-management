@@ -2,6 +2,7 @@ package com.example.clinic_management.dtos.requests;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
 import lombok.Data;
 
 @Data

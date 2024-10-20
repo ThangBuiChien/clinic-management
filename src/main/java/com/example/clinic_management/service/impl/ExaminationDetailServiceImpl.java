@@ -1,18 +1,19 @@
 package com.example.clinic_management.service.impl;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
 import com.example.clinic_management.dtos.requests.ExaminationRequestDTO;
 import com.example.clinic_management.entities.ExaminationDetail;
 import com.example.clinic_management.entities.Patient;
 import com.example.clinic_management.repository.ExaminationRepository;
 import com.example.clinic_management.repository.PatientRepository;
 import com.example.clinic_management.service.ExaminationDetailService;
-import com.example.clinic_management.service.PatientService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -27,17 +28,21 @@ public class ExaminationDetailServiceImpl implements ExaminationDetailService {
 
         Patient patient = validateAndGetExaminationDetail(examinationRequestDTO);
         ExaminationDetail examinationDetail = new ExaminationDetail();
-//        examinationDetail.setPatient(patient);
+        //        examinationDetail.setPatient(patient);
         examinationDetail.setPatientName(patient.getFullName());
-        examinationDetail.setExaminationType(examinationRequestDTO.getExaminationType().trim());
-        examinationDetail.setExaminationResult(examinationRequestDTO.getExaminationResult().trim());
+        examinationDetail.setExaminationType(
+                examinationRequestDTO.getExaminationType().trim());
+        examinationDetail.setExaminationResult(
+                examinationRequestDTO.getExaminationResult().trim());
         return examinationRepository.save(examinationDetail);
     }
 
     @Override
     @Transactional
     public ExaminationDetail getExaminationDetailById(Long id) {
-        return examinationRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Examination not found"));
+        return examinationRepository
+                .findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Examination not found"));
     }
 
     @Override
@@ -53,17 +58,19 @@ public class ExaminationDetailServiceImpl implements ExaminationDetailService {
         }
 
         // Validate patient existence
-        Patient patient = patientRepository.findById(examinationRequestDTO.getPatientId())
-                .orElseThrow(() -> new IllegalArgumentException("Patient not found with id: " + examinationRequestDTO.getPatientId()));
+        Patient patient = patientRepository
+                .findById(examinationRequestDTO.getPatientId())
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Patient not found with id: " + examinationRequestDTO.getPatientId()));
 
         // If patient exists, both examination type and result must be filled
-        if (!StringUtils.hasText(examinationRequestDTO.getExaminationType()) ||
-                examinationRequestDTO.getExaminationType().trim().isEmpty()) {
+        if (!StringUtils.hasText(examinationRequestDTO.getExaminationType())
+                || examinationRequestDTO.getExaminationType().trim().isEmpty()) {
             throw new IllegalArgumentException("Examination type is required when patient ID is provided");
         }
 
-        if (!StringUtils.hasText(examinationRequestDTO.getExaminationResult()) ||
-                examinationRequestDTO.getExaminationResult().trim().isEmpty()) {
+        if (!StringUtils.hasText(examinationRequestDTO.getExaminationResult())
+                || examinationRequestDTO.getExaminationResult().trim().isEmpty()) {
             throw new IllegalArgumentException("Examination result is required when patient ID is provided");
         }
         return patient;

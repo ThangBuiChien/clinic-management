@@ -1,6 +1,7 @@
 package com.example.clinic_management.entities;
 
 import jakarta.persistence.*;
+
 import lombok.*;
 
 @Getter

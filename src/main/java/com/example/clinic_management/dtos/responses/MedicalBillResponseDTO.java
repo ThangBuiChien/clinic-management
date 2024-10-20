@@ -1,10 +1,10 @@
 package com.example.clinic_management.dtos.responses;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.time.LocalDate;
 import java.util.List;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -20,4 +20,5 @@ public class MedicalBillResponseDTO {
     private String syndrome;
     private String note;
     private List<PrescribedDrugResponseDTO> prescribedDrugs;
+    private List<ExaminationDetailResponseDTO> examinationDetails;
 }

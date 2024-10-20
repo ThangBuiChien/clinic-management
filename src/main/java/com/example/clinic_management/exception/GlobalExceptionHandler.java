@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -44,25 +43,26 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
-//    @ExceptionHandler(PatientNotFoundException.class)
-//    public ResponseEntity<ErrorResponse> handlePatientNotFoundException(PatientNotFoundException ex) {
-//        ErrorResponse error = new ErrorResponse(
-//                HttpStatus.NOT_FOUND.value(),
-//                "Patient Not Found",
-//                ex.getMessage()
-//        );
-//        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-//    }
-//
-//    @ExceptionHandler(PrescriptionValidationException.class)
-//    public ResponseEntity<ErrorResponse> handlePrescriptionValidationException(PrescriptionValidationException ex) {
-//        ErrorResponse error = new ErrorResponse(
-//                HttpStatus.BAD_REQUEST.value(),
-//                "Prescription Validation Error",
-//                ex.getMessage()
-//        );
-//        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-//    }
+    //    @ExceptionHandler(PatientNotFoundException.class)
+    //    public ResponseEntity<ErrorResponse> handlePatientNotFoundException(PatientNotFoundException ex) {
+    //        ErrorResponse error = new ErrorResponse(
+    //                HttpStatus.NOT_FOUND.value(),
+    //                "Patient Not Found",
+    //                ex.getMessage()
+    //        );
+    //        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    //    }
+    //
+    //    @ExceptionHandler(PrescriptionValidationException.class)
+    //    public ResponseEntity<ErrorResponse> handlePrescriptionValidationException(PrescriptionValidationException ex)
+    // {
+    //        ErrorResponse error = new ErrorResponse(
+    //                HttpStatus.BAD_REQUEST.value(),
+    //                "Prescription Validation Error",
+    //                ex.getMessage()
+    //        );
+    //        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    //    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetails> handleGlobalException(Exception exception, WebRequest request) {
@@ -72,7 +72,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         logger.severe("Internal server error: " + exception.getMessage());
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 
     // For handle, when the request is not valid, using @Valid and java validation
     @Override
