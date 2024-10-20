@@ -20,4 +20,5 @@ public class MedicalBillResponseDTO {
     private String syndrome;
     private String note;
     private List<PrescribedDrugResponseDTO> prescribedDrugs;
+    private List<ExaminationDetailResponseDTO> examinationDetails;
 }

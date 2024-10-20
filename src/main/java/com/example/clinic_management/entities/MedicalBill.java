@@ -34,6 +34,9 @@ public class MedicalBill {
     @OneToMany(mappedBy = "medicalBill", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<PrescribedDrug> drugs = new ArrayList<>();
 
+    @OneToMany(mappedBy = "medicalBill", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<ExaminationDetail> examinationDetails = new ArrayList<>();
+
     @Column(name = "note")
     private String note;
 

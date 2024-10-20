@@ -2,12 +2,13 @@ package com.example.clinic_management.mapper;
 
 import com.example.clinic_management.dtos.requests.MedicalBillRequestDTO;
 import com.example.clinic_management.dtos.responses.MedicalBillResponseDTO;
+import com.example.clinic_management.entities.ExaminationDetail;
 import com.example.clinic_management.entities.MedicalBill;
 import com.example.clinic_management.entities.PrescribedDrug;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring", uses = {AutoPrescribedDrugMapper.class,
-        MapperService.class})
+        AutoExaminationDetailMapper.class, MapperService.class})
 public interface AutoMedicalBillMapper {
 
     @Mapping(target = "patientId", source = "patient.id")
@@ -25,6 +26,7 @@ public interface AutoMedicalBillMapper {
     @Mapping(target = "doctor", source = "doctorId")
     @Mapping(target = "patient", source = "patientId")
     @Mapping(target = "drugs", source = "prescribedDrugRequestDTOS")
+    @Mapping(target = "examinationDetails", source = "examinationDetailRequestDTOS")
     MedicalBill toEntity(MedicalBillRequestDTO medicalBillRequestDTO);
 
     // In bi-directional mapping, so we need two handle 2 sides
@@ -35,6 +37,13 @@ public interface AutoMedicalBillMapper {
         if (medicalBill.getDrugs() != null) {
             for (PrescribedDrug drug : medicalBill.getDrugs()) {
                 drug.setMedicalBill(medicalBill);
+            }
+        }
+        if(medicalBill.getExaminationDetails()!=null){
+            for(ExaminationDetail examinationDetail : medicalBill.getExaminationDetails()){
+                examinationDetail.setPatientName(medicalBill.getPatient().getFullName());
+                examinationDetail.setDoctorName(medicalBill.getDoctor().getFullName());
+                examinationDetail.setMedicalBill(medicalBill);
             }
         }
     }

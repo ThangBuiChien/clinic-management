@@ -29,4 +29,6 @@ public class MedicalBillRequestDTO {
 
 //    private List<Long> prescribedDrugIds;
     private List<PrescribedDrugRequestDTO> prescribedDrugRequestDTOS;
+
+    private List<ExaminationDetailRequestDTO> examinationDetailRequestDTOS;
 }
