@@ -1,5 +1,7 @@
 package com.example.clinic_management.mapper;
 
+import com.example.clinic_management.entities.Drug;
+import com.example.clinic_management.repository.DrugRepository;
 import org.springframework.stereotype.Service;
 
 import com.example.clinic_management.entities.Department;
@@ -22,6 +24,8 @@ public class MapperService {
 
     private final PatientRepository patientRepository;
 
+    private final DrugRepository drugRepository;
+
     public Department findDepartmentById(Long id) {
         return departmentRepository
                 .findById(id)
@@ -34,5 +38,9 @@ public class MapperService {
 
     public Patient findPatientById(Long id) {
         return patientRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Patient", "id", id));
+    }
+
+    public Drug findDrugById(Long id){
+        return drugRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Drug", "id", id));
     }
 }
