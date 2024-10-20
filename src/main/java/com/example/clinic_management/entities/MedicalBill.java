@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -22,17 +24,22 @@ public class MedicalBill {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "patient_name", nullable = false)
-    private String patientName;
+    @Column(name = "date", nullable = false)
+    private LocalDate date;
 
-    @Column(name = "patient_dob", nullable = false)
-    private String patientDob;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor_id")
+    private Doctor doctor;
 
-    @Column(name = "patient_gender", nullable = false)
-    private String patientGender;
+    @OneToMany(mappedBy = "medicalBill", fetch = FetchType.LAZY)
+    private List<PrescribedDrug> drugs = new ArrayList<>();
 
-    @Column(name = "symptom_name", nullable = false)
-    private String symptomName;
+    @Column(name = "note")
+    private String note;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
 
     @Size(max = 3070, message = "Syndrome description must be less than 3070 characters")
     @Pattern(
@@ -42,37 +49,17 @@ public class MedicalBill {
     @Column(name = "syndrome")
     private String syndrome;
 
-    @ElementCollection
-    @CollectionTable(name = "medical_bill_drug_names", joinColumns = @JoinColumn(name = "medical_bill_id"))
-    @Column(name = "drug_name")
-    private List<String> drugNames;
+    public void addPrescribedDrug(PrescribedDrug prescribedDrug) {
+        drugs.add(prescribedDrug);
+        prescribedDrug.setMedicalBill(this);
+    }
 
-    @Column(name = "dosage")
-    private String dosage;
+    public void removePrescribedDrug(PrescribedDrug prescribedDrug) {
+        drugs.remove(prescribedDrug);
+        prescribedDrug.setMedicalBill(null);
+    }
 
-    @Column(name = "special_instructions")
-    private String specialInstructions;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "patient_id")
-    private Patient patient;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "prescribed_drugs_id")
-    private PrescribedDrug prescribedDrug;
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

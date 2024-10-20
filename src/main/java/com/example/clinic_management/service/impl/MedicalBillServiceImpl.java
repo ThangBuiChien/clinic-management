@@ -2,21 +2,24 @@ package com.example.clinic_management.service.impl;
 
 import com.example.clinic_management.dtos.requests.MedicalBillRequestDTO;
 import com.example.clinic_management.dtos.responses.MedicalBillResponseDTO;
-import com.example.clinic_management.entities.Drug;
+import com.example.clinic_management.entities.Doctor;
 import com.example.clinic_management.entities.MedicalBill;
 import com.example.clinic_management.entities.Patient;
 import com.example.clinic_management.entities.PrescribedDrug;
+import com.example.clinic_management.exception.ResourceNotFoundException;
+import com.example.clinic_management.mapper.AutoMedicalBillMapper;
+import com.example.clinic_management.repository.DoctorRepository;
 import com.example.clinic_management.repository.MedicalBillRepository;
 import com.example.clinic_management.repository.PatientRepository;
 import com.example.clinic_management.repository.PrescribedDrugRepository;
 import com.example.clinic_management.service.MedicalBillService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,142 +27,104 @@ import java.util.stream.Collectors;
 public class MedicalBillServiceImpl implements MedicalBillService {
     private final MedicalBillRepository medicalBillRepository;
     private final PatientRepository patientRepository;
+    private final DoctorRepository doctorRepository;
     private final PrescribedDrugRepository prescribedDrugRepository;
-
+    private final AutoMedicalBillMapper autoMedicalBillMapper;
 
     @Override
     @Transactional
     public MedicalBillResponseDTO createMedicalBill(MedicalBillRequestDTO medicalBillRequestDTO) {
-        // 1. Validate patient exists
         Patient patient = patientRepository.findById(medicalBillRequestDTO.getPatientId())
-                .orElseThrow(() -> new IllegalArgumentException("Patient not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Patient", "id", medicalBillRequestDTO.getPatientId()));
 
-        // 2. Check if prescription exists for the symptom
-        PrescribedDrug prescribedDrug;
-        List<String> drugNames = new ArrayList<>(medicalBillRequestDTO.getDrugNames());
+        Doctor doctor = doctorRepository.findById(medicalBillRequestDTO.getDoctorId())
+                .orElseThrow(() -> new ResourceNotFoundException("Doctor", "id", medicalBillRequestDTO.getDoctorId()));
 
-        if (medicalBillRequestDTO.getPrescribedDrugId() != null) {
-            prescribedDrug = prescribedDrugRepository.findById(medicalBillRequestDTO.getPrescribedDrugId())
-                    .orElseThrow(() -> new IllegalArgumentException("Prescribed drug not found"));
+        MedicalBill medicalBill = autoMedicalBillMapper.toEntity(medicalBillRequestDTO);
+        medicalBill.setPatient(patient);
+        medicalBill.setDoctor(doctor);
 
-            // Merge drug names from the existing prescribed drug with the new input
-            if (prescribedDrug.getDrugs() != null) {
-                drugNames.addAll(prescribedDrug.getDrugs().stream()
-                        .map(Drug::getName)
-                        .filter(name -> !drugNames.contains(name))
-                        .collect(Collectors.toList()));
-            }
-        } else {
-            validateNewPrescriptionFields(medicalBillRequestDTO);
-            prescribedDrug = createNewPrescribedDrug(medicalBillRequestDTO);
+        List<PrescribedDrug> prescribedDrugs = prescribedDrugRepository.findAllById(medicalBillRequestDTO.getPrescribedDrugIds());
+        if (prescribedDrugs.size() != medicalBillRequestDTO.getPrescribedDrugIds().size()) {
+            throw new ResourceNotFoundException("One or more prescribed drugs not found");
         }
-
-        MedicalBill medicalBill = new MedicalBill();
-        setMedicalBillFromPrescription(medicalBill, patient, prescribedDrug, medicalBillRequestDTO);
-
-        // Set the merged drug names
-        medicalBill.setDrugNames(drugNames);
+        medicalBill.setDrugs(prescribedDrugs);
+        prescribedDrugs.forEach(drug -> drug.setMedicalBill(medicalBill));
 
         MedicalBill savedMedicalBill = medicalBillRepository.save(medicalBill);
-        return convertToResponseDTO(savedMedicalBill);
-    }
-
-    private PrescribedDrug createNewPrescribedDrug(MedicalBillRequestDTO medicalBillRequestDTO) {
-        PrescribedDrug newPrescribedDrug = new PrescribedDrug();
-        newPrescribedDrug.setSymptomName(medicalBillRequestDTO.getSymptomName());
-        newPrescribedDrug.setDosage(medicalBillRequestDTO.getDosage());
-        newPrescribedDrug.setSpecialInstructions(medicalBillRequestDTO.getSpecialInstructions());
-        return prescribedDrugRepository.save(newPrescribedDrug);
-    }
-
-    private void validateNewPrescriptionFields(MedicalBillRequestDTO requestDTO) {
-        StringBuilder errorMessage = new StringBuilder();
-
-        if (requestDTO.getSymptomName() == null || requestDTO.getSymptomName().trim().isEmpty()) {
-            errorMessage.append("Symptom name is required. ");
-        }
-
-        if (requestDTO.getDosage() == null || requestDTO.getDosage().trim().isEmpty()) {
-            errorMessage.append("Dosage is required for new prescriptions. ");
-        }
-
-        if (requestDTO.getSpecialInstructions() == null || requestDTO.getSpecialInstructions().trim().isEmpty()) {
-            errorMessage.append("Special instructions are required for new prescriptions. ");
-        }
-
-        if (!errorMessage.isEmpty()) {
-            throw new IllegalArgumentException(errorMessage.toString().trim());
-        }
+        return autoMedicalBillMapper.toResponseDTO(savedMedicalBill);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<MedicalBillResponseDTO> getAllMedicalBills() {
-        List<MedicalBill> medicalBills = medicalBillRepository.findAll();
+        List<MedicalBill> medicalBills = medicalBillRepository.findAllWithPrescribedDrugs();
         return medicalBills.stream()
-                .map(this::convertToResponseDTO)
+                .map(autoMedicalBillMapper::toResponseDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public MedicalBillResponseDTO getMedicalBillById(Long id) {
-        MedicalBill medicalBill = medicalBillRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Medical bill not found with id: " + id));
-        return convertToResponseDTO(medicalBill);
+        MedicalBill medicalBill = medicalBillRepository.findByIdWithPrescribedDrugs(id)
+                .orElseThrow(() -> new ResourceNotFoundException("MedicalBill", "id", id));
+        return autoMedicalBillMapper.toResponseDTO(medicalBill);
     }
 
+    @Override
+    public Page<MedicalBillResponseDTO> getAllMedicalBills(Pageable pageable) {
+        return medicalBillRepository.findAll(pageable)
+                .map(autoMedicalBillMapper::toResponseDTO);
+    }
 
-//    private void setMedicalBillFromExistingPrescription(MedicalBill medicalBill, Patient patient, PrescribedDrug prescribedDrug, MedicalBillRequestDTO medicalBillRequestDTO) {
-//        medicalBill.setPatient(patient);
-//        medicalBill.setPatientName(patient.getFullName());
-//        medicalBill.setPatientDob(String.valueOf(patient.getBirthDate()));
-//        medicalBill.setPatientGender(String.valueOf(patient.getGender()));
-//
-//        medicalBill.setSymptomName(prescribedDrug.getSymptomName());
-//        medicalBill.setSyndrome(medicalBillRequestDTO.getSyndrome());
-////        medicalBill.setDrugName(prescribedDrug.getDrugs());
-//        medicalBill.setDosage(prescribedDrug.getDosage());
-//        medicalBill.setSpecialInstructions(prescribedDrug.getSpecialInstructions());
-//    }
-//
-//    private void setMedicalBillFromNewPresciption(MedicalBill medicalBill, Patient patient, MedicalBillRequestDTO medicalBillRequestDTO) {
-//
-//        medicalBill.setPatient(patient);
-//        medicalBill.setPatientName(patient.getFullName());
-//        medicalBill.setPatientDob(String.valueOf(patient.getBirthDate()));
-//        medicalBill.setPatientGender(String.valueOf(patient.getGender()));
-//
-//        medicalBill.setSymptomName(medicalBillRequestDTO.getSymptomName());
-////        medicalBill.setDrugName(medicalBillRequestDTO.getDrugName());
-//        medicalBill.setDosage(medicalBillRequestDTO.getDosage());
-//        medicalBill.setSpecialInstructions(medicalBillRequestDTO.getSpecialInstructions());
-//        medicalBill.setSyndrome(medicalBillRequestDTO.getSyndrome());
-//    }
-private void setMedicalBillFromPrescription(MedicalBill medicalBill, Patient patient, PrescribedDrug prescribedDrug, MedicalBillRequestDTO medicalBillRequestDTO) {
-    medicalBill.setPatient(patient);
-    medicalBill.setPatientName(patient.getFullName());
-    medicalBill.setPatientDob(String.valueOf(patient.getBirthDate()));
-    medicalBill.setPatientGender(String.valueOf(patient.getGender()));
+    @Override
+    public List<MedicalBillResponseDTO> findMedicalBillsByPatientName(String patientName) {
+        return medicalBillRepository.findByPatientFullNameContainingIgnoreCase(patientName).stream()
+                .map(autoMedicalBillMapper::toResponseDTO)
+                .collect(Collectors.toList());
+    }
 
-    medicalBill.setPrescribedDrug(prescribedDrug);
-    medicalBill.setSymptomName(prescribedDrug.getSymptomName());
-    medicalBill.setSyndrome(medicalBillRequestDTO.getSyndrome());
-    medicalBill.setDosage(prescribedDrug.getDosage());
-    medicalBill.setSpecialInstructions(prescribedDrug.getSpecialInstructions());
-    // Drug names are now set in the createMedicalBill method
-}
+    @Override
+    public List<MedicalBillResponseDTO> findMedicalBillsByDoctorName(String doctorName) {
+        return medicalBillRepository.findByDoctorFullNameContainingIgnoreCase(doctorName).stream()
+                .map(autoMedicalBillMapper::toResponseDTO)
+                .collect(Collectors.toList());
+    }
 
-    private MedicalBillResponseDTO convertToResponseDTO(MedicalBill medicalBill) {
-        MedicalBillResponseDTO responseDTO = new MedicalBillResponseDTO();
-        responseDTO.setId(medicalBill.getId());
-        responseDTO.setPatientName(medicalBill.getPatientName());
-        responseDTO.setPatientDoB(medicalBill.getPatientDob());
-        responseDTO.setPatientGender(medicalBill.getPatientGender());
-        responseDTO.setSymptomName(medicalBill.getSymptomName());
-        responseDTO.setSyndrome(medicalBill.getSyndrome());
-        responseDTO.setDosage(medicalBill.getDosage());
-        responseDTO.setSpecialInstructions(medicalBill.getSpecialInstructions());
-        responseDTO.setDrugNames(medicalBill.getDrugNames()); // Set drug names here
+    @Override
+    @Transactional
+    public MedicalBillResponseDTO updateMedicalBill(Long id, MedicalBillRequestDTO medicalBillRequestDTO) {
+        MedicalBill existingMedicalBill = medicalBillRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("MedicalBill", "id", id));
 
-        return responseDTO;
+        Patient patient = patientRepository.findById(medicalBillRequestDTO.getPatientId())
+                .orElseThrow(() -> new ResourceNotFoundException("Patient", "id", medicalBillRequestDTO.getPatientId()));
+
+        Doctor doctor = doctorRepository.findById(medicalBillRequestDTO.getDoctorId())
+                .orElseThrow(() -> new ResourceNotFoundException("Doctor", "id", medicalBillRequestDTO.getDoctorId()));
+
+        existingMedicalBill.setPatient(patient);
+        existingMedicalBill.setDoctor(doctor);
+        existingMedicalBill.setDate(medicalBillRequestDTO.getDate());
+        existingMedicalBill.setSyndrome(medicalBillRequestDTO.getSyndrome());
+        existingMedicalBill.setNote(medicalBillRequestDTO.getNote());
+
+        List<PrescribedDrug> prescribedDrugs = prescribedDrugRepository.findAllById(medicalBillRequestDTO.getPrescribedDrugIds());
+        if (prescribedDrugs.size() != medicalBillRequestDTO.getPrescribedDrugIds().size()) {
+            throw new ResourceNotFoundException("One or more prescribed drugs not found");
+        }
+        existingMedicalBill.setDrugs(prescribedDrugs);
+
+        MedicalBill updatedMedicalBill = medicalBillRepository.save(existingMedicalBill);
+        return autoMedicalBillMapper.toResponseDTO(updatedMedicalBill);
+    }
+
+    @Override
+    @Transactional
+    public void deleteMedicalBill(Long id) {
+        MedicalBill medicalBill = medicalBillRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("MedicalBill", "id", id));
+        medicalBillRepository.delete(medicalBill);
     }
 }

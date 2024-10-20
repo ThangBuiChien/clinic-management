@@ -4,20 +4,20 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 public class PrescribedDrugRequestDTO {
-    @NotNull(message = "At least one Drug ID is required")
-    private List<Long> drugIds; // List of existing drug IDs
-
-    @NotNull(message = "Symptom Name is required")
-    @Size(min = 1, max = 50, message = "Template Name must be between 1 and 50 characters")
-    private String symptomName;
+    @NotNull(message = "Drug ID is required")
+    private Long drugId;
 
     @NotNull(message = "Dosage is required")
-    @Size(max = 50, message = "Dosage must be up to 50 characters") // Adjusting validation
-    private String dosage; 
+    private int dosage;
+
+    @NotNull(message = "Duration is required")
+    private int duration;
+
+    @NotNull(message = "Frequency is required")
+    @Size(max = 50, message = "Frequency must be up to 50 characters")
+    private String frequency;
 
     @Size(max = 200, message = "Special instructions must be up to 200 characters")
     private String specialInstructions;

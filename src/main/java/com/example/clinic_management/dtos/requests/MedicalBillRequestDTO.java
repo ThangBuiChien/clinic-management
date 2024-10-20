@@ -3,24 +3,29 @@ package com.example.clinic_management.dtos.requests;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.List;
 
+@Getter
+@Setter
 @Data
 public class MedicalBillRequestDTO {
-
     @NotNull(message = "Patient ID is required")
     private Long patientId;
 
-    @NotBlank(message = "Symptom name is required")
-    private String symptomName;
+    @NotNull(message = "Doctor ID is required")
+    private Long doctorId;
 
-    // Optional fields for new prescription
+    @NotNull(message = "Date is required")
+    private LocalDate date;
+
+    @NotBlank(message = "Syndrome is required")
     private String syndrome;
 
-    private Long prescribedDrugId;
+    private String note;
 
-    private String dosage;
-    private String specialInstructions;
-    private List<String> drugNames; // New field for creating new drugs
+    private List<Long> prescribedDrugIds;
 }

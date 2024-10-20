@@ -1,14 +1,17 @@
 package com.example.clinic_management.dtos.responses;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.List;
-
+@Getter
+@Setter
 @Data
 public class PrescribedDrugResponseDTO {
     private Long id;
-    private String symptomName;
-    private List<String> drugNames;
-    private String dosage;
+    private String drugName;
+    private int dosage;
+    private int duration;
+    private String frequency;
     private String specialInstructions;
 }

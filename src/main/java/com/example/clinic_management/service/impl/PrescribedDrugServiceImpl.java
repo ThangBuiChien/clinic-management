@@ -51,15 +51,14 @@ public class PrescribedDrugServiceImpl implements PrescribedDrugService {
 
     @Override
     public PrescribedDrugResponseDTO addPrescribedDrug(PrescribedDrugRequestDTO prescribedDrugRequestDTO) {
-        List<Drug> drugs = drugRepository.findAllById(prescribedDrugRequestDTO.getDrugIds());
-        if (drugs.size() != prescribedDrugRequestDTO.getDrugIds().size()) {
-            throw new ResourceNotFoundException("Some drugs not found");
-        }
+        Drug drug = drugRepository.findById(prescribedDrugRequestDTO.getDrugId())
+                .orElseThrow(() -> new ResourceNotFoundException("Drug", "id", prescribedDrugRequestDTO.getDrugId()));
 
         PrescribedDrug newPrescribedDrug = new PrescribedDrug();
-        newPrescribedDrug.setDrugs(drugs);
-        newPrescribedDrug.setSymptomName(prescribedDrugRequestDTO.getSymptomName());
+        newPrescribedDrug.setDrug(drug);
         newPrescribedDrug.setDosage(prescribedDrugRequestDTO.getDosage());
+        newPrescribedDrug.setDuration(prescribedDrugRequestDTO.getDuration());
+        newPrescribedDrug.setFrequency(prescribedDrugRequestDTO.getFrequency());
         newPrescribedDrug.setSpecialInstructions(prescribedDrugRequestDTO.getSpecialInstructions());
 
         prescribedDrugRepository.save(newPrescribedDrug);
@@ -72,14 +71,13 @@ public class PrescribedDrugServiceImpl implements PrescribedDrugService {
         PrescribedDrug existingPrescribedDrug = prescribedDrugRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("PrescribedDrug", "id", id));
 
-        List<Drug> drugs = drugRepository.findAllById(prescribedDrugRequestDTO.getDrugIds());
-        if (drugs.size() != prescribedDrugRequestDTO.getDrugIds().size()) {
-            throw new ResourceNotFoundException("Some drugs not found");
-        }
+        Drug drug = drugRepository.findById(prescribedDrugRequestDTO.getDrugId())
+                .orElseThrow(() -> new ResourceNotFoundException("Drug", "id", prescribedDrugRequestDTO.getDrugId()));
 
-        existingPrescribedDrug.setDrugs(drugs);
-        existingPrescribedDrug.setSymptomName(prescribedDrugRequestDTO.getSymptomName());
+        existingPrescribedDrug.setDrug(drug);
         existingPrescribedDrug.setDosage(prescribedDrugRequestDTO.getDosage());
+        existingPrescribedDrug.setDuration(prescribedDrugRequestDTO.getDuration());
+        existingPrescribedDrug.setFrequency(prescribedDrugRequestDTO.getFrequency());
         existingPrescribedDrug.setSpecialInstructions(prescribedDrugRequestDTO.getSpecialInstructions());
 
         prescribedDrugRepository.save(existingPrescribedDrug);
