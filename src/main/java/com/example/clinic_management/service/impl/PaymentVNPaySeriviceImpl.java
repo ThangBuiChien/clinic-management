@@ -19,6 +19,7 @@ import com.example.clinic_management.enums.AppointmentStatus;
 import com.example.clinic_management.exception.ResourceNotFoundException;
 import com.example.clinic_management.mapper.AutoAppointmentMapper;
 import com.example.clinic_management.repository.AppointmentRepository;
+import com.example.clinic_management.service.EmailService;
 import com.example.clinic_management.service.PaymentVNPayService;
 
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class PaymentVNPaySeriviceImpl implements PaymentVNPayService {
 
     private final AppointmentRepository appointmentRepository;
     private final AutoAppointmentMapper autoAppointmentMapper;
+    private final EmailService emailService;
 
     @Override
     public CreatePaymentRequestDTO createPaymentRequest(HttpServletRequest req, Long appointmentId)
@@ -136,6 +138,15 @@ public class PaymentVNPaySeriviceImpl implements PaymentVNPayService {
             appointment.setAppointmentStatus(AppointmentStatus.CONFIRMED);
             appointmentRepository.save(appointment);
 
+            // send mail
+            //            emailService.sendSimpleEmail(appointment.getPatient().getEmail(), "Payment success",
+            //                    "Your payment amount " + formatAmount(amount) + " VND for appointment with id "
+            //                            + appointment.getId() + " was successfully");
+
+            // send mail with html
+            emailService.sendHtmlFormatSuccessPayment(
+                    appointment.getPatient().getEmail(), "Payment success", appointment, formatAmount(amount));
+
             transactionStatusDTO.setStatus("Ok");
             transactionStatusDTO.setMessage("Successfully");
             transactionStatusDTO.setData(autoAppointmentMapper.toResponseDTO(appointment));
@@ -145,5 +156,25 @@ public class PaymentVNPaySeriviceImpl implements PaymentVNPayService {
             transactionStatusDTO.setData("");
         }
         return transactionStatusDTO;
+    }
+
+    public String formatAmount(String amount) {
+        // Convert amount to long and remove the last two digits
+        long amountLong = Long.parseLong(amount) / 100;
+        String amountStr = String.valueOf(amountLong);
+
+        // Create a StringBuilder to build the formatted string
+        StringBuilder formattedAmount = new StringBuilder();
+
+        // Insert dots every three digits from the right
+        int length = amountStr.length();
+        for (int i = 0; i < length; i++) {
+            if (i > 0 && (length - i) % 3 == 0) {
+                formattedAmount.append('.');
+            }
+            formattedAmount.append(amountStr.charAt(i));
+        }
+
+        return formattedAmount.toString();
     }
 }

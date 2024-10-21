@@ -39,7 +39,7 @@ public class PatientController {
     @PostMapping("")
     public ResponseEntity<ApiResponse> addPatient(@RequestBody @Valid PatientRequestDTO patientRequestDTO) {
         return ResponseEntity.ok(ApiResponse.builder()
-                .message("Doctor created successfully")
+                .message("Patient created successfully")
                 .result(patientService.addPatient(patientRequestDTO))
                 .build());
     }
