@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Add some CSS to style your email */
+        .container {
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        .content {
+            padding: 20px;
+        }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Appointment Payment Successful</h1>
+    </div>
+    <div class="content">
+        <p>Dear ${customerName},</p>
+        <p>We are pleased to inform you that your payment of <strong>${amount}</strong> VND for the appointment with ID <strong>${appointmentId}</strong> has been successfully processed.</p>
+        <p>Here are your appointment details:</p>
+        <ul>
+            <li><strong>Date:</strong> ${appointmentDate}</li>
+            <li><strong>Time Slot:</strong> ${timeSlot}</li>
+            <li><strong>Doctor:</strong> ${doctorName}</li>
+            <li><strong>Status:</strong> ${appointmentStatus}</li>
+        </ul>
+        <p>If you have any questions or require further assistance, please contact us at support@clinic.com.</p>
+    </div>
+    <div class="footer">
+        <p>Best regards,</p>
+        <p>Your Clinic Team</p>
+    </div>
+</div>
+</body>
+</html>
