@@ -72,7 +72,8 @@ public class AppointmentController {
             @PathVariable Long doctorId, @PathVariable String date) {
 
         // convert date string to LocalDate
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+        //        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate localDate = LocalDate.parse(date, formatter);
 
         return ResponseEntity.ok(ApiResponse.builder()
