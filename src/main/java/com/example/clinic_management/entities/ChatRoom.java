@@ -1,15 +1,16 @@
 package com.example.clinic_management.entities;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import jakarta.persistence.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -28,35 +29,34 @@ public class ChatRoom {
     @JoinTable(
             name = "chat_room_participants",
             joinColumns = @JoinColumn(name = "chat_room_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<Patient> participants = new HashSet<>();
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChatMessage> messages = new ArrayList<>();
 
-    public void addMessage(ChatMessage message){
+    public void addMessage(ChatMessage message) {
         messages.add(message);
         message.setChatRoom(this);
     }
 
-    public void deleteMessage(ChatMessage message){
+    public void deleteMessage(ChatMessage message) {
         messages.remove(message);
         message.setChatRoom(null);
     }
 
-    public void addParticipant(Patient patient){
+    public void addParticipant(Patient patient) {
         participants.add(patient);
         patient.getChatRooms().add(this);
     }
 
-    public void addParticipants(List<Patient> patients){
-        for(Patient patient : patients){
+    public void addParticipants(List<Patient> patients) {
+        for (Patient patient : patients) {
             addParticipant(patient);
         }
     }
 
-    public void removeParticipants(Patient patient){
+    public void removeParticipants(Patient patient) {
         participants.remove(patient);
         patient.getChatRooms().remove(this);
     }

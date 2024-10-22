@@ -1,24 +1,27 @@
 package com.example.clinic_management.controllers;
 
-import com.example.clinic_management.dtos.requests.ChatRoomRequestDTO;
-import com.example.clinic_management.dtos.responses.ApiResponse;
-import com.example.clinic_management.entities.ChatMessage;
-import com.example.clinic_management.service.ChatRoomService;
+import java.util.List;
+
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.example.clinic_management.dtos.requests.ChatRoomRequestDTO;
+import com.example.clinic_management.dtos.responses.ApiResponse;
+import com.example.clinic_management.dtos.responses.ChatMessageResponseDTO;
+import com.example.clinic_management.service.ChatRoomService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("${api.prefix}/chat_room")
+@RequestMapping("api/chat_room")
 public class ChatRoomController {
     private final ChatRoomService chatRoomService;
 
     @PostMapping("")
-    public ResponseEntity<ApiResponse> createChatRoom(@RequestBody @Valid ChatRoomRequestDTO chatRoomRequest){
+    public ResponseEntity<ApiResponse> createChatRoom(@RequestBody @Valid ChatRoomRequestDTO chatRoomRequest) {
         return ResponseEntity.ok(ApiResponse.builder()
                 .message("Chatroom created successfully")
                 .result(chatRoomService.createChatRoom(chatRoomRequest.getRoomName(), chatRoomRequest.getUserIds()))
@@ -26,7 +29,7 @@ public class ChatRoomController {
     }
 
     @GetMapping("/history/{roomId}")
-    public List<ChatMessage> getChatHistory(@PathVariable Long roomId) {
+    public List<ChatMessageResponseDTO> getChatHistory(@PathVariable Long roomId) {
         return chatRoomService.getChatMessageHistory(roomId);
     }
 

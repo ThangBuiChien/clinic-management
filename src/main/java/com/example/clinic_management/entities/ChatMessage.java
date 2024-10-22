@@ -1,7 +1,9 @@
 package com.example.clinic_management.entities;
 
-import com.example.clinic_management.enums.MessageType;
 import jakarta.persistence.*;
+
+import com.example.clinic_management.enums.MessageType;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,5 +27,4 @@ public class ChatMessage {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "chat_room_id", nullable = false)
     private ChatRoom chatRoom;
-
 }
