@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.clinic_management.dtos.requests.AddAppointmentRequestByDepartmentDTO;
@@ -133,7 +134,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public List<AppointmentResponseDTO> getAppointmentByDoctorIdAndDate(Long doctorId, LocalDate date) {
-        List<Appointment> appointment = appointmentRepository.findByDoctorIdAndAppointmentDate(doctorId, date);
+        List<Appointment> appointment = appointmentRepository.findByDoctorIdAndAppointmentDate(
+                doctorId, date, Sort.by(Sort.Direction.ASC, "timeSlot"));
         return appointment.stream().map(autoAppointmentMapper::toResponseDTO).toList();
     }
 
