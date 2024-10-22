@@ -23,10 +23,14 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name : Set environment variables
+        run: |
+          echo "EMAIL_USERNAME=${{ secrets.EMAIL_USERNAME }}" >> $GITHUB_ENV
+          echo "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" >> $GITHUB_ENV
+
       # Step 3: Build and run tests with Maven
       - name: Build and Test with Maven
         run: mvn -B clean install --file pom.xml  # This ensures the tests are run
-#        run: mvn -B clean install -DskipTests --file pom.xml
 
 
       # Optional: Update the dependency graph
