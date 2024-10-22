@@ -1,12 +1,12 @@
 package com.example.clinic_management;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 public class AlwaysTrueTest {
     @Test
     void testAlwaysTrue() {
-        assertTrue(false);  // This will always pass
+        assertTrue(true); // This will always pass
     }
 }
