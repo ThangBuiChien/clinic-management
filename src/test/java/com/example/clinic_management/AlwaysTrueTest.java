@@ -7,6 +7,6 @@ import org.junit.jupiter.api.Test;
 public class AlwaysTrueTest {
     @Test
     void testAlwaysTrue() {
-        assertTrue(false); // This will always pass
+        assertTrue(true); // This will always pass
     }
 }
