@@ -2,6 +2,8 @@ package com.example.clinic_management.service.impl;
 
 import java.util.List;
 
+import com.example.clinic_management.dtos.responses.ChatRoomResponseDTO;
+import com.example.clinic_management.mapper.AutoChatRoomMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -26,11 +28,12 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
     private final PatientRepository patientRepository;
     private final AutoChatMessageMapper autoChatMessageMapper;
+    private final AutoChatRoomMapper autoChatRoomMapper;
 
     private final Logger logger = LoggerFactory.getLogger(ChatRoomService.class);
 
     @Override
-    public ChatRoom createChatRoom(String roomName, List<Long> userIds) {
+    public ChatRoomResponseDTO createChatRoom(String roomName, List<Long> userIds) {
         List<Patient> users = patientRepository.findAllById(userIds);
         if (users.size() != userIds.size()) {
             logger.warn("Not all user IDs were found");
@@ -43,7 +46,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         chatRoom.setRoomName(roomName);
         chatRoom.addParticipants(users);
 
-        return chatRoomRepository.save(chatRoom);
+        return autoChatRoomMapper.toResponseDTO(chatRoomRepository.save(chatRoom));
     }
 
     @Override
