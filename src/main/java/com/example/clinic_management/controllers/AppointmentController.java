@@ -3,8 +3,6 @@ package com.example.clinic_management.controllers;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import com.example.clinic_management.dtos.requests.AddAppointmentRequestByDepartmentDTO;
-import com.example.clinic_management.dtos.requests.AddAppointmentRequestByDoctorDTO;
 import jakarta.validation.Valid;
 
 import org.springframework.data.domain.Pageable;
@@ -12,7 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.clinic_management.dtos.requests.AppointmentRequestDTO;
+import com.example.clinic_management.dtos.requests.AddAppointmentRequestByDepartmentDTO;
+import com.example.clinic_management.dtos.requests.AddAppointmentRequestByDoctorDTO;
 import com.example.clinic_management.dtos.responses.ApiResponse;
 import com.example.clinic_management.enums.AppointmentStatus;
 import com.example.clinic_management.service.AppointmentService;
@@ -25,16 +24,18 @@ import lombok.RequiredArgsConstructor;
 public class AppointmentController {
     private final AppointmentService appointmentService;
 
-//    @PostMapping("")
-//    public ResponseEntity<ApiResponse> addAppointment(@Valid @RequestBody AppointmentRequestDTO appointmentRequestDTO) {
-//        return ResponseEntity.ok(ApiResponse.builder()
-//                .message("Appointment created successfully")
-//                .result(appointmentService.addAppointment(appointmentRequestDTO))
-//                .build());
-//    }
+    //    @PostMapping("")
+    //    public ResponseEntity<ApiResponse> addAppointment(@Valid @RequestBody AppointmentRequestDTO
+    // appointmentRequestDTO) {
+    //        return ResponseEntity.ok(ApiResponse.builder()
+    //                .message("Appointment created successfully")
+    //                .result(appointmentService.addAppointment(appointmentRequestDTO))
+    //                .build());
+    //    }
 
     @PostMapping("/doctor")
-    public ResponseEntity<ApiResponse> addAppointmentByDoctor(@Valid @RequestBody AddAppointmentRequestByDoctorDTO appointmentRequestDTO) {
+    public ResponseEntity<ApiResponse> addAppointmentByDoctor(
+            @Valid @RequestBody AddAppointmentRequestByDoctorDTO appointmentRequestDTO) {
         return ResponseEntity.ok(ApiResponse.builder()
                 .message("Appointment created successfully")
                 .result(appointmentService.addAppointmentBySelectDoctor(appointmentRequestDTO))
@@ -42,7 +43,8 @@ public class AppointmentController {
     }
 
     @PostMapping("/department")
-    public ResponseEntity<ApiResponse> addAppointmentByDepartment(@Valid @RequestBody AddAppointmentRequestByDepartmentDTO appointmentRequestDTO) {
+    public ResponseEntity<ApiResponse> addAppointmentByDepartment(
+            @Valid @RequestBody AddAppointmentRequestByDepartmentDTO appointmentRequestDTO) {
         return ResponseEntity.ok(ApiResponse.builder()
                 .message("Appointment created successfully")
                 .result(appointmentService.addAppointmentBySelectDepartment(appointmentRequestDTO))
@@ -70,7 +72,8 @@ public class AppointmentController {
             @PathVariable Long doctorId, @PathVariable String date) {
 
         // convert date string to LocalDate
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+        //        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate localDate = LocalDate.parse(date, formatter);
 
         return ResponseEntity.ok(ApiResponse.builder()

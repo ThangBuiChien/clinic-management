@@ -1,5 +1,16 @@
 package com.example.clinic_management.service.impl;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.clinic_management.config.PaymentConfig;
 import com.example.clinic_management.dtos.requests.CreatePaymentRequestDTO;
 import com.example.clinic_management.dtos.responses.TransactionStatusResponseDTO;
@@ -8,18 +19,10 @@ import com.example.clinic_management.enums.AppointmentStatus;
 import com.example.clinic_management.exception.ResourceNotFoundException;
 import com.example.clinic_management.mapper.AutoAppointmentMapper;
 import com.example.clinic_management.repository.AppointmentRepository;
+import com.example.clinic_management.service.EmailService;
 import com.example.clinic_management.service.PaymentVNPayService;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -27,13 +30,15 @@ public class PaymentVNPaySeriviceImpl implements PaymentVNPayService {
 
     private final AppointmentRepository appointmentRepository;
     private final AutoAppointmentMapper autoAppointmentMapper;
-
+    private final EmailService emailService;
 
     @Override
-    public CreatePaymentRequestDTO createPaymentRequest(HttpServletRequest req, Long appointmentId) throws UnsupportedEncodingException {
-        Appointment appointment = appointmentRepository.findById(appointmentId)
+    public CreatePaymentRequestDTO createPaymentRequest(HttpServletRequest req, Long appointmentId)
+            throws UnsupportedEncodingException {
+        Appointment appointment = appointmentRepository
+                .findById(appointmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("appointment", "id", appointmentId));
-        if(appointment.getAppointmentStatus() != AppointmentStatus.PENDING){
+        if (appointment.getAppointmentStatus() != AppointmentStatus.PENDING) {
             throw new RuntimeException("Appointment has been pay!");
         }
 
@@ -41,7 +46,7 @@ public class PaymentVNPaySeriviceImpl implements PaymentVNPayService {
         String vnp_Command = "pay";
         String orderType = "other";
 
-        long amount = 70000*100;
+        long amount = 70000 * 100;
         String bankCode = "NCB";
 
         String vnp_TxnRef = PaymentConfig.getRandomNumber(8);
@@ -89,11 +94,11 @@ public class PaymentVNPaySeriviceImpl implements PaymentVNPayService {
             String fieldName = (String) itr.next();
             String fieldValue = (String) vnp_Params.get(fieldName);
             if ((fieldValue != null) && (fieldValue.length() > 0)) {
-                //Build hash data
+                // Build hash data
                 hashData.append(fieldName);
                 hashData.append('=');
                 hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
-                //Build query
+                // Build query
                 query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII.toString()));
                 query.append('=');
                 query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
@@ -120,16 +125,27 @@ public class PaymentVNPaySeriviceImpl implements PaymentVNPayService {
 
     @Transactional
     @Override
-    public TransactionStatusResponseDTO handleTransactionResult(String amount, String bankCode, String order, String responseCode) {
+    public TransactionStatusResponseDTO handleTransactionResult(
+            String amount, String bankCode, String order, String responseCode) {
         TransactionStatusResponseDTO transactionStatusDTO = new TransactionStatusResponseDTO();
         if (responseCode.equals("00")) {
             String decodedOrderInfo = java.net.URLDecoder.decode(order, StandardCharsets.UTF_8);
             String orderIdStr = decodedOrderInfo.substring(decodedOrderInfo.indexOf(":") + 1);
             Long orderId = Long.parseLong(orderIdStr);
-            Appointment appointment  = appointmentRepository.findByPayId(orderId)
+            Appointment appointment = appointmentRepository
+                    .findByPayId(orderId)
                     .orElseThrow(() -> new ResourceNotFoundException("appointment", "payId", orderId));
             appointment.setAppointmentStatus(AppointmentStatus.CONFIRMED);
             appointmentRepository.save(appointment);
+
+            // send mail
+            //            emailService.sendSimpleEmail(appointment.getPatient().getEmail(), "Payment success",
+            //                    "Your payment amount " + formatAmount(amount) + " VND for appointment with id "
+            //                            + appointment.getId() + " was successfully");
+
+            // send mail with html
+            emailService.sendHtmlFormatSuccessPayment(
+                    appointment.getPatient().getEmail(), "Payment success", appointment, formatAmount(amount));
 
             transactionStatusDTO.setStatus("Ok");
             transactionStatusDTO.setMessage("Successfully");
@@ -140,5 +156,25 @@ public class PaymentVNPaySeriviceImpl implements PaymentVNPayService {
             transactionStatusDTO.setData("");
         }
         return transactionStatusDTO;
+    }
+
+    public String formatAmount(String amount) {
+        // Convert amount to long and remove the last two digits
+        long amountLong = Long.parseLong(amount) / 100;
+        String amountStr = String.valueOf(amountLong);
+
+        // Create a StringBuilder to build the formatted string
+        StringBuilder formattedAmount = new StringBuilder();
+
+        // Insert dots every three digits from the right
+        int length = amountStr.length();
+        for (int i = 0; i < length; i++) {
+            if (i > 0 && (length - i) % 3 == 0) {
+                formattedAmount.append('.');
+            }
+            formattedAmount.append(amountStr.charAt(i));
+        }
+
+        return formattedAmount.toString();
     }
 }

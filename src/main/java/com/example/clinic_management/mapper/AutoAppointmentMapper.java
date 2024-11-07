@@ -1,9 +1,9 @@
 package com.example.clinic_management.mapper;
 
-import com.example.clinic_management.dtos.requests.AddAppointmentRequestByDoctorDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import com.example.clinic_management.dtos.requests.AddAppointmentRequestByDoctorDTO;
 import com.example.clinic_management.dtos.requests.AppointmentRequestDTO;
 import com.example.clinic_management.dtos.responses.AppointmentResponseDTO;
 import com.example.clinic_management.entities.Appointment;

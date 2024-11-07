@@ -1,6 +1,7 @@
 package com.example.clinic_management.service.impl;
 
 import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -36,8 +37,9 @@ public class PrescribedDrugServiceImpl implements PrescribedDrugService {
     @Override
     public Page<PrescribedDrugResponseDTO> getAllPrescribedDrugs(Pageable pageable) {
         Page<PrescribedDrug> prescribedDrugs = prescribedDrugRepository.findAll(pageable);
-        List<PrescribedDrugResponseDTO> prescribedDrugDTOs =
-                prescribedDrugs.stream().map(autoPrescribedDrugMapper::toResponseDTO).toList();
+        List<PrescribedDrugResponseDTO> prescribedDrugDTOs = prescribedDrugs.stream()
+                .map(autoPrescribedDrugMapper::toResponseDTO)
+                .toList();
         return new PageImpl<>(prescribedDrugDTOs, pageable, prescribedDrugs.getTotalElements());
     }
 
@@ -51,7 +53,8 @@ public class PrescribedDrugServiceImpl implements PrescribedDrugService {
 
     @Override
     public PrescribedDrugResponseDTO addPrescribedDrug(PrescribedDrugRequestDTO prescribedDrugRequestDTO) {
-        Drug drug = drugRepository.findById(prescribedDrugRequestDTO.getDrugId())
+        Drug drug = drugRepository
+                .findById(prescribedDrugRequestDTO.getDrugId())
                 .orElseThrow(() -> new ResourceNotFoundException("Drug", "id", prescribedDrugRequestDTO.getDrugId()));
 
         PrescribedDrug newPrescribedDrug = new PrescribedDrug();
@@ -68,10 +71,12 @@ public class PrescribedDrugServiceImpl implements PrescribedDrugService {
 
     @Override
     public PrescribedDrugResponseDTO updatePrescribedDrug(Long id, PrescribedDrugRequestDTO prescribedDrugRequestDTO) {
-        PrescribedDrug existingPrescribedDrug = prescribedDrugRepository.findById(id)
+        PrescribedDrug existingPrescribedDrug = prescribedDrugRepository
+                .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("PrescribedDrug", "id", id));
 
-        Drug drug = drugRepository.findById(prescribedDrugRequestDTO.getDrugId())
+        Drug drug = drugRepository
+                .findById(prescribedDrugRequestDTO.getDrugId())
                 .orElseThrow(() -> new ResourceNotFoundException("Drug", "id", prescribedDrugRequestDTO.getDrugId()));
 
         existingPrescribedDrug.setDrug(drug);
@@ -87,7 +92,8 @@ public class PrescribedDrugServiceImpl implements PrescribedDrugService {
 
     @Override
     public void deletePrescribedDrug(Long id) {
-        prescribedDrugRepository.findById(id)
+        prescribedDrugRepository
+                .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("PrescribedDrug", "id", id));
         prescribedDrugRepository.deleteById(id);
     }

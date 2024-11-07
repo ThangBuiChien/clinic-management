@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import jakarta.validation.constraints.*;
 
+import org.hibernate.annotations.NaturalId;
+
 import com.example.clinic_management.enums.Gender;
 
 import lombok.Getter;
@@ -22,8 +24,9 @@ public class PatientRequestDTO {
     private long citizenId;
 
     @NotBlank(message = "Email is required")
-    @Size(max = 20)
+    @Size(max = 50)
     @Email
+    @NaturalId
     private String email;
 
     @NotNull(message = "Gender is required")
