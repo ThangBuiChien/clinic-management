@@ -17,7 +17,9 @@ public class AppointmentResponseDTO {
     //    private Doctor doctor;
     //    private Patient patient;
     private String doctorName;
+    private Long doctorId;
     private String patientName;
+    private Long patientId;
     private AppointmentStatus appointmentStatus;
     private TimeSlot timeSlot;
 
