@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.clinic_management.dtos.requests.PatientRequestDTO;
@@ -26,12 +27,19 @@ public class PatientServiceImpl implements PatientService {
 
     private final AutoPatientMapper autoPatientMapper;
 
+    private final PasswordEncoder passwordEncoder;
+
+
     @Override
     public PatientResponseDTO addPatient(PatientRequestDTO patientRequestDTO) {
         Patient newPatient = patientRepository.save(autoPatientMapper.toEntity(patientRequestDTO));
-        newPatient.setRole(Role.PATIENT);
+        newPatient.setRole(Role.ROLE_PATIENT);
         newPatient.setStatus(AccountStatus.ACTIVE);
-        return autoPatientMapper.toResponseDTO(newPatient);
+
+        newPatient.setPassword(passwordEncoder.encode(patientRequestDTO.getPassword()));
+
+
+        return autoPatientMapper.toResponseDTO(patientRepository.save(newPatient));
     }
 
     @Override
@@ -40,7 +48,7 @@ public class PatientServiceImpl implements PatientService {
 
         Patient updatedPatient = autoPatientMapper.toEntity(patientRequestDTO);
         updatedPatient.setId(id);
-        updatedPatient.setRole(Role.PATIENT);
+        updatedPatient.setRole(Role.ROLE_PATIENT);
         updatedPatient.setStatus(AccountStatus.ACTIVE);
         patientRepository.save(updatedPatient);
         return autoPatientMapper.toResponseDTO(updatedPatient);
