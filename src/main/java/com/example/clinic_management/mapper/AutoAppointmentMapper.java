@@ -10,7 +10,7 @@ import com.example.clinic_management.entities.Appointment;
 
 @Mapper(
         componentModel = "spring",
-        uses = {MapperService.class})
+        uses = {MapperService.class, AutoPatientMapper.class})
 public interface AutoAppointmentMapper {
 
     @Mapping(source = "doctorId", target = "doctor")
@@ -23,7 +23,8 @@ public interface AutoAppointmentMapper {
 
     @Mapping(source = "doctor.fullName", target = "doctorName")
     @Mapping(source = "doctor.id", target = "doctorId")
-    @Mapping(source = "patient.fullName", target = "patientName")
-    @Mapping(source = "patient.id", target = "patientId")
+//    @Mapping(source = "patient.fullName", target = "patientName")
+//    @Mapping(source = "patient.id", target = "patientId")
+    @Mapping(source = "patient", target = "patientResponseDTO")
     AppointmentResponseDTO toResponseDTO(Appointment appointment);
 }
