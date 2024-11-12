@@ -23,8 +23,8 @@ public interface AutoAppointmentMapper {
 
     @Mapping(source = "doctor.fullName", target = "doctorName")
     @Mapping(source = "doctor.id", target = "doctorId")
-//    @Mapping(source = "patient.fullName", target = "patientName")
-//    @Mapping(source = "patient.id", target = "patientId")
+    //    @Mapping(source = "patient.fullName", target = "patientName")
+    //    @Mapping(source = "patient.id", target = "patientId")
     @Mapping(source = "patient", target = "patientResponseDTO")
     AppointmentResponseDTO toResponseDTO(Appointment appointment);
 }

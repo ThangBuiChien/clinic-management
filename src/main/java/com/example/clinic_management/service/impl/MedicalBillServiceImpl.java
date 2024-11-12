@@ -99,7 +99,8 @@ public class MedicalBillServiceImpl implements MedicalBillService {
     @Transactional
     public MedicalBillResponseDTO updateMedicalBill(Long id, MedicalBillRequestDTO medicalBillRequestDTO) {
 
-        MedicalBill medicalBill = medicalBillRepository.findById(id)
+        MedicalBill medicalBill = medicalBillRepository
+                .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("medical bill", "id", id));
         autoMedicalBillMapper.updateMedicalBillFromDTO(medicalBillRequestDTO, medicalBill);
         medicalBillRepository.save(medicalBill);
