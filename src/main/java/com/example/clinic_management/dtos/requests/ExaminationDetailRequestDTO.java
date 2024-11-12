@@ -14,4 +14,6 @@ public class ExaminationDetailRequestDTO {
     private String examinationType;
 
     private String examinationResult;
+
+    private Long imagesCount;
 }

@@ -3,6 +3,10 @@ package com.example.clinic_management.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.clinic_management.dtos.requests.ExaminationDetailRequestDTO;
+import com.example.clinic_management.entities.ExaminationDetail;
+import com.example.clinic_management.entities.Image;
+import com.example.clinic_management.service.ImageService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,6 +24,7 @@ import com.example.clinic_management.repository.PrescribedDrugRepository;
 import com.example.clinic_management.service.MedicalBillService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +34,7 @@ public class MedicalBillServiceImpl implements MedicalBillService {
     private final DoctorRepository doctorRepository;
     private final PrescribedDrugRepository prescribedDrugRepository;
     private final AutoMedicalBillMapper autoMedicalBillMapper;
+    private final ImageService imageService;
 
     @Override
     @Transactional
@@ -57,6 +63,37 @@ public class MedicalBillServiceImpl implements MedicalBillService {
         //        return autoMedicalBillMapper.toResponseDTO(savedMedicalBill);
         MedicalBill medicalBill = autoMedicalBillMapper.toEntity(medicalBillRequestDTO);
         medicalBillRepository.save(medicalBill);
+        return autoMedicalBillMapper.toResponseDTO(medicalBill);
+    }
+
+    @Override
+    public MedicalBillResponseDTO createMedicalBillWithImage(MedicalBillRequestDTO medicalBillRequestDTO, List<MultipartFile> files) {
+        MedicalBill medicalBill = autoMedicalBillMapper.toEntity(medicalBillRequestDTO);
+//        medicalBill = medicalBillRepository.save(medicalBill);
+
+        List<Image> images = files.stream()
+                        .map(imageService::convertMultipartFileToImage)
+                                .toList();
+
+        int imageIndex = 0;
+        for (int i=0; i < medicalBillRequestDTO.getExaminationDetailRequestDTOS().size(); i++) {
+
+            int count = medicalBillRequestDTO.getExaminationDetailRequestDTOS().get(i).getImagesCount().intValue();
+            List<Image> detailImages = images.subList(imageIndex, imageIndex + count);
+            imageIndex += count;
+
+            ExaminationDetail detail = medicalBill.getExaminationDetails().get(i);
+            detail.addImage(detailImages);
+        }
+
+        medicalBillRepository.save(medicalBill);
+
+        for (ExaminationDetail detail : medicalBill.getExaminationDetails()) {
+            for (Image image : detail.getImagesTest()) {
+                imageService.updateUrlDownload(image);
+            }
+        }
+
         return autoMedicalBillMapper.toResponseDTO(medicalBill);
     }
 
