@@ -5,7 +5,6 @@ import java.util.List;
 import com.example.clinic_management.dtos.responses.ChatMessageResponseDTO;
 import com.example.clinic_management.dtos.responses.ChatRoomResponseDTO;
 import com.example.clinic_management.entities.ChatMessage;
-import com.example.clinic_management.entities.ChatRoom;
 
 public interface ChatRoomService {
     public ChatRoomResponseDTO createChatRoom(String roomName, List<Long> userIds);
