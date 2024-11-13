@@ -2,7 +2,6 @@ package com.example.clinic_management.service.impl;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +26,6 @@ public class DoctorServiceImpl implements DoctorService {
     private final DoctorRepository doctorRepository;
     private final AutoDoctorMapper autoDoctorMapper;
     private final DepartmentRepository departmentRepository;
-    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Page<DoctorResponseDTO> getAllDoctors(Pageable pageable) {
@@ -56,10 +54,8 @@ public class DoctorServiceImpl implements DoctorService {
                         () -> new ResourceNotFoundException("Department", "id", doctorRequestDTO.getDepartmentId()));
 
         Doctor doctor = autoDoctorMapper.toEntity(doctorRequestDTO);
-        doctor.setRole(Role.ROLE_DOCTOR);
+        doctor.setRole(Role.DOCTOR);
         doctor.setStatus(AccountStatus.ACTIVE);
-        doctor.setPassword(passwordEncoder.encode(doctorRequestDTO.getPassword()));
-
 
         department.addDoctor(doctor);
 

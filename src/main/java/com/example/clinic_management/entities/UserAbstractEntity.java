@@ -11,7 +11,6 @@ import com.example.clinic_management.enums.Role;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.NaturalId;
 
 @Getter
 @Setter
@@ -35,11 +34,7 @@ public abstract class UserAbstractEntity {
     @NotBlank(message = "Email is required")
     @Size(max = 50)
     @Email
-    @NaturalId
     private String email;
-
-    @NotBlank(message = "Password is required")
-    private String password;
 
     @Column(name = "gender")
     @NotNull(message = "gender is required")
