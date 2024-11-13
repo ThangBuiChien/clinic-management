@@ -67,15 +67,27 @@ public class MedicalBillController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/patient/{patientName}")
+    @GetMapping("/patient/name/{patientName}")
     public ResponseEntity<List<MedicalBillResponseDTO>> getMedicalBillsByPatientName(@PathVariable String patientName) {
         List<MedicalBillResponseDTO> responseDTOS = medicalBillService.findMedicalBillsByPatientName(patientName);
         return ResponseEntity.ok(responseDTOS);
     }
 
-    @GetMapping("/doctor/{doctorName}")
+    @GetMapping("/doctor/name/{doctorName}")
     public ResponseEntity<List<MedicalBillResponseDTO>> getMedicalBillsByDoctorName(@PathVariable String doctorName) {
         List<MedicalBillResponseDTO> responseDTOS = medicalBillService.findMedicalBillsByDoctorName(doctorName);
+        return ResponseEntity.ok(responseDTOS);
+    }
+
+    @GetMapping("/patient/id/{patientId}")
+    public ResponseEntity<Page<MedicalBillResponseDTO>>  getMedicalBillsByPatientId(@PathVariable Long patientId, Pageable pageable) {
+        Page<MedicalBillResponseDTO> responseDTOS = medicalBillService.findMedicalBillsByPatientId(patientId, pageable);
+        return ResponseEntity.ok(responseDTOS);
+    }
+
+    @GetMapping("/doctor/id/{doctorId}")
+    public ResponseEntity<Page<MedicalBillResponseDTO>>  getMedicalBillsByDoctorId(@PathVariable Long doctorId, Pageable pageable) {
+        Page<MedicalBillResponseDTO> responseDTOS = medicalBillService.findMedicalBillsByDoctorId(doctorId, pageable);
         return ResponseEntity.ok(responseDTOS);
     }
 }

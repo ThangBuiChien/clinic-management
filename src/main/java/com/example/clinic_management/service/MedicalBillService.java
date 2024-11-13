@@ -24,6 +24,10 @@ public interface MedicalBillService {
 
     List<MedicalBillResponseDTO> findMedicalBillsByDoctorName(String doctorName);
 
+    Page<MedicalBillResponseDTO> findMedicalBillsByPatientId(Long patientId, Pageable pageable);
+
+    Page<MedicalBillResponseDTO> findMedicalBillsByDoctorId(Long doctorId, Pageable pageable);
+
     MedicalBillResponseDTO updateMedicalBill(Long id, MedicalBillRequestDTO medicalBillRequestDTO);
 
     void deleteMedicalBill(Long id);

@@ -133,6 +133,16 @@ public class MedicalBillServiceImpl implements MedicalBillService {
     }
 
     @Override
+    public Page<MedicalBillResponseDTO> findMedicalBillsByPatientId(Long patientId, Pageable pageable) {
+        return medicalBillRepository.findByPatientId(patientId, pageable).map(autoMedicalBillMapper::toResponseDTO);
+    }
+
+    @Override
+    public Page<MedicalBillResponseDTO> findMedicalBillsByDoctorId(Long doctorId, Pageable pageable) {
+        return medicalBillRepository.findByDoctorId(doctorId, pageable).map(autoMedicalBillMapper::toResponseDTO);
+    }
+
+    @Override
     @Transactional
     public MedicalBillResponseDTO updateMedicalBill(Long id, MedicalBillRequestDTO medicalBillRequestDTO) {
 
