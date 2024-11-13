@@ -29,6 +29,9 @@ public class PatientRequestDTO {
     @NaturalId
     private String email;
 
+    @NotBlank(message = "Password is required")
+    private String password;
+
     @NotNull(message = "Gender is required")
     private Gender gender;
 
