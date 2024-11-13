@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ChatBotResponseDTO {
     private String message;
+    private String sessionId; // Added to track conversations
 }
