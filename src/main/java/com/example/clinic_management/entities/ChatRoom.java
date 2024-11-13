@@ -33,14 +33,14 @@ public class ChatRoom {
     private Set<Patient> participants = new HashSet<>();
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ChatMessage> messages = new ArrayList<>();
+    private List<ChatMessageEntity> messages = new ArrayList<>();
 
-    public void addMessage(ChatMessage message) {
+    public void addMessage(ChatMessageEntity message) {
         messages.add(message);
         message.setChatRoom(this);
     }
 
-    public void deleteMessage(ChatMessage message) {
+    public void deleteMessage(ChatMessageEntity message) {
         messages.remove(message);
         message.setChatRoom(null);
     }

@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.clinic_management.dtos.responses.ChatMessageResponseDTO;
 import com.example.clinic_management.dtos.responses.ChatRoomResponseDTO;
-import com.example.clinic_management.entities.ChatMessage;
+import com.example.clinic_management.entities.ChatMessageEntity;
 import com.example.clinic_management.entities.ChatRoom;
 import com.example.clinic_management.entities.Patient;
 import com.example.clinic_management.exception.ResourceNotFoundException;
@@ -65,9 +65,9 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
     @Transactional
     @Override
-    public void addMessageToChatRoom(ChatMessage chatMessage, Long chatRoomId) {
+    public void addMessageToChatRoom(ChatMessageEntity chatMessageEntity, Long chatRoomId) {
         ChatRoom chatRoom = findByIdToEntity(chatRoomId);
-        chatRoom.addMessage(chatMessage);
+        chatRoom.addMessage(chatMessageEntity);
 
         chatRoomRepository.save(chatRoom);
     }
