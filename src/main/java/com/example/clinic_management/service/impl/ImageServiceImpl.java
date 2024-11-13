@@ -84,7 +84,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public void updateUrlDownload(Image image) {
-        image.setDownloadUrl("/api/v1/images/image/download/" + image.getId());
+        image.setDownloadUrl("/api/images/download/" + image.getId());
         imageRepository.save(image);
 
     }

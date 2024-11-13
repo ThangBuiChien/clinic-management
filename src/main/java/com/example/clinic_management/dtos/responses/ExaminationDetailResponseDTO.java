@@ -3,6 +3,8 @@ package com.example.clinic_management.dtos.responses;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class ExaminationDetailResponseDTO {
@@ -15,4 +17,6 @@ public class ExaminationDetailResponseDTO {
     private String examinationType;
 
     private String examinationResult;
+
+    private List<ImageResponseDTO> imageResponseDTO;
 }
