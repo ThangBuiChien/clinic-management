@@ -3,9 +3,12 @@ package com.example.clinic_management.service.impl;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.example.clinic_management.dtos.requests.AppointmentSearchCriteria;
+import com.example.clinic_management.specification.AppointmentSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.example.clinic_management.dtos.requests.AddAppointmentRequestByDepartmentDTO;
@@ -38,6 +41,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final DoctorTimeSlotCapacityRepository doctorTimeSlotCapacityRepository;
 
     private final ScheduleRepository scheduleRepository;
+
+    private final AppointmentSpecification appointmentSpecification;
 
     @Override
     public AppointmentResponseDTO addAppointment(AppointmentRequestDTO appointmentRequestDTO) {
@@ -149,5 +154,11 @@ public class AppointmentServiceImpl implements AppointmentService {
                 })
                 .map(autoAppointmentMapper::toResponseDTO)
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment", "id", id));
+    }
+
+    @Override
+    public Page<AppointmentResponseDTO> searchAppointment(AppointmentSearchCriteria appointmentSearchCriteria, Pageable pageable) {
+        Specification<Appointment> spec = appointmentSpecification.getSearchSpecification(appointmentSearchCriteria);
+        return appointmentRepository.findAll(spec, pageable).map(autoAppointmentMapper::toResponseDTO);
     }
 }

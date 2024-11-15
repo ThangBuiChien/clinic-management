@@ -3,6 +3,7 @@ package com.example.clinic_management.service;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.example.clinic_management.dtos.requests.AppointmentSearchCriteria;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -29,4 +30,6 @@ public interface AppointmentService {
     List<AppointmentResponseDTO> getAppointmentByDoctorIdAndDate(Long doctorId, LocalDate date);
 
     AppointmentResponseDTO updateAppointmentStatus(Long id, AppointmentStatus appointmentStatus);
+
+    Page<AppointmentResponseDTO> searchAppointment(AppointmentSearchCriteria appointmentSearchCriteria, Pageable pageable);
 }

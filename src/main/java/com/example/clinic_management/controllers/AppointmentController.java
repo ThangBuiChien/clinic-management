@@ -3,8 +3,11 @@ package com.example.clinic_management.controllers;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import com.example.clinic_management.dtos.requests.AppointmentSearchCriteria;
+import com.example.clinic_management.dtos.responses.AppointmentResponseDTO;
 import jakarta.validation.Valid;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -90,4 +93,17 @@ public class AppointmentController {
                 .result(appointmentService.updateAppointmentStatus(id, newStatus))
                 .build());
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse> searchProducts(
+            AppointmentSearchCriteria criteria,
+            Pageable pageable) {
+
+        Page<AppointmentResponseDTO> products = appointmentService.searchAppointment(criteria, pageable);
+        return ResponseEntity.ok(ApiResponse.builder()
+                .message("Search/filter appointment successfully")
+                .result(products)
+                .build());
+    }
+
 }
