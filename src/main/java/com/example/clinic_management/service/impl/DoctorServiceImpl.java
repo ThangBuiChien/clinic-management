@@ -60,7 +60,6 @@ public class DoctorServiceImpl implements DoctorService {
         doctor.setStatus(AccountStatus.ACTIVE);
         doctor.setPassword(passwordEncoder.encode(doctorRequestDTO.getPassword()));
 
-
         department.addDoctor(doctor);
 
         //        doctorRepository.save(doctor);

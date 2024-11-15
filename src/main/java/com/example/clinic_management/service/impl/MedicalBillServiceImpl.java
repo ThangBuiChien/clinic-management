@@ -3,17 +3,16 @@ package com.example.clinic_management.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.example.clinic_management.dtos.requests.ExaminationDetailRequestDTO;
-import com.example.clinic_management.entities.ExaminationDetail;
-import com.example.clinic_management.entities.Image;
-import com.example.clinic_management.service.ImageService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.clinic_management.dtos.requests.MedicalBillRequestDTO;
 import com.example.clinic_management.dtos.responses.MedicalBillResponseDTO;
+import com.example.clinic_management.entities.ExaminationDetail;
+import com.example.clinic_management.entities.Image;
 import com.example.clinic_management.entities.MedicalBill;
 import com.example.clinic_management.exception.ResourceNotFoundException;
 import com.example.clinic_management.mapper.AutoMedicalBillMapper;
@@ -21,10 +20,10 @@ import com.example.clinic_management.repository.DoctorRepository;
 import com.example.clinic_management.repository.MedicalBillRepository;
 import com.example.clinic_management.repository.PatientRepository;
 import com.example.clinic_management.repository.PrescribedDrugRepository;
+import com.example.clinic_management.service.ImageService;
 import com.example.clinic_management.service.MedicalBillService;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -67,18 +66,24 @@ public class MedicalBillServiceImpl implements MedicalBillService {
     }
 
     @Override
-    public MedicalBillResponseDTO createMedicalBillWithImage(MedicalBillRequestDTO medicalBillRequestDTO, List<MultipartFile> files) {
+    public MedicalBillResponseDTO createMedicalBillWithImage(
+            MedicalBillRequestDTO medicalBillRequestDTO, List<MultipartFile> files) {
         MedicalBill medicalBill = autoMedicalBillMapper.toEntity(medicalBillRequestDTO);
-//        medicalBill = medicalBillRepository.save(medicalBill);
+        //        medicalBill = medicalBillRepository.save(medicalBill);
 
-        List<Image> images = files.stream()
-                        .map(imageService::convertMultipartFileToImage)
-                                .toList();
+        List<Image> images =
+                files.stream().map(imageService::convertMultipartFileToImage).toList();
 
         int imageIndex = 0;
-        for (int i=0; i < medicalBillRequestDTO.getExaminationDetailRequestDTOS().size(); i++) {
+        for (int i = 0;
+                i < medicalBillRequestDTO.getExaminationDetailRequestDTOS().size();
+                i++) {
 
-            int count = medicalBillRequestDTO.getExaminationDetailRequestDTOS().get(i).getImagesCount().intValue();
+            int count = medicalBillRequestDTO
+                    .getExaminationDetailRequestDTOS()
+                    .get(i)
+                    .getImagesCount()
+                    .intValue();
             List<Image> detailImages = images.subList(imageIndex, imageIndex + count);
             imageIndex += count;
 

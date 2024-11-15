@@ -11,13 +11,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.clinic_management.dtos.requests.MedicalBillRequestDTO;
 import com.example.clinic_management.dtos.responses.MedicalBillResponseDTO;
 import com.example.clinic_management.service.MedicalBillService;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/medical-bills")
@@ -37,7 +37,8 @@ public class MedicalBillController {
     public ResponseEntity<MedicalBillResponseDTO> createMedicalBillWithImages(
             @RequestPart("medicalBillData") MedicalBillRequestDTO medicalBillRequestDTO,
             @RequestPart("files") List<MultipartFile> files) {
-        MedicalBillResponseDTO responseDTO = medicalBillService.createMedicalBillWithImage(medicalBillRequestDTO,files);
+        MedicalBillResponseDTO responseDTO =
+                medicalBillService.createMedicalBillWithImage(medicalBillRequestDTO, files);
 
         return ResponseEntity.ok(responseDTO);
     }
@@ -80,13 +81,15 @@ public class MedicalBillController {
     }
 
     @GetMapping("/patient/id/{patientId}")
-    public ResponseEntity<Page<MedicalBillResponseDTO>>  getMedicalBillsByPatientId(@PathVariable Long patientId, Pageable pageable) {
+    public ResponseEntity<Page<MedicalBillResponseDTO>> getMedicalBillsByPatientId(
+            @PathVariable Long patientId, Pageable pageable) {
         Page<MedicalBillResponseDTO> responseDTOS = medicalBillService.findMedicalBillsByPatientId(patientId, pageable);
         return ResponseEntity.ok(responseDTOS);
     }
 
     @GetMapping("/doctor/id/{doctorId}")
-    public ResponseEntity<Page<MedicalBillResponseDTO>>  getMedicalBillsByDoctorId(@PathVariable Long doctorId, Pageable pageable) {
+    public ResponseEntity<Page<MedicalBillResponseDTO>> getMedicalBillsByDoctorId(
+            @PathVariable Long doctorId, Pageable pageable) {
         Page<MedicalBillResponseDTO> responseDTOS = medicalBillService.findMedicalBillsByDoctorId(doctorId, pageable);
         return ResponseEntity.ok(responseDTOS);
     }

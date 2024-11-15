@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import com.example.clinic_management.dtos.requests.AddAppointmentRequestByDepartmentDTO;
 import com.example.clinic_management.dtos.requests.AddAppointmentRequestByDoctorDTO;
 import com.example.clinic_management.dtos.requests.AppointmentRequestDTO;
+import com.example.clinic_management.dtos.requests.AppointmentSearchCriteria;
 import com.example.clinic_management.dtos.responses.AppointmentResponseDTO;
 import com.example.clinic_management.enums.AppointmentStatus;
 
@@ -29,4 +30,7 @@ public interface AppointmentService {
     List<AppointmentResponseDTO> getAppointmentByDoctorIdAndDate(Long doctorId, LocalDate date);
 
     AppointmentResponseDTO updateAppointmentStatus(Long id, AppointmentStatus appointmentStatus);
+
+    Page<AppointmentResponseDTO> searchAppointment(
+            AppointmentSearchCriteria appointmentSearchCriteria, Pageable pageable);
 }

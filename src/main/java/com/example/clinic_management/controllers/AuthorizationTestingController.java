@@ -1,9 +1,10 @@
 package com.example.clinic_management.controllers;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,6 +30,4 @@ public class AuthorizationTestingController {
     public String doctorEndpoint() {
         return "This endpoint is accessible by users with the DOCTOR role.";
     }
-
-
 }

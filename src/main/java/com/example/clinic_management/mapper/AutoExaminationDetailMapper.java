@@ -1,11 +1,11 @@
 package com.example.clinic_management.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import com.example.clinic_management.dtos.requests.ExaminationDetailRequestDTO;
 import com.example.clinic_management.dtos.responses.ExaminationDetailResponseDTO;
 import com.example.clinic_management.entities.ExaminationDetail;
-import org.mapstruct.Mapping;
 
 @Mapper(
         componentModel = "spring",

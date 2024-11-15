@@ -1,17 +1,18 @@
 package com.example.clinic_management.security.user;
 
-import com.example.clinic_management.entities.UserAbstractEntity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.example.clinic_management.entities.UserAbstractEntity;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -24,23 +25,17 @@ public class EShopUserDetail implements UserDetails {
     private String password;
     private Collection<GrantedAuthority> authorities;
 
-    public static EShopUserDetail buildEShopUserDetail(UserAbstractEntity user){
+    public static EShopUserDetail buildEShopUserDetail(UserAbstractEntity user) {
 
-//        List<GrantedAuthority> authorities = user.getRoles()
-//                .stream()
-//                .map(role -> new SimpleGrantedAuthority(role.getName()))
-//                .collect(Collectors.toList());
-
+        //        List<GrantedAuthority> authorities = user.getRoles()
+        //                .stream()
+        //                .map(role -> new SimpleGrantedAuthority(role.getName()))
+        //                .collect(Collectors.toList());
 
         GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().name());
         List<GrantedAuthority> authorities = List.of(authority);
 
-
-        return new EShopUserDetail(
-                user.getId(),
-                user.getEmail(),
-                user.getPassword(),
-                authorities);
+        return new EShopUserDetail(user.getId(), user.getEmail(), user.getPassword(), authorities);
     }
 
     @Override
