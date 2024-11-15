@@ -1,9 +1,7 @@
 package com.example.clinic_management.security.config;
 
-import com.example.clinic_management.security.jwt.AuthTokenFilter;
-import com.example.clinic_management.security.jwt.JwtAuthEntryPoint;
-import com.example.clinic_management.security.user.EShopUserDetailService;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
@@ -22,7 +20,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.List;
+import com.example.clinic_management.security.jwt.AuthTokenFilter;
+import com.example.clinic_management.security.jwt.JwtAuthEntryPoint;
+import com.example.clinic_management.security.user.EShopUserDetailService;
+
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -33,14 +35,12 @@ public class SecurityConfig {
     private final EShopUserDetailService userDetailsService;
     private final JwtAuthEntryPoint authEntryPoint;
 
-    private static final List<String> SECURED_URLS =
-            List.of("/api/v1/carts/**", "/api/authz/login/**");
+    private static final List<String> SECURED_URLS = List.of("/api/v1/carts/**", "/api/authz/login/**");
 
-
-//    @Bean
-//    public ModelMapper modelMapper() {
-//        return new ModelMapper();
-//    }
+    //    @Bean
+    //    public ModelMapper modelMapper() {
+    //        return new ModelMapper();
+    //    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -54,8 +54,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-        return  authConfig.getAuthenticationManager();
-
+        return authConfig.getAuthenticationManager();
     }
 
     @Bean
@@ -72,23 +71,28 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth ->auth
+                .authorizeHttpRequests(auth -> auth
                         // Public endpoints
-                        .requestMatchers("/api/auth/**", "/api/public/**", "/api/authz/public/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/api/public/**", "/api/authz/public/**")
+                        .permitAll()
                         // User role endpoints
-                        .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/user/**")
+                        .hasAnyRole("USER", "ADMIN")
                         // Patient only endpoints
-                        .requestMatchers("/api/authz/patient").hasRole("PATIENT")
-                        //Doctor onl endpoints
-                        .requestMatchers("/api/authz/doctor").hasRole("DOCTOR")
-                        //Login endpoint
-                        .requestMatchers(SECURED_URLS.toArray(String[]::new)).authenticated()
-//                        .anyRequest().authenticated());
-                        .anyRequest().permitAll());
+                        .requestMatchers("/api/authz/patient")
+                        .hasRole("PATIENT")
+                        // Doctor onl endpoints
+                        .requestMatchers("/api/authz/doctor")
+                        .hasRole("DOCTOR")
+                        // Login endpoint
+                        .requestMatchers(SECURED_URLS.toArray(String[]::new))
+                        .authenticated()
+                        //                        .anyRequest().authenticated());
+                        .anyRequest()
+                        .permitAll());
         http.authenticationProvider(daoAuthenticationProvider());
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
-
     }
 
     @Bean
@@ -104,6 +108,4 @@ public class SecurityConfig {
             }
         };
     }
-
-
 }

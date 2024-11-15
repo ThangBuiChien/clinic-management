@@ -4,15 +4,16 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.clinic_management.dtos.requests.MedicalBillRequestDTO;
 import com.example.clinic_management.dtos.responses.MedicalBillResponseDTO;
-import org.springframework.web.multipart.MultipartFile;
 
 public interface MedicalBillService {
     MedicalBillResponseDTO createMedicalBill(MedicalBillRequestDTO medicalBillRequestDTO);
 
-    MedicalBillResponseDTO createMedicalBillWithImage(MedicalBillRequestDTO medicalBillRequestDTO,  List<MultipartFile> files);
+    MedicalBillResponseDTO createMedicalBillWithImage(
+            MedicalBillRequestDTO medicalBillRequestDTO, List<MultipartFile> files);
 
     MedicalBillResponseDTO getMedicalBillById(Long id);
 

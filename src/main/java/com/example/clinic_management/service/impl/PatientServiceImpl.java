@@ -29,7 +29,6 @@ public class PatientServiceImpl implements PatientService {
 
     private final PasswordEncoder passwordEncoder;
 
-
     @Override
     public PatientResponseDTO addPatient(PatientRequestDTO patientRequestDTO) {
         Patient newPatient = patientRepository.save(autoPatientMapper.toEntity(patientRequestDTO));
@@ -37,7 +36,6 @@ public class PatientServiceImpl implements PatientService {
         newPatient.setStatus(AccountStatus.ACTIVE);
 
         newPatient.setPassword(passwordEncoder.encode(patientRequestDTO.getPassword()));
-
 
         return autoPatientMapper.toResponseDTO(patientRepository.save(newPatient));
     }

@@ -3,13 +3,13 @@ package com.example.clinic_management.service;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.example.clinic_management.dtos.requests.AppointmentSearchCriteria;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.example.clinic_management.dtos.requests.AddAppointmentRequestByDepartmentDTO;
 import com.example.clinic_management.dtos.requests.AddAppointmentRequestByDoctorDTO;
 import com.example.clinic_management.dtos.requests.AppointmentRequestDTO;
+import com.example.clinic_management.dtos.requests.AppointmentSearchCriteria;
 import com.example.clinic_management.dtos.responses.AppointmentResponseDTO;
 import com.example.clinic_management.enums.AppointmentStatus;
 
@@ -31,5 +31,6 @@ public interface AppointmentService {
 
     AppointmentResponseDTO updateAppointmentStatus(Long id, AppointmentStatus appointmentStatus);
 
-    Page<AppointmentResponseDTO> searchAppointment(AppointmentSearchCriteria appointmentSearchCriteria, Pageable pageable);
+    Page<AppointmentResponseDTO> searchAppointment(
+            AppointmentSearchCriteria appointmentSearchCriteria, Pageable pageable);
 }

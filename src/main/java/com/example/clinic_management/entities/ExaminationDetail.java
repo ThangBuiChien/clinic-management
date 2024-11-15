@@ -1,14 +1,14 @@
 package com.example.clinic_management.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -40,16 +40,14 @@ public class ExaminationDetail {
     @OneToMany(mappedBy = "examinationDetail", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> imagesTest = new ArrayList<>();
 
-    public void addImage(Image image){
+    public void addImage(Image image) {
         this.imagesTest.add(image);
         image.setExaminationDetail(this);
     }
 
-    public void addImage(List<Image> images){
+    public void addImage(List<Image> images) {
         for (Image image : images) {
             addImage(image);
         }
-
     }
-
 }

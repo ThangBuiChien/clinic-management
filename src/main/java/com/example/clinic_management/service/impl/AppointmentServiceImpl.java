@@ -3,8 +3,6 @@ package com.example.clinic_management.service.impl;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.example.clinic_management.dtos.requests.AppointmentSearchCriteria;
-import com.example.clinic_management.specification.AppointmentSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -14,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.example.clinic_management.dtos.requests.AddAppointmentRequestByDepartmentDTO;
 import com.example.clinic_management.dtos.requests.AddAppointmentRequestByDoctorDTO;
 import com.example.clinic_management.dtos.requests.AppointmentRequestDTO;
+import com.example.clinic_management.dtos.requests.AppointmentSearchCriteria;
 import com.example.clinic_management.dtos.responses.AppointmentResponseDTO;
 import com.example.clinic_management.entities.Appointment;
 import com.example.clinic_management.entities.Doctor;
@@ -25,6 +24,7 @@ import com.example.clinic_management.repository.AppointmentRepository;
 import com.example.clinic_management.repository.DoctorTimeSlotCapacityRepository;
 import com.example.clinic_management.repository.ScheduleRepository;
 import com.example.clinic_management.service.AppointmentService;
+import com.example.clinic_management.specification.AppointmentSpecification;
 
 import lombok.RequiredArgsConstructor;
 
@@ -157,7 +157,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public Page<AppointmentResponseDTO> searchAppointment(AppointmentSearchCriteria appointmentSearchCriteria, Pageable pageable) {
+    public Page<AppointmentResponseDTO> searchAppointment(
+            AppointmentSearchCriteria appointmentSearchCriteria, Pageable pageable) {
         Specification<Appointment> spec = appointmentSpecification.getSearchSpecification(appointmentSearchCriteria);
         return appointmentRepository.findAll(spec, pageable).map(autoAppointmentMapper::toResponseDTO);
     }

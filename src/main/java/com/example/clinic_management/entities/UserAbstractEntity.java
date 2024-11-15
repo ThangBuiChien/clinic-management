@@ -5,13 +5,14 @@ import java.time.LocalDate;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
+import org.hibernate.annotations.NaturalId;
+
 import com.example.clinic_management.enums.AccountStatus;
 import com.example.clinic_management.enums.Gender;
 import com.example.clinic_management.enums.Role;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.NaturalId;
 
 @Getter
 @Setter

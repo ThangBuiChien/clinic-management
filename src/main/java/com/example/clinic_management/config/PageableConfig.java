@@ -31,7 +31,7 @@ public class PageableConfig implements WebMvcConfigurer {
         resolver.setSizeParameterName("size");
         resolver.setOneIndexedParameters(false);
 
-//        resolver.setFallbackPageable(PageRequest.of(defaultPageNumber, defaultPageSize));
+        //        resolver.setFallbackPageable(PageRequest.of(defaultPageNumber, defaultPageSize));
         Sort defaultSort = Sort.by(Sort.Direction.fromString(sortDir), sortBy);
         resolver.setFallbackPageable(PageRequest.of(defaultPageNumber, defaultPageSize, defaultSort));
         argumentResolvers.add(resolver);
