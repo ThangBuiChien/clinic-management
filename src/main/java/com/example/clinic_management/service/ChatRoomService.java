@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.example.clinic_management.dtos.responses.ChatMessageResponseDTO;
 import com.example.clinic_management.dtos.responses.ChatRoomResponseDTO;
-import com.example.clinic_management.entities.ChatMessage;
+import com.example.clinic_management.entities.ChatMessageEntity;
 
 public interface ChatRoomService {
     public ChatRoomResponseDTO createChatRoom(String roomName, List<Long> userIds);
@@ -13,5 +13,5 @@ public interface ChatRoomService {
 
     public List<Long> getAllUserIdInChatRoom(Long chatRoomId);
 
-    public void addMessageToChatRoom(ChatMessage chatMessage, Long chatRoomId);
+    public void addMessageToChatRoom(ChatMessageEntity chatMessageEntity, Long chatRoomId);
 }

@@ -4,17 +4,15 @@ import jakarta.persistence.*;
 
 import com.example.clinic_management.enums.MessageType;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class ChatMessage {
+@Builder
+public class ChatMessageEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +20,7 @@ public class ChatMessage {
 
     private MessageType type;
     private String sender;
+    @Column(length = 1000) // Adjust the length as needed
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
