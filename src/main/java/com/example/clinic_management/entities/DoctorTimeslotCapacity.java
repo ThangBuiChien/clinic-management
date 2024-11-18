@@ -35,4 +35,8 @@ public class DoctorTimeslotCapacity {
     public void addPatient() {
         currentPatients++;
     }
+
+    public void removePatient() {
+        currentPatients--;
+    }
 }

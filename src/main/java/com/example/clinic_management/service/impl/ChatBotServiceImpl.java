@@ -1,8 +1,16 @@
 package com.example.clinic_management.service.impl;
 
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Service;
+
 import com.example.clinic_management.config.ChatBotConfig;
 import com.example.clinic_management.dtos.requests.ChatMessageEntityRequestDTO;
-import com.example.clinic_management.dtos.responses.ChatMessageResponseDTO;
 import com.example.clinic_management.entities.ChatBotConversation;
 import com.example.clinic_management.entities.ChatMessageEntity;
 import com.example.clinic_management.entities.ChatRoom;
@@ -17,17 +25,8 @@ import com.theokanning.openai.completion.chat.ChatCompletionResult;
 import com.theokanning.openai.completion.chat.ChatMessage;
 import com.theokanning.openai.completion.chat.ChatMessageRole;
 import com.theokanning.openai.service.OpenAiService;
-import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +40,6 @@ public class ChatBotServiceImpl implements ChatBotService {
     private final ChatRoomRepository chatRoomRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(ChatBotServiceImpl.class);
-
 
     private static final String BOT_NAME = "ClinicBot";
     private final Map<Long, List<ChatMessageEntity>> conversationHistory = new ConcurrentHashMap<>();
@@ -63,7 +61,7 @@ public class ChatBotServiceImpl implements ChatBotService {
 
             return response.getChoices().get(0).getMessage().getContent();
         } catch (Exception e) {
-//            log.error("Error generating OpenAI response", e);
+            //            log.error("Error generating OpenAI response", e);
             return "I apologize, but I encountered an error processing your request.";
         }
     }
@@ -75,8 +73,8 @@ public class ChatBotServiceImpl implements ChatBotService {
 
             // If this is a new conversation, add the system prompt
             if (conversation.getMessages().isEmpty()) {
-                ChatMessage systemMessage = new ChatMessage(ChatMessageRole.SYSTEM.value(),
-                        chatBotConfig.getSystemPrompt());
+                ChatMessage systemMessage =
+                        new ChatMessage(ChatMessageRole.SYSTEM.value(), chatBotConfig.getSystemPrompt());
                 chatBotConversationService.addMessage(sessionId, systemMessage);
             }
 
@@ -96,13 +94,12 @@ public class ChatBotServiceImpl implements ChatBotService {
             String assistantResponse = response.getChoices().get(0).getMessage().getContent();
 
             // Add assistant's response to conversation history
-            ChatMessage assistantMessage = new ChatMessage(ChatMessageRole.ASSISTANT.value(),
-                    assistantResponse);
+            ChatMessage assistantMessage = new ChatMessage(ChatMessageRole.ASSISTANT.value(), assistantResponse);
             chatBotConversationService.addMessage(sessionId, assistantMessage);
 
             return assistantResponse;
         } catch (Exception e) {
-//            log.error("Error generating OpenAI response", e);
+            //            log.error("Error generating OpenAI response", e);
             return "I apologize, but I encountered an error processing your request.";
         }
     }
@@ -112,15 +109,16 @@ public class ChatBotServiceImpl implements ChatBotService {
         // Get or initialize conversation history
         List<ChatMessageEntity> history = conversationHistory.computeIfAbsent(roomId, k -> new ArrayList<>());
 
-
-//        List<ChatMessageResponseDTO> history = Optional.ofNullable(chatRoomService.getChatMessageHistory(roomId))
-//                .orElseGet(ArrayList::new);
+        //        List<ChatMessageResponseDTO> history =
+        // Optional.ofNullable(chatRoomService.getChatMessageHistory(roomId))
+        //                .orElseGet(ArrayList::new);
 
         // Fetch the chat room and initialize the participants collection
-        ChatRoom chatRoom = chatRoomRepository.findById(roomId)
-                        .orElseThrow(() -> new ResourceNotFoundException("chatroom", "id" ,roomId));
+        ChatRoom chatRoom = chatRoomRepository
+                .findById(roomId)
+                .orElseThrow(() -> new ResourceNotFoundException("chatroom", "id", roomId));
         userMessage.setChatRoom(chatRoom);
-//        Hibernate.initialize(chatRoom.getParticipants());
+        //        Hibernate.initialize(chatRoom.getParticipants());
 
         // Add user message to history
         history.add(userMessage);
@@ -134,8 +132,8 @@ public class ChatBotServiceImpl implements ChatBotService {
         // Add conversation history (last 5 messages)
         int historyStart = Math.max(0, history.size() - 5);
         for (ChatMessageEntity msg : history.subList(historyStart, history.size())) {
-            String role = msg.getSender().equals(BOT_NAME) ?
-                    ChatMessageRole.ASSISTANT.value() : ChatMessageRole.USER.value();
+            String role =
+                    msg.getSender().equals(BOT_NAME) ? ChatMessageRole.ASSISTANT.value() : ChatMessageRole.USER.value();
             openAiMessages.add(new ChatMessage(role, msg.getContent()));
         }
 
@@ -157,7 +155,7 @@ public class ChatBotServiceImpl implements ChatBotService {
                     .sender(BOT_NAME)
                     .content(botResponse)
                     .type(MessageType.CHAT)
-//                    .chatRoom(chatRoom)
+                    //                    .chatRoom(chatRoom)
                     .build();
 
             // Save message to database
@@ -166,8 +164,8 @@ public class ChatBotServiceImpl implements ChatBotService {
             // Add to conversation history
             history.add(botMessage);
 
-            ChatMessageEntityRequestDTO botMessageRequestDTO = new ChatMessageEntityRequestDTO(botMessage.getType(),
-                    botMessage.getSender(), botMessage.getContent());
+            ChatMessageEntityRequestDTO botMessageRequestDTO = new ChatMessageEntityRequestDTO(
+                    botMessage.getType(), botMessage.getSender(), botMessage.getContent());
 
             // Send message through WebSocket
             messagingTemplate.convertAndSend("/topic/room/" + roomId, botMessageRequestDTO);
@@ -176,7 +174,6 @@ public class ChatBotServiceImpl implements ChatBotService {
             logger.error("Error generating bot response", e);
             sendErrorMessage(roomId, "I apologize, but I encountered an error processing your request." + e);
         }
-
     }
 
     private void sendErrorMessage(Long roomId, String errorMessage) {

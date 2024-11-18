@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.clinic_management.dtos.requests.AddAppointmentRequestByDepartmentDTO;
 import com.example.clinic_management.dtos.requests.AddAppointmentRequestByDoctorDTO;
 import com.example.clinic_management.dtos.requests.AppointmentSearchCriteria;
+import com.example.clinic_management.dtos.requests.UpdateAppointmentDateAndTime;
 import com.example.clinic_management.dtos.responses.ApiResponse;
 import com.example.clinic_management.dtos.responses.AppointmentResponseDTO;
 import com.example.clinic_management.enums.AppointmentStatus;
@@ -42,6 +43,15 @@ public class AppointmentController {
         return ResponseEntity.ok(ApiResponse.builder()
                 .message("Appointment created successfully")
                 .result(appointmentService.addAppointmentBySelectDoctor(appointmentRequestDTO))
+                .build());
+    }
+
+    @PutMapping("/reschedule/{id}")
+    public ResponseEntity<ApiResponse> updateAppointSchedule(
+            @PathVariable Long id, @Valid @RequestBody UpdateAppointmentDateAndTime updateAppointmentDateAndTime) {
+        return ResponseEntity.ok(ApiResponse.builder()
+                .message("Appointment created successfully")
+                .result(appointmentService.updateAppointmentSchedule(id, updateAppointmentDateAndTime))
                 .build());
     }
 
