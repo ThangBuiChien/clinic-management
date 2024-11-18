@@ -8,11 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.example.clinic_management.dtos.requests.AddAppointmentRequestByDepartmentDTO;
-import com.example.clinic_management.dtos.requests.AddAppointmentRequestByDoctorDTO;
-import com.example.clinic_management.dtos.requests.AppointmentRequestDTO;
-import com.example.clinic_management.dtos.requests.AppointmentSearchCriteria;
+import com.example.clinic_management.dtos.requests.*;
 import com.example.clinic_management.dtos.responses.AppointmentResponseDTO;
 import com.example.clinic_management.entities.Appointment;
 import com.example.clinic_management.entities.Doctor;
@@ -156,10 +154,68 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment", "id", id));
     }
 
+    @Transactional
+    @Override
+    public AppointmentResponseDTO updateAppointmentSchedule(
+            Long id, UpdateAppointmentDateAndTime updateAppointmentDateAndTime) {
+
+        // find by id -> check if is validated new schedule or not -> check timeslot new day
+        // -> remove capacity old and add to new day, set new date, time slot to appointment and save
+        Appointment appointment = appointmentRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("appointment", "id", id));
+
+        isNewDateFarEnough(appointment.getAppointmentDate());
+
+        checkSameDateAndTime(appointment, updateAppointmentDateAndTime);
+
+        DoctorTimeslotCapacity newDoctorTimeslotCapacity =
+                bookingProcessorImpl.getOrCreateDoctorTimeSlotCapacityIfInWorkingDay(
+                        appointment.getDoctor().getId(),
+                        updateAppointmentDateAndTime.getAppointmentDate(),
+                        updateAppointmentDateAndTime.getTimeSlot());
+        if (!newDoctorTimeslotCapacity.canAcceptMorePatients()) {
+            throw new RuntimeException("Doctors is busy in this date and time");
+        }
+
+        // Increase slot capacity in doctor_timeslot_capacity
+        newDoctorTimeslotCapacity.addPatient();
+        doctorTimeSlotCapacityRepository.save(newDoctorTimeslotCapacity);
+
+        // Remove slot capacity in old doctor_timeslot_capacity
+        DoctorTimeslotCapacity oldDoctorTime = bookingProcessorImpl.getOrCreateDoctorTimeSlotCapacityIfInWorkingDay(
+                appointment.getDoctor().getId(), appointment.getAppointmentDate(), appointment.getTimeSlot());
+        oldDoctorTime.removePatient();
+        doctorTimeSlotCapacityRepository.save(oldDoctorTime);
+
+        appointment.setAppointmentDate(updateAppointmentDateAndTime.getAppointmentDate());
+        appointment.setTimeSlot(updateAppointmentDateAndTime.getTimeSlot());
+
+        appointmentRepository.save(appointment);
+
+        return autoAppointmentMapper.toResponseDTO(appointment);
+    }
+
     @Override
     public Page<AppointmentResponseDTO> searchAppointment(
             AppointmentSearchCriteria appointmentSearchCriteria, Pageable pageable) {
         Specification<Appointment> spec = appointmentSpecification.getSearchSpecification(appointmentSearchCriteria);
         return appointmentRepository.findAll(spec, pageable).map(autoAppointmentMapper::toResponseDTO);
+    }
+
+    private void isNewDateFarEnough(LocalDate oldAppointmentDate) {
+        LocalDate currentDate = LocalDate.now();
+
+        if (oldAppointmentDate.isBefore(currentDate.plusDays(2))) {
+            throw new RuntimeException("Can not reschedule before 2 days of currently booking date");
+        }
+    }
+
+    private void checkSameDateAndTime(
+            Appointment oldAppointment, UpdateAppointmentDateAndTime updateAppointmentDateAndTime) {
+        if (oldAppointment.getAppointmentDate().isEqual(updateAppointmentDateAndTime.getAppointmentDate())
+                && oldAppointment.getTimeSlot().equals(updateAppointmentDateAndTime.getTimeSlot())) {
+            throw new RuntimeException("Can not reschedule in the same date and timeslot");
+        }
     }
 }

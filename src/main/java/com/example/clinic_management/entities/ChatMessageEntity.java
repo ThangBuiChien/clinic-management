@@ -20,6 +20,7 @@ public class ChatMessageEntity {
 
     private MessageType type;
     private String sender;
+
     @Column(length = 1000) // Adjust the length as needed
     private String content;
 

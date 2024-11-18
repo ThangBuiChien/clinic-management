@@ -1,20 +1,22 @@
 package com.example.clinic_management.controllers;
 
-import com.example.clinic_management.dtos.requests.ChatBotRequestDTO;
-import com.example.clinic_management.dtos.requests.ChatRoomRequestDTO;
-import com.example.clinic_management.dtos.responses.ApiResponse;
-import com.example.clinic_management.dtos.responses.ChatBotResponseDTO;
-import com.example.clinic_management.service.ChatBotService;
+import java.util.Optional;
+import java.util.UUID;
+
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Optional;
-import java.util.UUID;
+import com.example.clinic_management.dtos.requests.ChatBotRequestDTO;
+import com.example.clinic_management.dtos.responses.ApiResponse;
+import com.example.clinic_management.dtos.responses.ChatBotResponseDTO;
+import com.example.clinic_management.service.ChatBotService;
+
+import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,7 +27,7 @@ public class ChatBotController {
 
     @PostMapping
     public ResponseEntity<ApiResponse> chat(@RequestBody @Valid ChatBotRequestDTO request) {
-//        String response = chatBotService.generateResponse(request.getMessage());
+        //        String response = chatBotService.generateResponse(request.getMessage());
 
         String sessionId = Optional.ofNullable(request.getSessionId())
                 .orElse(UUID.randomUUID().toString());
@@ -37,8 +39,4 @@ public class ChatBotController {
                 .result(new ChatBotResponseDTO(response, sessionId))
                 .build());
     }
-
-
-
-
 }

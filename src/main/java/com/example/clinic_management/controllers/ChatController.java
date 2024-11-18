@@ -1,7 +1,7 @@
 package com.example.clinic_management.controllers;
 
-import com.example.clinic_management.dtos.requests.ChatMessageEntityRequestDTO;
-import com.example.clinic_management.service.ChatBotService;
+import java.util.concurrent.CompletableFuture;
+
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -9,15 +9,15 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
+import com.example.clinic_management.dtos.requests.ChatMessageEntityRequestDTO;
 import com.example.clinic_management.entities.ChatMessageEntity;
 import com.example.clinic_management.entities.ChatRoom;
 import com.example.clinic_management.exception.ResourceNotFoundException;
 import com.example.clinic_management.repository.ChatRoomRepository;
+import com.example.clinic_management.service.ChatBotService;
 import com.example.clinic_management.service.ChatRoomService;
 
 import lombok.RequiredArgsConstructor;
-
-import java.util.concurrent.CompletableFuture;
 
 @Controller
 @RequiredArgsConstructor
@@ -51,7 +51,8 @@ public class ChatController {
 
     @MessageMapping("/chat.send/{roomId}")
     @SendTo("/topic/room/{roomId}") // Send message to a specific room
-    public ChatMessageEntityRequestDTO sendMessage(@DestinationVariable Long roomId, @Payload ChatMessageEntityRequestDTO chatMessageEntity) {
+    public ChatMessageEntityRequestDTO sendMessage(
+            @DestinationVariable Long roomId, @Payload ChatMessageEntityRequestDTO chatMessageEntity) {
         ChatRoom chatRoom = chatRoomRepository
                 .findById(roomId)
                 .orElseThrow(() -> new ResourceNotFoundException("chatroom", "id", roomId));
@@ -75,8 +76,8 @@ public class ChatController {
 
     private boolean shouldTriggerBot(String message) {
         String lowercaseMessage = message.toLowerCase();
-        return lowercaseMessage.startsWith("@bot") ||
-                lowercaseMessage.startsWith("bot:") ||
-                lowercaseMessage.contains("@clinicbot");
+        return lowercaseMessage.startsWith("@bot")
+                || lowercaseMessage.startsWith("bot:")
+                || lowercaseMessage.contains("@clinicbot");
     }
 }
