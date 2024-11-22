@@ -25,4 +25,8 @@ public interface MedicalBillRepository extends JpaRepository<MedicalBill, Long> 
     Page<MedicalBill> findByDoctorId(Long doctorId, Pageable pageable);
 
     Page<MedicalBill> findByPatientId(Long patientId, Pageable pageable);
+
+    Optional<MedicalBill> findTopByPatientIdOrderByIdDesc(@Param("patientId") Long patientId);
+
+
 }

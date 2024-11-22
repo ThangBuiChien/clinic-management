@@ -3,6 +3,10 @@ package com.example.clinic_management.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.clinic_management.dtos.requests.MedicalBillWithLabRequestDTO;
+import com.example.clinic_management.dtos.requests.PrescribedDrugRequestDTO;
+import com.example.clinic_management.entities.PrescribedDrug;
+import com.example.clinic_management.mapper.AutoPrescribedDrugMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -34,6 +38,8 @@ public class MedicalBillServiceImpl implements MedicalBillService {
     private final PrescribedDrugRepository prescribedDrugRepository;
     private final AutoMedicalBillMapper autoMedicalBillMapper;
     private final ImageService imageService;
+
+    private final AutoPrescribedDrugMapper autoPrescribedDrugMapper;
 
     @Override
     @Transactional
@@ -103,6 +109,33 @@ public class MedicalBillServiceImpl implements MedicalBillService {
     }
 
     @Override
+    public MedicalBillResponseDTO createMedicalBillWithLabRequireRequest(MedicalBillWithLabRequestDTO medicalBillWithLabRequestDTO) {
+        MedicalBill medicalBill = autoMedicalBillMapper.fromMedicalBillWithLabRequestDTOToEntity(medicalBillWithLabRequestDTO);
+        medicalBillRepository.save(medicalBill);
+        return autoMedicalBillMapper.toResponseDTO(medicalBill);
+    }
+
+    @Override
+    public MedicalBillResponseDTO addDrugToMedicalBill(Long medicalBillId, List<PrescribedDrugRequestDTO> prescribedDrugRequestDTOS) {
+
+        MedicalBill medicalBill = medicalBillRepository
+                .findById(medicalBillId).orElseThrow(() -> new ResourceNotFoundException("MedicalBill", "id", medicalBillId));
+
+        List<PrescribedDrug> prescribedDrugs = prescribedDrugRequestDTOS.stream()
+                .map(autoPrescribedDrugMapper::toEntity)
+                .toList();
+
+        medicalBill.addPrescribedDrugs(prescribedDrugs);
+
+        return autoMedicalBillMapper.toResponseDTO(medicalBillRepository.save(medicalBill));
+
+
+
+
+    }
+
+
+    @Override
     @Transactional(readOnly = true)
     public List<MedicalBillResponseDTO> getAllMedicalBills() {
         List<MedicalBill> medicalBills = medicalBillRepository.findAllWithPrescribedDrugs();
@@ -166,5 +199,12 @@ public class MedicalBillServiceImpl implements MedicalBillService {
                 .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("MedicalBill", "id", id));
         medicalBillRepository.delete(medicalBill);
+    }
+
+    @Override
+    public MedicalBillResponseDTO getTopMedicalBillByPatientId(Long patientId) {
+        return medicalBillRepository.findTopByPatientIdOrderByIdDesc(patientId)
+                .map(autoMedicalBillMapper::toResponseDTO)
+                .orElseThrow(() -> new ResourceNotFoundException("MedicalBill", "patientId", patientId));
     }
 }

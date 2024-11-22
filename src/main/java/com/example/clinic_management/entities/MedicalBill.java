@@ -57,6 +57,10 @@ public class MedicalBill {
         prescribedDrug.setMedicalBill(this);
     }
 
+    public void addPrescribedDrugs(List<PrescribedDrug> prescribedDrugs) {
+        prescribedDrugs.forEach(this::addPrescribedDrug);
+    }
+
     public void removePrescribedDrug(PrescribedDrug prescribedDrug) {
         drugs.remove(prescribedDrug);
         prescribedDrug.setMedicalBill(null);

@@ -1,5 +1,7 @@
 package com.example.clinic_management.mapper;
 
+import com.example.clinic_management.dtos.requests.ExaminationDetailLabRequestDTO;
+import com.example.clinic_management.dtos.requests.MedicalBillWithLabRequestDTO;
 import org.mapstruct.*;
 
 import com.example.clinic_management.dtos.requests.MedicalBillRequestDTO;
@@ -30,6 +32,11 @@ public interface AutoMedicalBillMapper {
 
     @Mapping(target = "doctor", source = "doctorId")
     @Mapping(target = "patient", source = "patientId")
+    @Mapping(target = "examinationDetails", source = "examinationDetailLabRequestDTOS")
+    MedicalBill fromMedicalBillWithLabRequestDTOToEntity(MedicalBillWithLabRequestDTO medicalBillWithLabRequestDTO);
+
+    @Mapping(target = "doctor", source = "doctorId")
+    @Mapping(target = "patient", source = "patientId")
     @Mapping(target = "drugs", source = "prescribedDrugRequestDTOS")
     @Mapping(target = "examinationDetails", source = "examinationDetailRequestDTOS")
     void updateMedicalBillFromDTO(MedicalBillRequestDTO medicalBillRequestDTO, @MappingTarget MedicalBill medicalBill);
@@ -52,4 +59,6 @@ public interface AutoMedicalBillMapper {
             }
         }
     }
+
+
 }

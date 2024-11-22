@@ -2,6 +2,8 @@ package com.example.clinic_management.service;
 
 import java.util.List;
 
+import com.example.clinic_management.dtos.requests.MedicalBillWithLabRequestDTO;
+import com.example.clinic_management.dtos.requests.PrescribedDrugRequestDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +16,11 @@ public interface MedicalBillService {
 
     MedicalBillResponseDTO createMedicalBillWithImage(
             MedicalBillRequestDTO medicalBillRequestDTO, List<MultipartFile> files);
+
+    MedicalBillResponseDTO createMedicalBillWithLabRequireRequest(
+            MedicalBillWithLabRequestDTO medicalBillWithLabRequestDTO);
+
+    MedicalBillResponseDTO addDrugToMedicalBill(Long medicalBillId, List<PrescribedDrugRequestDTO> prescribedDrugRequestDTOS);
 
     MedicalBillResponseDTO getMedicalBillById(Long id);
 
@@ -32,4 +39,6 @@ public interface MedicalBillService {
     MedicalBillResponseDTO updateMedicalBill(Long id, MedicalBillRequestDTO medicalBillRequestDTO);
 
     void deleteMedicalBill(Long id);
+
+    MedicalBillResponseDTO getTopMedicalBillByPatientId(Long patientId);
 }

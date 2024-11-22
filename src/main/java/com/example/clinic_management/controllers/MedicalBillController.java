@@ -2,6 +2,8 @@ package com.example.clinic_management.controllers;
 
 import java.util.List;
 
+import com.example.clinic_management.dtos.requests.MedicalBillWithLabRequestDTO;
+import com.example.clinic_management.dtos.requests.PrescribedDrugRequestDTO;
 import jakarta.validation.Valid;
 
 import org.springframework.data.domain.Page;
@@ -43,6 +45,22 @@ public class MedicalBillController {
         return ResponseEntity.ok(responseDTO);
     }
 
+    @PostMapping("lab_request")
+    public ResponseEntity<MedicalBillResponseDTO> createMedicalBillWithLabRequest(
+            @Valid @RequestBody MedicalBillWithLabRequestDTO medicalBillWithLabRequestDTO) {
+        MedicalBillResponseDTO responseDTO = medicalBillService.createMedicalBillWithLabRequireRequest(medicalBillWithLabRequestDTO);
+        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/{medicalBillId}/drugs")
+    public ResponseEntity<MedicalBillResponseDTO> addDrugsToMedicalBill(
+            @PathVariable Long medicalBillId, @Valid @RequestBody List<PrescribedDrugRequestDTO> prescribedDrugRequestDTOS) {
+        MedicalBillResponseDTO responseDTO = medicalBillService.addDrugToMedicalBill(medicalBillId, prescribedDrugRequestDTOS);
+        return ResponseEntity.ok(responseDTO);
+    }
+
+
+
     @GetMapping
     public ResponseEntity<Page<MedicalBillResponseDTO>> getMedicalBills(Pageable pageable) {
         Page<MedicalBillResponseDTO> responseDTOS = medicalBillService.getAllMedicalBills(pageable);
@@ -52,6 +70,12 @@ public class MedicalBillController {
     @GetMapping("/{id}")
     public ResponseEntity<MedicalBillResponseDTO> getMedicalBillById(@PathVariable Long id) {
         MedicalBillResponseDTO responseDTO = medicalBillService.getMedicalBillById(id);
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @GetMapping("/top/patient/{patientId}")
+    public ResponseEntity<MedicalBillResponseDTO> getTopMedicalBillByPatientId(@PathVariable Long patientId) {
+        MedicalBillResponseDTO responseDTO = medicalBillService.getTopMedicalBillByPatientId(patientId);
         return ResponseEntity.ok(responseDTO);
     }
 
