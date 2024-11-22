@@ -2,8 +2,6 @@ package com.example.clinic_management.controllers;
 
 import java.util.List;
 
-import com.example.clinic_management.dtos.requests.MedicalBillWithLabRequestDTO;
-import com.example.clinic_management.dtos.requests.PrescribedDrugRequestDTO;
 import jakarta.validation.Valid;
 
 import org.springframework.data.domain.Page;
@@ -16,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.clinic_management.dtos.requests.MedicalBillRequestDTO;
+import com.example.clinic_management.dtos.requests.MedicalBillWithLabRequestDTO;
+import com.example.clinic_management.dtos.requests.PrescribedDrugRequestDTO;
 import com.example.clinic_management.dtos.responses.MedicalBillResponseDTO;
 import com.example.clinic_management.service.MedicalBillService;
 
@@ -48,18 +48,19 @@ public class MedicalBillController {
     @PostMapping("lab_request")
     public ResponseEntity<MedicalBillResponseDTO> createMedicalBillWithLabRequest(
             @Valid @RequestBody MedicalBillWithLabRequestDTO medicalBillWithLabRequestDTO) {
-        MedicalBillResponseDTO responseDTO = medicalBillService.createMedicalBillWithLabRequireRequest(medicalBillWithLabRequestDTO);
+        MedicalBillResponseDTO responseDTO =
+                medicalBillService.createMedicalBillWithLabRequireRequest(medicalBillWithLabRequestDTO);
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
     @PostMapping("/{medicalBillId}/drugs")
     public ResponseEntity<MedicalBillResponseDTO> addDrugsToMedicalBill(
-            @PathVariable Long medicalBillId, @Valid @RequestBody List<PrescribedDrugRequestDTO> prescribedDrugRequestDTOS) {
-        MedicalBillResponseDTO responseDTO = medicalBillService.addDrugToMedicalBill(medicalBillId, prescribedDrugRequestDTOS);
+            @PathVariable Long medicalBillId,
+            @Valid @RequestBody List<PrescribedDrugRequestDTO> prescribedDrugRequestDTOS) {
+        MedicalBillResponseDTO responseDTO =
+                medicalBillService.addDrugToMedicalBill(medicalBillId, prescribedDrugRequestDTOS);
         return ResponseEntity.ok(responseDTO);
     }
-
-
 
     @GetMapping
     public ResponseEntity<Page<MedicalBillResponseDTO>> getMedicalBills(Pageable pageable) {

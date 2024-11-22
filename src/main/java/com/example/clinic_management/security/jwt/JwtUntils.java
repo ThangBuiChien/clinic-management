@@ -67,4 +67,17 @@ public class JwtUntils {
             throw new JwtException(e.getMessage());
         }
     }
+
+    public Claims decodeToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public Long getPatientIdFromToken(String token) {
+        Claims claims = decodeToken(token);
+        return claims.get("id", Long.class);
+    }
 }

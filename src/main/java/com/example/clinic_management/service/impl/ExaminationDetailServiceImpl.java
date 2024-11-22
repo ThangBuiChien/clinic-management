@@ -3,24 +3,24 @@ package com.example.clinic_management.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.clinic_management.dtos.requests.ExaminationDetailUploadImgRequestDTO;
-import com.example.clinic_management.dtos.responses.ExaminationDetailResponseDTO;
-import com.example.clinic_management.entities.Image;
-import com.example.clinic_management.mapper.AutoExaminationDetailMapper;
-import com.example.clinic_management.service.ImageService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.example.clinic_management.dtos.requests.ExaminationDetailUploadImgRequestDTO;
 import com.example.clinic_management.dtos.requests.ExaminationRequestDTO;
+import com.example.clinic_management.dtos.responses.ExaminationDetailResponseDTO;
 import com.example.clinic_management.entities.ExaminationDetail;
+import com.example.clinic_management.entities.Image;
 import com.example.clinic_management.entities.Patient;
+import com.example.clinic_management.mapper.AutoExaminationDetailMapper;
 import com.example.clinic_management.repository.ExaminationRepository;
 import com.example.clinic_management.repository.PatientRepository;
 import com.example.clinic_management.service.ExaminationDetailService;
+import com.example.clinic_management.service.ImageService;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -78,7 +78,7 @@ public class ExaminationDetailServiceImpl implements ExaminationDetailService {
                     .findById(dto.getId())
                     .orElseThrow(() -> new IllegalArgumentException("Examination not found with id: " + dto.getId()));
 
-//            examinationDetail.setExaminationType(dto.getExaminationType());
+            //            examinationDetail.setExaminationType(dto.getExaminationType());
             examinationDetail.setExaminationResult(dto.getExaminationResult());
 
             List<Image> tempImages = new ArrayList<>();
@@ -86,7 +86,7 @@ public class ExaminationDetailServiceImpl implements ExaminationDetailService {
                 tempImages.add(images.get(fileIndex));
             }
 
-//            examinationDetail.setImagesTest(tempImages);
+            //            examinationDetail.setImagesTest(tempImages);
             examinationDetail.addImage(tempImages);
 
             updatedExaminationDetail.add(examinationDetail);
@@ -98,8 +98,6 @@ public class ExaminationDetailServiceImpl implements ExaminationDetailService {
                 imageService.updateUrlDownload(image);
             }
         }
-
-
 
         return updatedExaminationDetail.stream()
                 .map(autoExaminationDetailMapper::toResponse)

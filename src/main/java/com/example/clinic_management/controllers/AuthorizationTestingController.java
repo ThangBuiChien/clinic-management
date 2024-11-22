@@ -4,12 +4,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.clinic_management.security.service.AuthenticationService;
+
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/authz")
 public class AuthorizationTestingController {
+
+    private final AuthenticationService authenticationService;
 
     @GetMapping("/public")
     public String publicEndpoint() {
@@ -29,5 +33,12 @@ public class AuthorizationTestingController {
     @GetMapping("/doctor")
     public String doctorEndpoint() {
         return "This endpoint is accessible by users with the DOCTOR role.";
+    }
+
+    @GetMapping("/getIdFromJWT")
+    public String getIdFromJWT() {
+
+        Long userId = authenticationService.getAuthenticatedUserId();
+        return "Your user id is " + userId;
     }
 }

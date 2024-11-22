@@ -3,10 +3,6 @@ package com.example.clinic_management.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.example.clinic_management.dtos.requests.MedicalBillWithLabRequestDTO;
-import com.example.clinic_management.dtos.requests.PrescribedDrugRequestDTO;
-import com.example.clinic_management.entities.PrescribedDrug;
-import com.example.clinic_management.mapper.AutoPrescribedDrugMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,12 +10,16 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.clinic_management.dtos.requests.MedicalBillRequestDTO;
+import com.example.clinic_management.dtos.requests.MedicalBillWithLabRequestDTO;
+import com.example.clinic_management.dtos.requests.PrescribedDrugRequestDTO;
 import com.example.clinic_management.dtos.responses.MedicalBillResponseDTO;
 import com.example.clinic_management.entities.ExaminationDetail;
 import com.example.clinic_management.entities.Image;
 import com.example.clinic_management.entities.MedicalBill;
+import com.example.clinic_management.entities.PrescribedDrug;
 import com.example.clinic_management.exception.ResourceNotFoundException;
 import com.example.clinic_management.mapper.AutoMedicalBillMapper;
+import com.example.clinic_management.mapper.AutoPrescribedDrugMapper;
 import com.example.clinic_management.repository.DoctorRepository;
 import com.example.clinic_management.repository.MedicalBillRepository;
 import com.example.clinic_management.repository.PatientRepository;
@@ -109,17 +109,21 @@ public class MedicalBillServiceImpl implements MedicalBillService {
     }
 
     @Override
-    public MedicalBillResponseDTO createMedicalBillWithLabRequireRequest(MedicalBillWithLabRequestDTO medicalBillWithLabRequestDTO) {
-        MedicalBill medicalBill = autoMedicalBillMapper.fromMedicalBillWithLabRequestDTOToEntity(medicalBillWithLabRequestDTO);
+    public MedicalBillResponseDTO createMedicalBillWithLabRequireRequest(
+            MedicalBillWithLabRequestDTO medicalBillWithLabRequestDTO) {
+        MedicalBill medicalBill =
+                autoMedicalBillMapper.fromMedicalBillWithLabRequestDTOToEntity(medicalBillWithLabRequestDTO);
         medicalBillRepository.save(medicalBill);
         return autoMedicalBillMapper.toResponseDTO(medicalBill);
     }
 
     @Override
-    public MedicalBillResponseDTO addDrugToMedicalBill(Long medicalBillId, List<PrescribedDrugRequestDTO> prescribedDrugRequestDTOS) {
+    public MedicalBillResponseDTO addDrugToMedicalBill(
+            Long medicalBillId, List<PrescribedDrugRequestDTO> prescribedDrugRequestDTOS) {
 
         MedicalBill medicalBill = medicalBillRepository
-                .findById(medicalBillId).orElseThrow(() -> new ResourceNotFoundException("MedicalBill", "id", medicalBillId));
+                .findById(medicalBillId)
+                .orElseThrow(() -> new ResourceNotFoundException("MedicalBill", "id", medicalBillId));
 
         List<PrescribedDrug> prescribedDrugs = prescribedDrugRequestDTOS.stream()
                 .map(autoPrescribedDrugMapper::toEntity)
@@ -128,12 +132,7 @@ public class MedicalBillServiceImpl implements MedicalBillService {
         medicalBill.addPrescribedDrugs(prescribedDrugs);
 
         return autoMedicalBillMapper.toResponseDTO(medicalBillRepository.save(medicalBill));
-
-
-
-
     }
-
 
     @Override
     @Transactional(readOnly = true)
@@ -203,7 +202,8 @@ public class MedicalBillServiceImpl implements MedicalBillService {
 
     @Override
     public MedicalBillResponseDTO getTopMedicalBillByPatientId(Long patientId) {
-        return medicalBillRepository.findTopByPatientIdOrderByIdDesc(patientId)
+        return medicalBillRepository
+                .findTopByPatientIdOrderByIdDesc(patientId)
                 .map(autoMedicalBillMapper::toResponseDTO)
                 .orElseThrow(() -> new ResourceNotFoundException("MedicalBill", "patientId", patientId));
     }
