@@ -24,7 +24,7 @@ public class DoctorRequestDTO {
     private long citizenId;
 
     @NotBlank(message = "Email is required")
-    @Size(max = 20)
+    @Size(max = 50)
     @Email
     private String email;
 

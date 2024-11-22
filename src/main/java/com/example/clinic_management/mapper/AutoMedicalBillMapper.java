@@ -1,10 +1,9 @@
 package com.example.clinic_management.mapper;
 
-import com.example.clinic_management.dtos.requests.ExaminationDetailLabRequestDTO;
-import com.example.clinic_management.dtos.requests.MedicalBillWithLabRequestDTO;
 import org.mapstruct.*;
 
 import com.example.clinic_management.dtos.requests.MedicalBillRequestDTO;
+import com.example.clinic_management.dtos.requests.MedicalBillWithLabRequestDTO;
 import com.example.clinic_management.dtos.responses.MedicalBillResponseDTO;
 import com.example.clinic_management.entities.ExaminationDetail;
 import com.example.clinic_management.entities.MedicalBill;
@@ -59,6 +58,4 @@ public interface AutoMedicalBillMapper {
             }
         }
     }
-
-
 }

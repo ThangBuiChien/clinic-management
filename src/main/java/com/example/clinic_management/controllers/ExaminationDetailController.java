@@ -2,22 +2,20 @@ package com.example.clinic_management.controllers;
 
 import java.util.List;
 
-import com.example.clinic_management.dtos.requests.ExaminationDetailUploadImgRequestDTO;
-import com.example.clinic_management.dtos.requests.MedicalBillRequestDTO;
-import com.example.clinic_management.dtos.responses.ApiResponse;
-import com.example.clinic_management.dtos.responses.ExaminationDetailResponseDTO;
-import com.example.clinic_management.dtos.responses.MedicalBillResponseDTO;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.example.clinic_management.dtos.requests.ExaminationDetailUploadImgRequestDTO;
 import com.example.clinic_management.dtos.requests.ExaminationRequestDTO;
+import com.example.clinic_management.dtos.responses.ApiResponse;
+import com.example.clinic_management.dtos.responses.ExaminationDetailResponseDTO;
 import com.example.clinic_management.entities.ExaminationDetail;
 import com.example.clinic_management.service.ExaminationDetailService;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/examination_detail")
@@ -48,7 +46,8 @@ public class ExaminationDetailController {
     @Transactional
     @PostMapping(value = "images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse> updateExaminationWithImages(
-            @RequestPart("examinationDetailUploadImgRequestDTO") List<ExaminationDetailUploadImgRequestDTO> examinationDetailUploadImgRequestDTO,
+            @RequestPart("examinationDetailUploadImgRequestDTO")
+                    List<ExaminationDetailUploadImgRequestDTO> examinationDetailUploadImgRequestDTO,
             @RequestPart("files") List<MultipartFile> files) {
         List<ExaminationDetailResponseDTO> responseDTO =
                 examinationDetailService.updateExaminationDetailWithImages(examinationDetailUploadImgRequestDTO, files);
