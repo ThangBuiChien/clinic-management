@@ -3,3 +3,9 @@ paging:
   default-page-number: 0
   default-sort-by: "id"
   default-sort-dir: "desc"
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 25MB
