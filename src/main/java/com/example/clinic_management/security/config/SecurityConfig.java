@@ -79,10 +79,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/user/**")
                         .hasAnyRole("USER", "ADMIN")
                         // Patient only endpoints
-                        .requestMatchers("/api/authz/patient")
+                        .requestMatchers("/api/authz/patient", "api/appointment/**")
                         .hasRole("PATIENT")
                         // Doctor onl endpoints
-                        .requestMatchers("/api/authz/doctor")
+                        .requestMatchers("/api/authz/doctor", "api/appointment/**")
                         .hasRole("DOCTOR")
                         // Login endpoint
                         .requestMatchers(SECURED_URLS.toArray(String[]::new))
