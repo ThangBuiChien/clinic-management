@@ -26,6 +26,8 @@ public interface AppointmentService {
 
     List<AppointmentResponseDTO> getAppointmentByDoctorIdAndDate(Long doctorId, LocalDate date);
 
+    Page<AppointmentResponseDTO> getAppointmentByPatientId(Long patientId, Pageable pageable);
+
     AppointmentResponseDTO updateAppointmentStatus(Long id, AppointmentStatus appointmentStatus);
 
     AppointmentResponseDTO updateAppointmentSchedule(

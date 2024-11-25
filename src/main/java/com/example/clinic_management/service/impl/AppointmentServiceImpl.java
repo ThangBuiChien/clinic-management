@@ -143,6 +143,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    public Page<AppointmentResponseDTO> getAppointmentByPatientId(Long patientId, Pageable pageable) {
+        return appointmentRepository.findByPatientId(patientId, pageable).map(autoAppointmentMapper::toResponseDTO);
+    }
+
+    @Override
     public AppointmentResponseDTO updateAppointmentStatus(Long id, AppointmentStatus appointmentStatus) {
         return appointmentRepository
                 .findById(id)
