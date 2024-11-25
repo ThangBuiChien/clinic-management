@@ -113,4 +113,12 @@ public class AppointmentController {
                 .result(products)
                 .build());
     }
+
+    @GetMapping("/patient/{patientId}")
+    public ResponseEntity<ApiResponse> getAppointmentByPatientId(@PathVariable Long patientId, Pageable pageable) {
+        return ResponseEntity.ok(ApiResponse.builder()
+                .message("Appointment fetched successfully")
+                .result(appointmentService.getAppointmentByPatientId(patientId, pageable))
+                .build());
+    }
 }
