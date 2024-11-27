@@ -18,7 +18,6 @@ public interface AutoDoctorMapper {
 
     //    @Mapping(source = "departmentId", target = "department")
     @Mapping(target = "department", ignore = true)
-    @Mapping(target = "email", ignore = true)
     Doctor toEntity(DoctorRequestDTO doctorRequestDTO);
 
     @Mapping(source = "department.id", target = "departmentId")
