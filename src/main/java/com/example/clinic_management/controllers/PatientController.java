@@ -48,7 +48,7 @@ public class PatientController {
     public ResponseEntity<ApiResponse> updatePatient(
             @PathVariable Long id, @RequestBody @Valid PatientRequestDTO patientRequestDTO) {
         return ResponseEntity.ok(ApiResponse.builder()
-                .message("Doctor updated successfully")
+                .message("Patient updated successfully")
                 .result(patientService.updatePatient(id, patientRequestDTO))
                 .build());
     }
@@ -57,6 +57,6 @@ public class PatientController {
     public ResponseEntity<ApiResponse> deletePatient(@PathVariable Long id) {
         patientService.deletePatient(id);
         return ResponseEntity.ok(
-                ApiResponse.builder().message("Doctor deleted successfully").build());
+                ApiResponse.builder().message("Patient deleted successfully").build());
     }
 }
