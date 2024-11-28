@@ -74,6 +74,11 @@ public class DoctorServiceImpl implements DoctorService {
 
         autoDoctorMapper.updateFromDTO(doctorRequestDTO, doctor);
 
+        if(doctorRequestDTO.getPassword() != null) {
+            doctor.setPassword(passwordEncoder.encode(doctorRequestDTO.getPassword()));
+        }
+
+
         return autoDoctorMapper.toResponseDTO(doctorRepository.save(doctor));
     }
 

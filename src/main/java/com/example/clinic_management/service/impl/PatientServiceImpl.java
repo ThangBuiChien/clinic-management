@@ -48,6 +48,10 @@ public class PatientServiceImpl implements PatientService {
         // Map the new values from patientRequestDTO to the existingPatient
         autoPatientMapper.updateFromDTO(patientRequestDTO, existingPatient);
 
+        if(patientRequestDTO.getPassword() != null){
+            existingPatient.setPassword(passwordEncoder.encode(patientRequestDTO.getPassword()));
+        }
+        
         // Save the updated patient entity
         Patient updatedPatient = patientRepository.save(existingPatient);
 
