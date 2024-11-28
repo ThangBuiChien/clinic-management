@@ -23,5 +23,11 @@ public interface AutoDoctorMapper {
     @Mapping(source = "department.id", target = "departmentId")
     DoctorResponseDTO toResponseDTO(Doctor doctor);
 
-    void updateFromDTO(DoctorPartialUpdateDTO doctorPartialUpdateDTO, @MappingTarget Doctor doctor);
+    @Mapping(source = "departmentId", target = "department")
+    @Mapping(target = "email", ignore = true)
+    void updateFromDTO(DoctorRequestDTO doctorRequestDTO, @MappingTarget Doctor doctor);
+
+    @Mapping(source = "departmentId", target = "department")
+    @Mapping(target = "email", ignore = true)
+    void updatePartialFromDTO(DoctorPartialUpdateDTO doctorPartialUpdateDTO, @MappingTarget Doctor doctor);
 }

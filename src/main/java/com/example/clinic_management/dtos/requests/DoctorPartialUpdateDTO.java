@@ -1,6 +1,8 @@
 package com.example.clinic_management.dtos.requests;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.Set;
 
 import com.example.clinic_management.enums.Gender;
 
@@ -18,4 +20,5 @@ public class DoctorPartialUpdateDTO {
     private LocalDate birthDate;
     private Long departmentId;
     private Long scheduleId;
+    Set<DayOfWeek> workingDays;
 }

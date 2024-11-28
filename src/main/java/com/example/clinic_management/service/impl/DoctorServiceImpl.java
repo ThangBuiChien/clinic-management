@@ -69,12 +69,16 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public DoctorResponseDTO updateDoctor(Long id, DoctorRequestDTO doctorRequestDTO) {
-        Doctor oldDoctor =
+        Doctor doctor =
                 doctorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Doctor", "id", id));
-        Doctor newDoctor = autoDoctorMapper.toEntity(doctorRequestDTO);
-        newDoctor.setId(oldDoctor.getId());
-        newDoctor.getDepartment().addDoctor(newDoctor);
-        return autoDoctorMapper.toResponseDTO(doctorRepository.save(newDoctor));
+
+        autoDoctorMapper.updateFromDTO(doctorRequestDTO, doctor);
+
+        if (doctorRequestDTO.getPassword() != null) {
+            doctor.setPassword(passwordEncoder.encode(doctorRequestDTO.getPassword()));
+        }
+
+        return autoDoctorMapper.toResponseDTO(doctorRepository.save(doctor));
     }
 
     @Override
@@ -82,7 +86,7 @@ public class DoctorServiceImpl implements DoctorService {
         Doctor doctor =
                 doctorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Doctor", "id", id));
 
-        autoDoctorMapper.updateFromDTO(doctorPartialUpdateDTO, doctor);
+        autoDoctorMapper.updatePartialFromDTO(doctorPartialUpdateDTO, doctor);
 
         return autoDoctorMapper.toResponseDTO(doctorRepository.save(doctor));
     }
