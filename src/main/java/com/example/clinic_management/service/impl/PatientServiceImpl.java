@@ -42,16 +42,16 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public PatientResponseDTO updatePatient(Long id, PatientRequestDTO patientRequestDTO) {
-        Patient existingPatient = patientRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Patient", "id", id));
+        Patient existingPatient =
+                patientRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Patient", "id", id));
 
         // Map the new values from patientRequestDTO to the existingPatient
         autoPatientMapper.updateFromDTO(patientRequestDTO, existingPatient);
 
-        if(patientRequestDTO.getPassword() != null){
+        if (patientRequestDTO.getPassword() != null) {
             existingPatient.setPassword(passwordEncoder.encode(patientRequestDTO.getPassword()));
         }
-        
+
         // Save the updated patient entity
         Patient updatedPatient = patientRepository.save(existingPatient);
 

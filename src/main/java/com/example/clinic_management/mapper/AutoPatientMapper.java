@@ -1,16 +1,15 @@
 package com.example.clinic_management.mapper;
 
 import org.mapstruct.Mapper;
-
-import com.example.clinic_management.dtos.requests.PatientRequestDTO;
-import com.example.clinic_management.dtos.responses.PatientResponseDTO;
-import com.example.clinic_management.entities.Patient;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(componentModel = "spring",
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+import com.example.clinic_management.dtos.requests.PatientRequestDTO;
+import com.example.clinic_management.dtos.responses.PatientResponseDTO;
+import com.example.clinic_management.entities.Patient;
+
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface AutoPatientMapper {
 
     Patient toEntity(PatientRequestDTO patientRequestDTO);
