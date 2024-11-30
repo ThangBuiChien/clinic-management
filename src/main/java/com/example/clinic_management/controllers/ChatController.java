@@ -2,6 +2,7 @@ package com.example.clinic_management.controllers;
 
 import java.util.concurrent.CompletableFuture;
 
+import com.example.clinic_management.service.ChatBotLocalService;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -28,6 +29,8 @@ public class ChatController {
     private final ChatRoomService chatRoomService;
 
     private final ChatBotService chatBotService;
+
+    private final ChatBotLocalService chatBotLocalService;
 
     @MessageMapping("/chat.register/{roomId}")
     @SendTo("/topic/room/{roomId}") // Use room ID dynamically
@@ -68,7 +71,10 @@ public class ChatController {
 
         // Process message with chatbot asynchronously if it contains bot trigger
         if (shouldTriggerBot(newMessage.getContent())) {
-            CompletableFuture.runAsync(() -> chatBotService.processAndRespond(newMessage, roomId));
+//            CompletableFuture.runAsync(() -> chatBotService.processAndRespond(newMessage, roomId));
+
+            CompletableFuture.runAsync(() -> chatBotLocalService.processAndRespond(newMessage, roomId));
+
         }
 
         return chatMessageEntity; // Broadcast the message to the room

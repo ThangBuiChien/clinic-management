@@ -3,6 +3,7 @@ package com.example.clinic_management.controllers;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.example.clinic_management.service.ChatBotLocalService;
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,8 @@ public class ChatBotController {
 
     private final ChatBotService chatBotService;
 
+    private final ChatBotLocalService chatBotLocalService;
+
     @PostMapping
     public ResponseEntity<ApiResponse> chat(@RequestBody @Valid ChatBotRequestDTO request) {
         //        String response = chatBotService.generateResponse(request.getMessage());
@@ -37,6 +40,16 @@ public class ChatBotController {
         return ResponseEntity.ok(ApiResponse.builder()
                 .message("ChatBot said...")
                 .result(new ChatBotResponseDTO(response, sessionId))
+                .build());
+    }
+
+    @PostMapping("/local_bot")
+    public ResponseEntity<ApiResponse> chatLocal(@RequestBody @Valid ChatBotRequestDTO request) {
+        String response = chatBotLocalService.getChatBotResponse(request.getMessage());
+
+        return ResponseEntity.ok(ApiResponse.builder()
+                .message("ChatBot said...")
+                .result(new ChatBotResponseDTO(response, null))
                 .build());
     }
 }
