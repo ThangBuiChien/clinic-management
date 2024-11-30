@@ -41,6 +41,11 @@ public class PaymentController {
         TransactionStatusResponseDTO transactionStatusDTO =
                 paymentVNPayService.handleTransactionResult(amount, bankCode, order, responseCode);
 
-        return ResponseEntity.status(HttpStatus.OK).body(transactionStatusDTO);
+        String redirectUrl = String.format("http://localhost:5173/payment-success?vnp_Amount=%s&vnp_BankCode=%s&vnp_OrderInfo=%s&vnp_ResponseCode=%s",
+                amount, bankCode, order, responseCode);
+
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .header("Location", redirectUrl)
+                .body(transactionStatusDTO);
     }
 }
