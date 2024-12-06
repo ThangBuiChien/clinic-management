@@ -39,7 +39,7 @@ Key highlights of the system include an **Appointment Booking System**, **Doctor
   - Docker for containerization
 
 - **Payment Integration**:  
-  - Stripe API for secure online payments
+  - VNPAY API for secure online payments
 
 - **AI Integration**:  
   - OpenAI for powering the chatbot and natural language processing
