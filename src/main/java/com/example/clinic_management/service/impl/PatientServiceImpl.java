@@ -15,7 +15,7 @@ import com.example.clinic_management.enums.Role;
 import com.example.clinic_management.exception.ResourceNotFoundException;
 import com.example.clinic_management.mapper.AutoPatientMapper;
 import com.example.clinic_management.repository.PatientRepository;
-import com.example.clinic_management.service.PatientService;
+import com.example.clinic_management.service.user.PatientService;
 
 import lombok.RequiredArgsConstructor;
 

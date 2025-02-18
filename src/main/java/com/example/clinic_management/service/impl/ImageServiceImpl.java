@@ -16,7 +16,7 @@ import com.example.clinic_management.exception.ResourceNotFoundException;
 import com.example.clinic_management.mapper.AutoMapperPicture;
 import com.example.clinic_management.repository.ExaminationRepository;
 import com.example.clinic_management.repository.ImageRepository;
-import com.example.clinic_management.service.ImageService;
+import com.example.clinic_management.service.diagnose.ImageService;
 
 import lombok.RequiredArgsConstructor;
 

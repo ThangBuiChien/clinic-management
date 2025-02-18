@@ -13,7 +13,7 @@ import com.example.clinic_management.entities.Department;
 import com.example.clinic_management.exception.ResourceNotFoundException;
 import com.example.clinic_management.mapper.AutoDepartmentMapper;
 import com.example.clinic_management.repository.DepartmentRepository;
-import com.example.clinic_management.service.DepartmentService;
+import com.example.clinic_management.service.user.DepartmentService;
 
 import lombok.RequiredArgsConstructor;
 

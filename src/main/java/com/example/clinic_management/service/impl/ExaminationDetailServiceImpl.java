@@ -17,8 +17,8 @@ import com.example.clinic_management.entities.Patient;
 import com.example.clinic_management.mapper.AutoExaminationDetailMapper;
 import com.example.clinic_management.repository.ExaminationRepository;
 import com.example.clinic_management.repository.PatientRepository;
-import com.example.clinic_management.service.ExaminationDetailService;
-import com.example.clinic_management.service.ImageService;
+import com.example.clinic_management.service.diagnose.ExaminationDetailService;
+import com.example.clinic_management.service.diagnose.ImageService;
 
 import lombok.RequiredArgsConstructor;
 

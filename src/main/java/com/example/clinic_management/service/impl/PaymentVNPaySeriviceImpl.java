@@ -19,8 +19,8 @@ import com.example.clinic_management.enums.AppointmentStatus;
 import com.example.clinic_management.exception.ResourceNotFoundException;
 import com.example.clinic_management.mapper.AutoAppointmentMapper;
 import com.example.clinic_management.repository.AppointmentRepository;
-import com.example.clinic_management.service.EmailService;
-import com.example.clinic_management.service.PaymentVNPayService;
+import com.example.clinic_management.service.booking.EmailService;
+import com.example.clinic_management.service.booking.PaymentVNPayService;
 
 import lombok.RequiredArgsConstructor;
 

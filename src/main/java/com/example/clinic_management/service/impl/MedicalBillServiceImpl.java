@@ -24,8 +24,8 @@ import com.example.clinic_management.repository.DoctorRepository;
 import com.example.clinic_management.repository.MedicalBillRepository;
 import com.example.clinic_management.repository.PatientRepository;
 import com.example.clinic_management.repository.PrescribedDrugRepository;
-import com.example.clinic_management.service.ImageService;
-import com.example.clinic_management.service.MedicalBillService;
+import com.example.clinic_management.service.diagnose.ImageService;
+import com.example.clinic_management.service.diagnose.MedicalBillService;
 
 import lombok.RequiredArgsConstructor;
 

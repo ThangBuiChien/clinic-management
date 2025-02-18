@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
 
 import com.example.clinic_management.entities.Appointment;
-import com.example.clinic_management.service.EmailService;
+import com.example.clinic_management.service.booking.EmailService;
 
 import lombok.RequiredArgsConstructor;
 

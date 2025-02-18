@@ -16,7 +16,7 @@ import com.example.clinic_management.repository.DepartmentRepository;
 import com.example.clinic_management.repository.DoctorRepository;
 import com.example.clinic_management.repository.DoctorTimeSlotCapacityRepository;
 import com.example.clinic_management.repository.ScheduleRepository;
-import com.example.clinic_management.service.BookingProcessor;
+import com.example.clinic_management.service.booking.BookingProcessor;
 
 import lombok.RequiredArgsConstructor;
 
@@ -76,11 +76,6 @@ public class BookingProcessorImpl implements BookingProcessor {
         if (schedule == null) {
             schedule = createScheduleWithFullTimeSlot(doctor, date);
         }
-
-        // Increase current patients for the given timeslot
-        //        doctorTimeSlotCapacityRepository
-        //                .findByScheduleIdAndTimeSlot(schedule.getId(), timeSlot)
-        //                .addPatient();
 
         return doctorTimeSlotCapacityRepository.findByScheduleIdAndTimeSlot(schedule.getId(), timeSlot);
     }

@@ -17,7 +17,7 @@ import com.example.clinic_management.exception.ResourceNotFoundException;
 import com.example.clinic_management.mapper.AutoDoctorMapper;
 import com.example.clinic_management.repository.DepartmentRepository;
 import com.example.clinic_management.repository.DoctorRepository;
-import com.example.clinic_management.service.DoctorService;
+import com.example.clinic_management.service.user.DoctorService;
 
 import lombok.RequiredArgsConstructor;
 

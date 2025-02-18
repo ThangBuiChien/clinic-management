@@ -21,7 +21,7 @@ import com.example.clinic_management.mapper.AutoAppointmentMapper;
 import com.example.clinic_management.repository.AppointmentRepository;
 import com.example.clinic_management.repository.DoctorTimeSlotCapacityRepository;
 import com.example.clinic_management.repository.ScheduleRepository;
-import com.example.clinic_management.service.AppointmentService;
+import com.example.clinic_management.service.booking.AppointmentService;
 import com.example.clinic_management.specification.AppointmentSpecification;
 
 import lombok.RequiredArgsConstructor;
