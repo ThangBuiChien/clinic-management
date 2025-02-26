@@ -65,4 +65,13 @@ public class MedicalBill {
         drugs.remove(prescribedDrug);
         prescribedDrug.setMedicalBill(null);
     }
+
+    public void addExaminationDetail(ExaminationDetail examinationDetail) {
+        examinationDetails.add(examinationDetail);
+        examinationDetail.setMedicalBill(this);
+    }
+
+    public void addExaminationDetails(List<ExaminationDetail> examinationDetails) {
+        examinationDetails.forEach(this::addExaminationDetail);
+    }
 }

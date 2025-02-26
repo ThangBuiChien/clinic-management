@@ -2,6 +2,7 @@ package com.example.clinic_management.service.diagnose;
 
 import java.util.List;
 
+import com.example.clinic_management.dtos.requests.ExaminationDetailLabRequestDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +23,9 @@ public interface MedicalBillService {
 
     MedicalBillResponseDTO addDrugToMedicalBill(
             Long medicalBillId, List<PrescribedDrugRequestDTO> prescribedDrugRequestDTOS);
+
+    MedicalBillResponseDTO addLabRequestToMedicalBill(
+            Long medicalBillId, List<ExaminationDetailLabRequestDTO> examinationDetailLabRequestDTOS);
 
     MedicalBillResponseDTO getMedicalBillById(Long id);
 

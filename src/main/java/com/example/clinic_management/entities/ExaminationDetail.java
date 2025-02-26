@@ -22,7 +22,7 @@ public class ExaminationDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "patient_name", nullable = false)
+    @Column(name = "patient_name", nullable = true)
     private String patientName;
 
     private String doctorName;

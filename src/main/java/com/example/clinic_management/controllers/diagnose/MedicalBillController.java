@@ -2,6 +2,7 @@ package com.example.clinic_management.controllers.diagnose;
 
 import java.util.List;
 
+import com.example.clinic_management.dtos.requests.ExaminationDetailLabRequestDTO;
 import jakarta.validation.Valid;
 
 import org.springframework.data.domain.Page;
@@ -59,6 +60,15 @@ public class MedicalBillController {
             @Valid @RequestBody List<PrescribedDrugRequestDTO> prescribedDrugRequestDTOS) {
         MedicalBillResponseDTO responseDTO =
                 medicalBillService.addDrugToMedicalBill(medicalBillId, prescribedDrugRequestDTOS);
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @PostMapping("/{medicalBillId}/lab_request")
+    public ResponseEntity<MedicalBillResponseDTO> addLabRequestToMedicalBill(
+            @PathVariable Long medicalBillId,
+            @Valid @RequestBody List<ExaminationDetailLabRequestDTO> examinationDetailLabRequestDTOS) {
+        MedicalBillResponseDTO responseDTO =
+                medicalBillService.addLabRequestToMedicalBill(medicalBillId, examinationDetailLabRequestDTOS);
         return ResponseEntity.ok(responseDTO);
     }
 

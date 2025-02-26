@@ -3,6 +3,8 @@ package com.example.clinic_management.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.clinic_management.dtos.requests.ExaminationDetailLabRequestDTO;
+import com.example.clinic_management.mapper.AutoExaminationDetailMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -40,6 +42,7 @@ public class MedicalBillServiceImpl implements MedicalBillService {
     private final ImageService imageService;
 
     private final AutoPrescribedDrugMapper autoPrescribedDrugMapper;
+    private final AutoExaminationDetailMapper autoExaminationDetailMapper;
 
     @Override
     @Transactional
@@ -132,6 +135,31 @@ public class MedicalBillServiceImpl implements MedicalBillService {
         medicalBill.addPrescribedDrugs(prescribedDrugs);
 
         return autoMedicalBillMapper.toResponseDTO(medicalBillRepository.save(medicalBill));
+    }
+
+    @Override
+    public MedicalBillResponseDTO addLabRequestToMedicalBill(Long medicalBillId, List<ExaminationDetailLabRequestDTO> examinationDetailLabRequestDTOS) {
+        MedicalBill medicalBill = medicalBillRepository
+                .findById(medicalBillId)
+                .orElseThrow(() -> new ResourceNotFoundException("MedicalBill", "id", medicalBillId));
+
+        String patientName = medicalBill.getPatient().getFullName();
+        String doctorName = medicalBill.getDoctor().getFullName();
+
+        List<ExaminationDetail> examinationDetails = examinationDetailLabRequestDTOS.stream()
+                .map(dto -> convertToExaminationDetail(dto, patientName, doctorName))
+                .toList();
+
+        medicalBill.addExaminationDetails(examinationDetails);
+        return autoMedicalBillMapper.toResponseDTO(medicalBillRepository.save(medicalBill));
+    }
+
+    private ExaminationDetail convertToExaminationDetail(ExaminationDetailLabRequestDTO dto, String patientName, String doctorName) {
+        ExaminationDetail detail = new ExaminationDetail();
+        detail.setExaminationType(dto.getExaminationType());
+        detail.setPatientName(patientName);
+        detail.setDoctorName(doctorName);
+        return detail;
     }
 
     @Override
