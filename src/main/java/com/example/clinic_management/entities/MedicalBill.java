@@ -52,6 +52,13 @@ public class MedicalBill {
     @Column(name = "syndrome")
     private String syndrome;
 
+    private Double weight;
+    private Integer heartRate;
+    private String bloodPressure;
+    private Double temperature;
+
+    private String finalDiagnosis;
+
     public void addPrescribedDrug(PrescribedDrug prescribedDrug) {
         drugs.add(prescribedDrug);
         prescribedDrug.setMedicalBill(this);

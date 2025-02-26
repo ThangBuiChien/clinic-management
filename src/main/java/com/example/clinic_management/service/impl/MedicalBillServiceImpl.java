@@ -3,7 +3,7 @@ package com.example.clinic_management.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.example.clinic_management.dtos.requests.ExaminationDetailLabRequestDTO;
+import com.example.clinic_management.dtos.requests.*;
 import com.example.clinic_management.mapper.AutoExaminationDetailMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,9 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.clinic_management.dtos.requests.MedicalBillRequestDTO;
-import com.example.clinic_management.dtos.requests.MedicalBillWithLabRequestDTO;
-import com.example.clinic_management.dtos.requests.PrescribedDrugRequestDTO;
 import com.example.clinic_management.dtos.responses.MedicalBillResponseDTO;
 import com.example.clinic_management.entities.ExaminationDetail;
 import com.example.clinic_management.entities.Image;
@@ -116,6 +113,14 @@ public class MedicalBillServiceImpl implements MedicalBillService {
             MedicalBillWithLabRequestDTO medicalBillWithLabRequestDTO) {
         MedicalBill medicalBill =
                 autoMedicalBillMapper.fromMedicalBillWithLabRequestDTOToEntity(medicalBillWithLabRequestDTO);
+        medicalBillRepository.save(medicalBill);
+        return autoMedicalBillMapper.toResponseDTO(medicalBill);
+    }
+
+    @Override
+    public MedicalBillResponseDTO createMedicalBillWithPreExamination(MedicalBillWithPreExaminationDTO medicalBillWithPreExaminationDTO) {
+        MedicalBill medicalBill = autoMedicalBillMapper.fromMedicalBillWithPreExaminationDTOToEntity(
+                medicalBillWithPreExaminationDTO);
         medicalBillRepository.save(medicalBill);
         return autoMedicalBillMapper.toResponseDTO(medicalBill);
     }

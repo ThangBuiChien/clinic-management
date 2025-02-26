@@ -9,5 +9,7 @@ public enum AppointmentStatus {
 
     LAB_TEST_COMPLETED,
     CANCELLED,
-    SUCCESS
+    SUCCESS,
+
+    PRE_EXAMINATION_COMPLETED,
 }
