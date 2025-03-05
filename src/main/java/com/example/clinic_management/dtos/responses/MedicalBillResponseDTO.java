@@ -19,6 +19,13 @@ public class MedicalBillResponseDTO {
     private LocalDate date;
     private String syndrome;
     private String note;
+
+    private Double weight;
+    private Integer heartRate;
+    private String bloodPressure;
+    private Double temperature;
+    private String finalDiagnosis;
+
     private List<PrescribedDrugResponseDTO> prescribedDrugs;
     private List<ExaminationDetailResponseDTO> examinationDetails;
 }

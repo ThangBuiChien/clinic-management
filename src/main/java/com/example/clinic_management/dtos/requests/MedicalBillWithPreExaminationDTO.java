@@ -1,11 +1,12 @@
 package com.example.clinic_management.dtos.requests;
 
+import java.time.LocalDate;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -29,6 +30,4 @@ public class MedicalBillWithPreExaminationDTO {
     private Integer heartRate;
     private String bloodPressure;
     private Double temperature;
-
-
 }

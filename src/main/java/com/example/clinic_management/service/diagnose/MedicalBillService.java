@@ -2,11 +2,11 @@ package com.example.clinic_management.service.diagnose;
 
 import java.util.List;
 
-import com.example.clinic_management.dtos.requests.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.clinic_management.dtos.requests.*;
 import com.example.clinic_management.dtos.responses.MedicalBillResponseDTO;
 
 public interface MedicalBillService {

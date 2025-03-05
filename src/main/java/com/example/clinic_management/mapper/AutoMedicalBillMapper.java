@@ -1,10 +1,10 @@
 package com.example.clinic_management.mapper;
 
-import com.example.clinic_management.dtos.requests.MedicalBillWithPreExaminationDTO;
 import org.mapstruct.*;
 
 import com.example.clinic_management.dtos.requests.MedicalBillRequestDTO;
 import com.example.clinic_management.dtos.requests.MedicalBillWithLabRequestDTO;
+import com.example.clinic_management.dtos.requests.MedicalBillWithPreExaminationDTO;
 import com.example.clinic_management.dtos.responses.MedicalBillResponseDTO;
 import com.example.clinic_management.entities.ExaminationDetail;
 import com.example.clinic_management.entities.MedicalBill;
@@ -43,7 +43,8 @@ public interface AutoMedicalBillMapper {
 
     @Mapping(target = "doctor", source = "doctorId")
     @Mapping(target = "patient", source = "patientId")
-    MedicalBill fromMedicalBillWithPreExaminationDTOToEntity(MedicalBillWithPreExaminationDTO medicalBillWithPreExaminationDTO);
+    MedicalBill fromMedicalBillWithPreExaminationDTOToEntity(
+            MedicalBillWithPreExaminationDTO medicalBillWithPreExaminationDTO);
 
     // In bi-directional mapping, so we need two handle 2 sides
     // medicalBill.addPreDrug() and also preDrug.setMedicalBill();

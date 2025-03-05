@@ -3,20 +3,20 @@ package com.example.clinic_management.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.example.clinic_management.dtos.requests.*;
-import com.example.clinic_management.mapper.AutoExaminationDetailMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.clinic_management.dtos.requests.*;
 import com.example.clinic_management.dtos.responses.MedicalBillResponseDTO;
 import com.example.clinic_management.entities.ExaminationDetail;
 import com.example.clinic_management.entities.Image;
 import com.example.clinic_management.entities.MedicalBill;
 import com.example.clinic_management.entities.PrescribedDrug;
 import com.example.clinic_management.exception.ResourceNotFoundException;
+import com.example.clinic_management.mapper.AutoExaminationDetailMapper;
 import com.example.clinic_management.mapper.AutoMedicalBillMapper;
 import com.example.clinic_management.mapper.AutoPrescribedDrugMapper;
 import com.example.clinic_management.repository.DoctorRepository;
@@ -118,9 +118,10 @@ public class MedicalBillServiceImpl implements MedicalBillService {
     }
 
     @Override
-    public MedicalBillResponseDTO createMedicalBillWithPreExamination(MedicalBillWithPreExaminationDTO medicalBillWithPreExaminationDTO) {
-        MedicalBill medicalBill = autoMedicalBillMapper.fromMedicalBillWithPreExaminationDTOToEntity(
-                medicalBillWithPreExaminationDTO);
+    public MedicalBillResponseDTO createMedicalBillWithPreExamination(
+            MedicalBillWithPreExaminationDTO medicalBillWithPreExaminationDTO) {
+        MedicalBill medicalBill =
+                autoMedicalBillMapper.fromMedicalBillWithPreExaminationDTOToEntity(medicalBillWithPreExaminationDTO);
         medicalBillRepository.save(medicalBill);
         return autoMedicalBillMapper.toResponseDTO(medicalBill);
     }
@@ -143,7 +144,8 @@ public class MedicalBillServiceImpl implements MedicalBillService {
     }
 
     @Override
-    public MedicalBillResponseDTO addLabRequestToMedicalBill(Long medicalBillId, List<ExaminationDetailLabRequestDTO> examinationDetailLabRequestDTOS) {
+    public MedicalBillResponseDTO addLabRequestToMedicalBill(
+            Long medicalBillId, List<ExaminationDetailLabRequestDTO> examinationDetailLabRequestDTOS) {
         MedicalBill medicalBill = medicalBillRepository
                 .findById(medicalBillId)
                 .orElseThrow(() -> new ResourceNotFoundException("MedicalBill", "id", medicalBillId));
@@ -159,7 +161,8 @@ public class MedicalBillServiceImpl implements MedicalBillService {
         return autoMedicalBillMapper.toResponseDTO(medicalBillRepository.save(medicalBill));
     }
 
-    private ExaminationDetail convertToExaminationDetail(ExaminationDetailLabRequestDTO dto, String patientName, String doctorName) {
+    private ExaminationDetail convertToExaminationDetail(
+            ExaminationDetailLabRequestDTO dto, String patientName, String doctorName) {
         ExaminationDetail detail = new ExaminationDetail();
         detail.setExaminationType(dto.getExaminationType());
         detail.setPatientName(patientName);

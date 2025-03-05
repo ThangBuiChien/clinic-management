@@ -2,7 +2,6 @@ package com.example.clinic_management.controllers.diagnose;
 
 import java.util.List;
 
-import com.example.clinic_management.dtos.requests.*;
 import jakarta.validation.Valid;
 
 import org.springframework.data.domain.Page;
@@ -14,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.clinic_management.dtos.requests.*;
 import com.example.clinic_management.dtos.responses.MedicalBillResponseDTO;
 import com.example.clinic_management.service.diagnose.MedicalBillService;
 
