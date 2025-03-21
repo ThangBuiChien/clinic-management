@@ -17,6 +17,8 @@ public class ExaminationDetailResponseDTO {
 
     private LabTest examinationType;
 
+    private String labDepartment;
+
     private String examinationResult;
 
     private List<ImageResponseDTO> imageResponseDTO;
