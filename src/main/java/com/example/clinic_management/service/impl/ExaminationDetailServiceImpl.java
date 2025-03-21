@@ -2,7 +2,12 @@ package com.example.clinic_management.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import com.example.clinic_management.enums.LabDepartment;
+import com.example.clinic_management.enums.LabTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -39,8 +44,8 @@ public class ExaminationDetailServiceImpl implements ExaminationDetailService {
         ExaminationDetail examinationDetail = new ExaminationDetail();
         //        examinationDetail.setPatient(patient);
         examinationDetail.setPatientName(patient.getFullName());
-        examinationDetail.setExaminationType(
-                examinationRequestDTO.getExaminationType().trim());
+//        examinationDetail.setExaminationType(
+//                examinationRequestDTO.getExaminationType().trim());
         examinationDetail.setExaminationResult(
                 examinationRequestDTO.getExaminationResult().trim());
         return examinationRepository.save(examinationDetail);
@@ -102,6 +107,10 @@ public class ExaminationDetailServiceImpl implements ExaminationDetailService {
         return updatedExaminationDetail.stream()
                 .map(autoExaminationDetailMapper::toResponse)
                 .toList();
+    }
+    @Override
+    public Set<LabTest> getLabTestsByDepartment(LabDepartment labDepartment) {
+        return LabTest.getTestsByDepartment(labDepartment);
     }
 
     private Patient validateAndGetExaminationDetail(ExaminationRequestDTO examinationRequestDTO) {
