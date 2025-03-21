@@ -45,6 +45,17 @@ public class DoctorController {
                 .build());
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse> getDoctorsByNameAndDepartment(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Long departmentId,
+            Pageable pageable) {
+        return ResponseEntity.ok(ApiResponse.builder()
+                .message("Fetched doctor Search successfully")
+                .result(doctorService.getDoctorsByNameAndDepartment(name, departmentId, pageable))
+                .build());
+    }
+
     @PostMapping("")
     public ResponseEntity<ApiResponse> addDoctor(@RequestBody @Valid DoctorRequestDTO doctorRequestDTO) {
         return ResponseEntity.ok(ApiResponse.builder()

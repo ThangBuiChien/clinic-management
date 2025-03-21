@@ -22,4 +22,6 @@ public interface DoctorService {
     DoctorResponseDTO updatePartialDoctor(Long id, DoctorPartialUpdateDTO doctorPartialUpdateDTO);
 
     void deleteDoctor(Long id);
+
+    Page<DoctorResponseDTO> getDoctorsByNameAndDepartment(String name, Long departmentId, Pageable pageable);
 }
