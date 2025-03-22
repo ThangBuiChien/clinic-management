@@ -3,6 +3,8 @@ package com.example.clinic_management.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -40,6 +42,8 @@ public class MedicalBillServiceImpl implements MedicalBillService {
 
     private final AutoPrescribedDrugMapper autoPrescribedDrugMapper;
     private final AutoExaminationDetailMapper autoExaminationDetailMapper;
+
+    private final Logger logger = LoggerFactory.getLogger(MedicalBillServiceImpl.class);
 
     @Override
     @Transactional
@@ -224,7 +228,9 @@ public class MedicalBillServiceImpl implements MedicalBillService {
                 .orElseThrow(() -> new ResourceNotFoundException("medical bill", "id", id));
         autoMedicalBillMapper.updateMedicalBillFromDTO(medicalBillRequestDTO, medicalBill);
         medicalBillRepository.save(medicalBill);
-        return autoMedicalBillMapper.toResponseDTO(medicalBill);
+        MedicalBillResponseDTO medicalBillResponseDTO =  autoMedicalBillMapper.toResponseDTO(medicalBill);
+        
+        return  medicalBillResponseDTO;
     }
 
     @Override
