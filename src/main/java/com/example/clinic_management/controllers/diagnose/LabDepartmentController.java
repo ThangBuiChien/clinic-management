@@ -17,6 +17,12 @@ public class LabDepartmentController {
 
     private final ExaminationDetailService examinationDetailService;
 
+    @GetMapping("")
+    public ResponseEntity<LabDepartment[]> getAllLabDepartments() {
+        LabDepartment[] labDepartments = LabDepartment.values();
+        return ResponseEntity.ok(labDepartments);
+    }
+
     @GetMapping("/lab_tests")
     public ResponseEntity<Set<LabTest>> getLabTestsByDepartment(@RequestParam LabDepartment labDepartment) {
         Set<LabTest> labTests = examinationDetailService.getLabTestsByDepartment(labDepartment);
