@@ -55,4 +55,8 @@ public class ExaminationDetail {
             addImage(image);
         }
     }
+
+    public boolean isDone() {
+        return examinationResult != null;
+    }
 }

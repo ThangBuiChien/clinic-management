@@ -81,4 +81,11 @@ public class MedicalBill {
     public void addExaminationDetails(List<ExaminationDetail> examinationDetails) {
         examinationDetails.forEach(this::addExaminationDetail);
     }
+
+    public boolean checkIfAllExaminationDetailsAreDone() {
+        if(examinationDetails == null) {
+            return true;
+        }
+        return examinationDetails.stream().allMatch(ExaminationDetail::isDone);
+    }
 }
