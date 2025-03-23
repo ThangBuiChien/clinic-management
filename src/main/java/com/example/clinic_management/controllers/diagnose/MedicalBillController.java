@@ -133,4 +133,11 @@ public class MedicalBillController {
         Page<MedicalBillResponseDTO> responseDTOS = medicalBillService.findMedicalBillsByDoctorId(doctorId, pageable);
         return ResponseEntity.ok(responseDTOS);
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<MedicalBillResponseDTO> partialUpdateMedicalBill(
+            @PathVariable Long id, @Valid @RequestBody MedicalBillPartialUpdateRequestDTO dto) {
+        MedicalBillResponseDTO responseDTO = medicalBillService.partialUpdateMedicalBill(id, dto);
+        return ResponseEntity.ok(responseDTO);
+    }
 }

@@ -249,4 +249,15 @@ public class MedicalBillServiceImpl implements MedicalBillService {
                 .map(autoMedicalBillMapper::toResponseDTO)
                 .orElseThrow(() -> new ResourceNotFoundException("MedicalBill", "patientId", patientId));
     }
+
+    @Override
+    public MedicalBillResponseDTO partialUpdateMedicalBill(Long id, MedicalBillPartialUpdateRequestDTO dto) {
+        return medicalBillRepository
+                .findById(id)
+                .map(medicalBill -> {
+                    autoMedicalBillMapper.partialUpdateMedicalBillFromDTO(dto, medicalBill);
+                    return autoMedicalBillMapper.toResponseDTO(medicalBillRepository.save(medicalBill));
+                })
+                .orElseThrow(() -> new ResourceNotFoundException("MedicalBill", "id", id));
+    }
 }

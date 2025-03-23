@@ -46,4 +46,6 @@ public interface MedicalBillService {
     void deleteMedicalBill(Long id);
 
     MedicalBillResponseDTO getTopMedicalBillByPatientId(Long patientId);
+
+    MedicalBillResponseDTO partialUpdateMedicalBill(Long id, MedicalBillPartialUpdateRequestDTO dto);
 }
