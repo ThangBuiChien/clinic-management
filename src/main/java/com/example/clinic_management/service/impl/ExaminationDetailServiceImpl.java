@@ -1,8 +1,7 @@
 package com.example.clinic_management.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.example.clinic_management.enums.LabDepartment;
 import com.example.clinic_management.enums.LabTest;
@@ -111,6 +110,24 @@ public class ExaminationDetailServiceImpl implements ExaminationDetailService {
     @Override
     public Set<LabTest> getLabTestsByDepartment(LabDepartment labDepartment) {
         return LabTest.getTestsByDepartment(labDepartment);
+    }
+
+    @Override
+    public Page<ExaminationDetailResponseDTO> getExaminationDetailsByExaminationTypeAndImagesTestIsEmpty(LabTest examinationType, Pageable pageable) {
+        return examinationRepository
+                .findByExaminationTypeAndImagesTestIsEmpty(examinationType, pageable)
+                .map(autoExaminationDetailMapper::toResponse);
+    }
+
+    @Override
+    public Page<ExaminationDetailResponseDTO> getExaminationDetailsByDepartmentAndImagesTestIsEmpty(LabDepartment labDepartment, Pageable pageable) {
+        Collection<LabTest> testsInDepartment = Arrays.stream(LabTest.values())
+                .filter(test -> test.getDepartment() == labDepartment)
+                .collect(Collectors.toList());
+
+        return examinationRepository
+                .findByDepartmentAndImagesTestIsEmpty(testsInDepartment, pageable)
+                .map(autoExaminationDetailMapper::toResponse);
     }
 
     private Patient validateAndGetExaminationDetail(ExaminationRequestDTO examinationRequestDTO) {

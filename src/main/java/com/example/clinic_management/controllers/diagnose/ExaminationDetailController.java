@@ -2,6 +2,10 @@ package com.example.clinic_management.controllers.diagnose;
 
 import java.util.List;
 
+import com.example.clinic_management.enums.LabDepartment;
+import com.example.clinic_management.enums.LabTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,5 +60,21 @@ public class ExaminationDetailController {
                 .message("Upload images lab successfully")
                 .result(responseDTO)
                 .build());
+    }
+
+    @GetMapping("by_department")
+    public ResponseEntity<Page<ExaminationDetailResponseDTO>> getExaminationDetails(
+            @RequestParam LabDepartment labDepartment, Pageable pageable) {
+        Page<ExaminationDetailResponseDTO> page = examinationDetailService
+                .getExaminationDetailsByDepartmentAndImagesTestIsEmpty(labDepartment, pageable);
+        return ResponseEntity.ok(page);
+    }
+
+    @GetMapping("by_examination_type")
+    public ResponseEntity<Page<ExaminationDetailResponseDTO>> getExaminationDetails(
+            @RequestParam LabTest examinationType, Pageable pageable) {
+        Page<ExaminationDetailResponseDTO> page = examinationDetailService
+                .getExaminationDetailsByExaminationTypeAndImagesTestIsEmpty(examinationType, pageable);
+        return ResponseEntity.ok(page);
     }
 }

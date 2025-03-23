@@ -25,4 +25,8 @@ public interface ExaminationDetailService {
             List<ExaminationDetailUploadImgRequestDTO> examinationDetailUploadImgRequestDTOs,
             List<MultipartFile> files);
     Set<LabTest> getLabTestsByDepartment(LabDepartment labDepartment);
+
+    Page<ExaminationDetailResponseDTO> getExaminationDetailsByExaminationTypeAndImagesTestIsEmpty(LabTest examinationType, Pageable pageable);
+
+    Page<ExaminationDetailResponseDTO> getExaminationDetailsByDepartmentAndImagesTestIsEmpty(LabDepartment labDepartment, Pageable pageable);
 }
