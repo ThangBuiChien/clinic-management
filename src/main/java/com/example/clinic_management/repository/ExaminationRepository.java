@@ -17,10 +17,10 @@ import java.util.List;
 @Repository
 public interface ExaminationRepository extends JpaRepository<ExaminationDetail, Long> {
 
-    @Query("SELECT e FROM ExaminationDetail e WHERE e.examinationType = :examinationType AND SIZE(e.imagesTest) = 0")
+    @Query("SELECT e FROM ExaminationDetail e WHERE e.examinationType = :examinationType AND SIZE(e.imagesTest) = 0 ORDER BY e.id")
     Page<ExaminationDetail> findByExaminationTypeAndImagesTestIsEmpty(@Param("examinationType") LabTest examinationType, Pageable pageable);
 
-    @Query("SELECT e FROM ExaminationDetail e WHERE e.examinationType IN :labTests AND SIZE(e.imagesTest) = 0")
+    @Query("SELECT e FROM ExaminationDetail e WHERE e.examinationType IN :labTests AND SIZE(e.imagesTest) = 0 ORDER BY e.id")
     Page<ExaminationDetail> findByDepartmentAndImagesTestIsEmpty(@Param("labTests") Collection<LabTest> labTests, Pageable pageable);
 
 }
