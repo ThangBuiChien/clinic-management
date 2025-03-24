@@ -138,6 +138,16 @@ public class ExaminationDetailServiceImpl implements ExaminationDetailService {
                 .map(autoExaminationDetailMapper::toResponse);
     }
 
+    @Override
+    public Page<ExaminationDetailResponseDTO> getAllExaminationDetailsByImagesTestIsEmpty(Pageable pageable) {
+        Collection<LabTest> allTests = Arrays.stream(LabTest.values())
+                .toList();
+
+        return examinationRepository
+                .findByDepartmentAndImagesTestIsEmpty(allTests, pageable)
+                .map(autoExaminationDetailMapper::toResponse);
+    }
+
     private Patient validateAndGetExaminationDetail(ExaminationRequestDTO examinationRequestDTO) {
         // First check if patient ID exists
         if (examinationRequestDTO.getPatientId() == null) {

@@ -77,4 +77,11 @@ public class ExaminationDetailController {
                 .getExaminationDetailsByExaminationTypeAndImagesTestIsEmpty(examinationType, pageable);
         return ResponseEntity.ok(page);
     }
+
+    @GetMapping("all_undone")
+    public ResponseEntity<Page<ExaminationDetailResponseDTO>> getAllExaminationDetails(Pageable pageable) {
+        Page<ExaminationDetailResponseDTO> page = examinationDetailService
+                .getAllExaminationDetailsByImagesTestIsEmpty(pageable);
+        return ResponseEntity.ok(page);
+    }
 }
