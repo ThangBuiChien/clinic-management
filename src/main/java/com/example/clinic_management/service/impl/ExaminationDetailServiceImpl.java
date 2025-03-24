@@ -55,10 +55,11 @@ public class ExaminationDetailServiceImpl implements ExaminationDetailService {
 
     @Override
     @Transactional
-    public ExaminationDetail getExaminationDetailById(Long id) {
+    public ExaminationDetailResponseDTO getExaminationDetailById(Long id) {
         return examinationRepository
                 .findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Examination not found"));
+                .map(autoExaminationDetailMapper::toResponse)
+                .orElseThrow(() -> new IllegalArgumentException("Examination not found with" + id));
     }
 
     @Override

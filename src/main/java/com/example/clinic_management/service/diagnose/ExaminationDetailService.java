@@ -17,7 +17,7 @@ import com.example.clinic_management.entities.ExaminationDetail;
 public interface ExaminationDetailService {
     ExaminationDetail createExaminationDetail(ExaminationRequestDTO examinationRequestDTO);
 
-    ExaminationDetail getExaminationDetailById(Long id);
+    ExaminationDetailResponseDTO getExaminationDetailById(Long id);
 
     List<ExaminationDetail> getAllExaminationDetails();
 

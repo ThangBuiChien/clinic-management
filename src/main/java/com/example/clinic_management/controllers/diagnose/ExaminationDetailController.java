@@ -36,8 +36,8 @@ public class ExaminationDetailController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ExaminationDetail> getExaminationDetailById(@PathVariable Long id) {
-        ExaminationDetail examinationDetail = examinationDetailService.getExaminationDetailById(id);
+    public ResponseEntity<ExaminationDetailResponseDTO> getExaminationDetailById(@PathVariable Long id) {
+        ExaminationDetailResponseDTO examinationDetail = examinationDetailService.getExaminationDetailById(id);
         return ResponseEntity.ok(examinationDetail);
     }
 
