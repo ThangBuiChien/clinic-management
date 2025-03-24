@@ -21,6 +21,8 @@ public class Feedback {
 
     private String comment;
 
+    private String patientName;
+
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "appointment_id", nullable = false)
     private Appointment appointment;

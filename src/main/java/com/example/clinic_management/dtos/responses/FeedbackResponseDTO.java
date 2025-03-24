@@ -13,6 +13,9 @@ public class FeedbackResponseDTO {
 
     private String comment;
 
+    private String patientName;
+
     private DoctorResponseDTO doctorResponseDTO;
+
 
 }
