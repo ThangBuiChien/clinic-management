@@ -29,6 +29,7 @@ public class FeedbackServiceImpl implements FeedbackService {
         feedback.setDoctor(appointment.getDoctor());
         feedback.setRating(feedbackCreateDTO.getRating());
         feedback.setComment(feedbackCreateDTO.getComment());
+        feedback.setPatientName(appointment.getPatient().getFullName());
 
         feedbackRepository.save(feedback);
 
@@ -45,6 +46,7 @@ public class FeedbackServiceImpl implements FeedbackService {
         return FeedbackResponseDTO.builder()
                 .rating(feedback.getRating())
                 .comment(feedback.getComment())
+                .patientName(feedback.getPatientName())
                 .doctorResponseDTO(autoDoctorMapper.toResponseDTO(feedback.getDoctor()))
                 .build();
     }
