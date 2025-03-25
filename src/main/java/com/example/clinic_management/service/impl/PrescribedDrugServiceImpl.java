@@ -15,7 +15,7 @@ import com.example.clinic_management.exception.ResourceNotFoundException;
 import com.example.clinic_management.mapper.AutoPrescribedDrugMapper;
 import com.example.clinic_management.repository.DrugRepository;
 import com.example.clinic_management.repository.PrescribedDrugRepository;
-import com.example.clinic_management.service.PrescribedDrugService;
+import com.example.clinic_management.service.diagnose.PrescribedDrugService;
 
 import lombok.RequiredArgsConstructor;
 

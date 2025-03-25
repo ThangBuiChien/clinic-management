@@ -17,7 +17,7 @@ import com.example.clinic_management.mapper.AutoChatMessageMapper;
 import com.example.clinic_management.mapper.AutoChatRoomMapper;
 import com.example.clinic_management.repository.ChatRoomRepository;
 import com.example.clinic_management.repository.PatientRepository;
-import com.example.clinic_management.service.ChatRoomService;
+import com.example.clinic_management.service.chat.ChatRoomService;
 
 import lombok.RequiredArgsConstructor;
 

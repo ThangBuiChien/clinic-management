@@ -52,6 +52,13 @@ public class MedicalBill {
     @Column(name = "syndrome")
     private String syndrome;
 
+    private Double weight;
+    private Integer heartRate;
+    private String bloodPressure;
+    private Double temperature;
+
+    private String finalDiagnosis;
+
     public void addPrescribedDrug(PrescribedDrug prescribedDrug) {
         drugs.add(prescribedDrug);
         prescribedDrug.setMedicalBill(this);
@@ -64,5 +71,21 @@ public class MedicalBill {
     public void removePrescribedDrug(PrescribedDrug prescribedDrug) {
         drugs.remove(prescribedDrug);
         prescribedDrug.setMedicalBill(null);
+    }
+
+    public void addExaminationDetail(ExaminationDetail examinationDetail) {
+        examinationDetails.add(examinationDetail);
+        examinationDetail.setMedicalBill(this);
+    }
+
+    public void addExaminationDetails(List<ExaminationDetail> examinationDetails) {
+        examinationDetails.forEach(this::addExaminationDetail);
+    }
+
+    public boolean checkIfAllExaminationDetailsAreDone() {
+        if(examinationDetails == null) {
+            return true;
+        }
+        return examinationDetails.stream().allMatch(ExaminationDetail::isDone);
     }
 }

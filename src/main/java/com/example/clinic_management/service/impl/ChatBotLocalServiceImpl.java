@@ -1,25 +1,27 @@
 package com.example.clinic_management.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
 import com.example.clinic_management.dtos.requests.ChatMessageEntityRequestDTO;
 import com.example.clinic_management.entities.ChatMessageEntity;
 import com.example.clinic_management.entities.ChatRoom;
 import com.example.clinic_management.enums.MessageType;
 import com.example.clinic_management.exception.ResourceNotFoundException;
 import com.example.clinic_management.repository.ChatRoomRepository;
-import com.example.clinic_management.service.ChatBotLocalService;
-import com.example.clinic_management.service.ChatRoomService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.json.JSONObject;
+import com.example.clinic_management.service.chat.ChatBotLocalService;
+import com.example.clinic_management.service.chat.ChatRoomService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -33,13 +35,11 @@ public class ChatBotLocalServiceImpl implements ChatBotLocalService {
     private final ChatRoomService chatRoomService;
     private final SimpMessagingTemplate messagingTemplate;
 
-
     private final Map<Long, List<ChatMessageEntity>> conversationHistory = new ConcurrentHashMap<>();
-
 
     @Override
     public String getChatBotResponse(String question) {
-        try{
+        try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -48,12 +48,8 @@ public class ChatBotLocalServiceImpl implements ChatBotLocalService {
 
             HttpEntity<String> entity = new HttpEntity<>(request.toString(), headers);
 
-            ResponseEntity<String> response = restTemplate.exchange(
-                    chatBotApiUrl + "/chat",
-                    HttpMethod.POST,
-                    entity,
-                    String.class
-            );
+            ResponseEntity<String> response =
+                    restTemplate.exchange(chatBotApiUrl + "/chat", HttpMethod.POST, entity, String.class);
 
             return response.getBody();
         } catch (Exception e) {
@@ -88,11 +84,10 @@ public class ChatBotLocalServiceImpl implements ChatBotLocalService {
         // Add to conversation history
         history.add(botMessage);
 
-        ChatMessageEntityRequestDTO botMessageRequestDTO = new ChatMessageEntityRequestDTO(
-                botMessage.getType(), botMessage.getSender(), botMessage.getContent());
+        ChatMessageEntityRequestDTO botMessageRequestDTO =
+                new ChatMessageEntityRequestDTO(botMessage.getType(), botMessage.getSender(), botMessage.getContent());
 
         // Send message through WebSocket
         messagingTemplate.convertAndSend("/topic/room/" + roomId, botMessageRequestDTO);
-
     }
 }

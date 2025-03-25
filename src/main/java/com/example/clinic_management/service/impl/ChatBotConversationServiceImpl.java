@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.example.clinic_management.entities.ChatBotConversation;
-import com.example.clinic_management.service.ChatBotConversationService;
+import com.example.clinic_management.service.chat.ChatBotConversationService;
 import com.theokanning.openai.completion.chat.ChatMessage;
 
 import lombok.RequiredArgsConstructor;

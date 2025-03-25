@@ -3,6 +3,7 @@ package com.example.clinic_management.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.clinic_management.enums.LabTest;
 import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
@@ -22,13 +23,17 @@ public class ExaminationDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "patient_name", nullable = false)
+    @Column(name = "patient_name", nullable = true)
     private String patientName;
 
     private String doctorName;
 
+//    @Column(name = "examination_type")
+//    private String examinationType;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "examination_type")
-    private String examinationType;
+    private LabTest examinationType;
 
     @Column(name = "examination_result")
     private String examinationResult;
@@ -49,5 +54,9 @@ public class ExaminationDetail {
         for (Image image : images) {
             addImage(image);
         }
+    }
+
+    public boolean isDone() {
+        return examinationResult != null;
     }
 }

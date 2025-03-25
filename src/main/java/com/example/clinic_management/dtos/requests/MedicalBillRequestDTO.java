@@ -28,6 +28,13 @@ public class MedicalBillRequestDTO {
 
     private String note;
 
+    private Double weight;
+    private Integer heartRate;
+    private String bloodPressure;
+    private Double temperature;
+
+    private String finalDiagnosis;
+
     //    private List<Long> prescribedDrugIds;
     private List<PrescribedDrugRequestDTO> prescribedDrugRequestDTOS;
 

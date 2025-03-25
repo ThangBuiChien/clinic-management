@@ -13,7 +13,7 @@ import com.example.clinic_management.entities.Symptom;
 import com.example.clinic_management.exception.ResourceNotFoundException;
 import com.example.clinic_management.mapper.AutoSymptomMapper;
 import com.example.clinic_management.repository.SymptomRepository;
-import com.example.clinic_management.service.SymptomService;
+import com.example.clinic_management.service.diagnose.SymptomService;
 
 import lombok.RequiredArgsConstructor;
 

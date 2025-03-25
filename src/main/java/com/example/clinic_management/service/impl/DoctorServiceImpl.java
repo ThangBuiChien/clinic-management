@@ -1,5 +1,6 @@
 package com.example.clinic_management.service.impl;
 
+import com.example.clinic_management.specification.DoctorSpecifications;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +18,7 @@ import com.example.clinic_management.exception.ResourceNotFoundException;
 import com.example.clinic_management.mapper.AutoDoctorMapper;
 import com.example.clinic_management.repository.DepartmentRepository;
 import com.example.clinic_management.repository.DoctorRepository;
-import com.example.clinic_management.service.DoctorService;
+import com.example.clinic_management.service.user.DoctorService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +29,7 @@ public class DoctorServiceImpl implements DoctorService {
     private final AutoDoctorMapper autoDoctorMapper;
     private final DepartmentRepository departmentRepository;
     private final PasswordEncoder passwordEncoder;
+    private final DoctorSpecifications doctorSpecifications;
 
     @Override
     public Page<DoctorResponseDTO> getAllDoctors(Pageable pageable) {
@@ -99,5 +101,12 @@ public class DoctorServiceImpl implements DoctorService {
             doctor.getDepartment().getDoctors().remove(doctor);
         }
         doctorRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<DoctorResponseDTO> getDoctorsByNameAndDepartment(String name, Long departmentId,
+                                                                 Pageable pageable) {
+        return doctorRepository.findAll(doctorSpecifications.filterByNameAndDepartment(name, departmentId), pageable)
+                .map(autoDoctorMapper::toResponseDTO);
     }
 }

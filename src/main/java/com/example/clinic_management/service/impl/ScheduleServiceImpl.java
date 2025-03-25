@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import com.example.clinic_management.dtos.responses.ScheduleResponseDTO;
 import com.example.clinic_management.mapper.AutoScheduleMapper;
 import com.example.clinic_management.repository.ScheduleRepository;
-import com.example.clinic_management.service.ScheduleService;
+import com.example.clinic_management.service.booking.ScheduleService;
 
 import lombok.RequiredArgsConstructor;
 

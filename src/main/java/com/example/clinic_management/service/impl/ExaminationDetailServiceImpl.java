@@ -1,8 +1,16 @@
 package com.example.clinic_management.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import com.example.clinic_management.entities.*;
+import com.example.clinic_management.enums.AppointmentStatus;
+import com.example.clinic_management.enums.LabDepartment;
+import com.example.clinic_management.enums.LabTest;
+import com.example.clinic_management.repository.AppointmentRepository;
+import com.example.clinic_management.service.booking.AppointmentService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -11,14 +19,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.clinic_management.dtos.requests.ExaminationDetailUploadImgRequestDTO;
 import com.example.clinic_management.dtos.requests.ExaminationRequestDTO;
 import com.example.clinic_management.dtos.responses.ExaminationDetailResponseDTO;
-import com.example.clinic_management.entities.ExaminationDetail;
-import com.example.clinic_management.entities.Image;
-import com.example.clinic_management.entities.Patient;
 import com.example.clinic_management.mapper.AutoExaminationDetailMapper;
 import com.example.clinic_management.repository.ExaminationRepository;
 import com.example.clinic_management.repository.PatientRepository;
-import com.example.clinic_management.service.ExaminationDetailService;
-import com.example.clinic_management.service.ImageService;
+import com.example.clinic_management.service.diagnose.ExaminationDetailService;
+import com.example.clinic_management.service.diagnose.ImageService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,6 +35,8 @@ public class ExaminationDetailServiceImpl implements ExaminationDetailService {
     private final PatientRepository patientRepository;
     private final ImageService imageService;
     private final AutoExaminationDetailMapper autoExaminationDetailMapper;
+    private final AppointmentService appointmentService;
+    private final AppointmentRepository appointmentRepository;
 
     @Override
     @Transactional
@@ -39,8 +46,8 @@ public class ExaminationDetailServiceImpl implements ExaminationDetailService {
         ExaminationDetail examinationDetail = new ExaminationDetail();
         //        examinationDetail.setPatient(patient);
         examinationDetail.setPatientName(patient.getFullName());
-        examinationDetail.setExaminationType(
-                examinationRequestDTO.getExaminationType().trim());
+//        examinationDetail.setExaminationType(
+//                examinationRequestDTO.getExaminationType().trim());
         examinationDetail.setExaminationResult(
                 examinationRequestDTO.getExaminationResult().trim());
         return examinationRepository.save(examinationDetail);
@@ -48,10 +55,11 @@ public class ExaminationDetailServiceImpl implements ExaminationDetailService {
 
     @Override
     @Transactional
-    public ExaminationDetail getExaminationDetailById(Long id) {
+    public ExaminationDetailResponseDTO getExaminationDetailById(Long id) {
         return examinationRepository
                 .findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Examination not found"));
+                .map(autoExaminationDetailMapper::toResponse)
+                .orElseThrow(() -> new IllegalArgumentException("Examination not found with" + id));
     }
 
     @Override
@@ -99,9 +107,46 @@ public class ExaminationDetailServiceImpl implements ExaminationDetailService {
             }
         }
 
+        if (!updatedExaminationDetail.isEmpty()) {
+            checkMedicalBillDoneAllExaminationDetail(updatedExaminationDetail
+                    .get(0).getMedicalBill().getExaminationDetails());
+        }
+
         return updatedExaminationDetail.stream()
                 .map(autoExaminationDetailMapper::toResponse)
                 .toList();
+    }
+    @Override
+    public Set<LabTest> getLabTestsByDepartment(LabDepartment labDepartment) {
+        return LabTest.getTestsByDepartment(labDepartment);
+    }
+
+    @Override
+    public Page<ExaminationDetailResponseDTO> getExaminationDetailsByExaminationTypeAndImagesTestIsEmpty(LabTest examinationType, Pageable pageable) {
+        return examinationRepository
+                .findByExaminationTypeAndImagesTestIsEmpty(examinationType, pageable)
+                .map(autoExaminationDetailMapper::toResponse);
+    }
+
+    @Override
+    public Page<ExaminationDetailResponseDTO> getExaminationDetailsByDepartmentAndImagesTestIsEmpty(LabDepartment labDepartment, Pageable pageable) {
+        Collection<LabTest> testsInDepartment = Arrays.stream(LabTest.values())
+                .filter(test -> test.getDepartment() == labDepartment)
+                .collect(Collectors.toList());
+
+        return examinationRepository
+                .findByDepartmentAndImagesTestIsEmpty(testsInDepartment, pageable)
+                .map(autoExaminationDetailMapper::toResponse);
+    }
+
+    @Override
+    public Page<ExaminationDetailResponseDTO> getAllExaminationDetailsByImagesTestIsEmpty(Pageable pageable) {
+        Collection<LabTest> allTests = Arrays.stream(LabTest.values())
+                .toList();
+
+        return examinationRepository
+                .findByDepartmentAndImagesTestIsEmpty(allTests, pageable)
+                .map(autoExaminationDetailMapper::toResponse);
     }
 
     private Patient validateAndGetExaminationDetail(ExaminationRequestDTO examinationRequestDTO) {
@@ -128,4 +173,19 @@ public class ExaminationDetailServiceImpl implements ExaminationDetailService {
         }
         return patient;
     }
+
+    private void checkMedicalBillDoneAllExaminationDetail(List<ExaminationDetail> examinationDetails) {
+
+        boolean isAllDone = examinationDetails.stream().allMatch(ExaminationDetail::isDone);
+        if (isAllDone) {
+            MedicalBill medicalBill = examinationDetails.get(0).getMedicalBill();
+            Optional<Appointment> appointment = appointmentRepository
+                    .findTopByPatientIdOrderByIdDesc(medicalBill.getPatient().getId());
+            appointment.ifPresent(value -> appointmentService.updateAppointmentStatus(value.getId(),
+                    AppointmentStatus.LAB_TEST_COMPLETED));
+        }
+
+    }
+
+
 }

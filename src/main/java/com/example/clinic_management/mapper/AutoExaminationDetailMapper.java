@@ -19,5 +19,7 @@ public interface AutoExaminationDetailMapper {
             ExaminationDetailLabRequestDTO examinationDetailLabRequestDTO);
 
     @Mapping(source = "imagesTest", target = "imageResponseDTO")
+    @Mapping(source = "examinationType.department", target = "labDepartment")
     ExaminationDetailResponseDTO toResponse(ExaminationDetail examinationDetail);
 }
+ 
