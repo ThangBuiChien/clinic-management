@@ -45,6 +45,8 @@ public class FeedbackServiceImpl implements FeedbackService {
         return FeedbackResponseDTO.builder()
                 .rating(feedback.getRating())
                 .comment(feedback.getComment())
+                .createdAt(feedback.getCreatedAt())
+                .doctorDepartmentName(feedback.getDoctor().getDepartment().getName())
                 .doctorResponseDTO(autoDoctorMapper.toResponseDTO(feedback.getDoctor()))
                 .build();
     }
