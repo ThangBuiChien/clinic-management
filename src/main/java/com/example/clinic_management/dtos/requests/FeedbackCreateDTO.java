@@ -16,4 +16,6 @@ public class FeedbackCreateDTO {
 
     @NotBlank
     private String comment;
+
+    private String patientName;
 }
