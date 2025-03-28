@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
     Page<Feedback> findAllByDoctorId(Long doctorId, Pageable pageable);
+
+    Page<Feedback> findAllByPatientId(Long patientId, Pageable pageable);
 }

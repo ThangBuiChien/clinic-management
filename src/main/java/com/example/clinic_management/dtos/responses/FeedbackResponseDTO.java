@@ -17,6 +17,8 @@ public class FeedbackResponseDTO {
 
     private LocalDateTime createdAt;
 
+    private String patientName;
+
     private String doctorDepartmentName;
 
     private DoctorResponseDTO doctorResponseDTO;

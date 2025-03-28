@@ -37,4 +37,8 @@ public class Feedback {
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "patient_id", nullable = false)
+    private Patient patient;
 }

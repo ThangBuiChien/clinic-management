@@ -39,5 +39,15 @@ public class FeedbackController {
                 .build());
     }
 
+    @GetMapping("/patient/{patientId}")
+    public ResponseEntity<ApiResponse> getFeedbackByPatientId(@PathVariable Long patientId,
+                                                              Pageable pageable) {
+        Page<FeedbackResponseDTO> feedbackList = feedbackService.getFeedbackByPatientId(patientId, pageable);
+        return ResponseEntity.ok(ApiResponse.builder()
+                .message("Feedback fetched successfully")
+                .result(feedbackList)
+                .build());
+    }
+
 
 }

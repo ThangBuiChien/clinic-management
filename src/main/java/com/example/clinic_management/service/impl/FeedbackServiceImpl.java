@@ -29,6 +29,7 @@ public class FeedbackServiceImpl implements FeedbackService {
         feedback.setDoctor(appointment.getDoctor());
         feedback.setRating(feedbackCreateDTO.getRating());
         feedback.setComment(feedbackCreateDTO.getComment());
+        feedback.setPatient(appointment.getPatient());
 
         feedbackRepository.save(feedback);
 
@@ -41,11 +42,18 @@ public class FeedbackServiceImpl implements FeedbackService {
         return feedbacks.map(this::convertToDTO);
     }
 
+    @Override
+    public Page<FeedbackResponseDTO> getFeedbackByPatientId(Long patientId, Pageable pageable) {
+        Page<Feedback> feedbacks = feedbackRepository.findAllByPatientId(patientId, pageable);
+        return feedbacks.map(this::convertToDTO);
+    }
+
     private FeedbackResponseDTO convertToDTO(Feedback feedback) {
         return FeedbackResponseDTO.builder()
                 .rating(feedback.getRating())
                 .comment(feedback.getComment())
                 .createdAt(feedback.getCreatedAt())
+                .patientName(feedback.getPatient().getFullName())
                 .doctorDepartmentName(feedback.getDoctor().getDepartment().getName())
                 .doctorResponseDTO(autoDoctorMapper.toResponseDTO(feedback.getDoctor()))
                 .build();
