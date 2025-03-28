@@ -21,8 +21,6 @@ public class FeedbackResponseDTO {
 
     private String doctorDepartmentName;
 
-    private String patientName;
-
     private DoctorResponseDTO doctorResponseDTO;
 
 

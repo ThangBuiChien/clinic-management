@@ -56,7 +56,6 @@ public class FeedbackServiceImpl implements FeedbackService {
                 .createdAt(feedback.getCreatedAt())
                 .patientName(feedback.getPatient().getFullName())
                 .doctorDepartmentName(feedback.getDoctor().getDepartment().getName())
-                .patientName(feedback.getPatientName())
                 .doctorResponseDTO(autoDoctorMapper.toResponseDTO(feedback.getDoctor()))
                 .build();
     }
