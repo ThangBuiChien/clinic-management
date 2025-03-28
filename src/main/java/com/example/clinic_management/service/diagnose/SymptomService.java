@@ -20,4 +20,8 @@ public interface SymptomService {
     SymptomResponseDTO updateSymptom(Long id, SymptomRequestDTO symptomRequestDTO);
 
     void deleteSymptom(Long id);
+
+    SymptomResponseDTO createSymptomWithDrugs(SymptomRequestDTO symptomRequestDTO);
+
+    SymptomResponseDTO getSymptomByName(String name);
 }

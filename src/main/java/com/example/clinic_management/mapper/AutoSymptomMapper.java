@@ -6,7 +6,7 @@ import com.example.clinic_management.dtos.requests.SymptomRequestDTO;
 import com.example.clinic_management.dtos.responses.SymptomResponseDTO;
 import com.example.clinic_management.entities.Symptom;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {AutoPrescribedDrugMapper.class})
 public interface AutoSymptomMapper {
     Symptom toEntity(SymptomRequestDTO symptomRequestDTO);
 

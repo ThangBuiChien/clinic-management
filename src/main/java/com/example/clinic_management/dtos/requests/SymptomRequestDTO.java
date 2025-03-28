@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class SymptomRequestDTO {
@@ -16,4 +18,6 @@ public class SymptomRequestDTO {
     //    @NotNull(message = "Symptom description is required")
     @Size(max = 3070)
     private String description;
+
+    List<PrescribedDrugRequestDTO> prescribedDrugs;
 }
