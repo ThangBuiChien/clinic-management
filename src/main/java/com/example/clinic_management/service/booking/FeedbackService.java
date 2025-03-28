@@ -10,4 +10,6 @@ public interface FeedbackService {
     FeedbackResponseDTO createFeedback(Long appointmentId, FeedbackCreateDTO feedbackCreateDTO);
 
     Page<FeedbackResponseDTO> getFeedbackByDoctorId(Long doctorId, Pageable pageable);
+
+    Page<FeedbackResponseDTO> getFeedbackByPatientId(Long patientId, Pageable pageable);
 }

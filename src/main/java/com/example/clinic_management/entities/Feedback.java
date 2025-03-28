@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -12,6 +16,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "feedback")
+@EntityListeners(AuditingEntityListener.class)
 public class Feedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,4 +35,12 @@ public class Feedback {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "patient_id", nullable = false)
+    private Patient patient;
 }
