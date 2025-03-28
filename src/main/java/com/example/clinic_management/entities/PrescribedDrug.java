@@ -25,6 +25,10 @@ public class PrescribedDrug {
     @JoinColumn(name = "drug_id")
     private Drug drug;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "symptom_id")
+    private Symptom symptom;
+
     private int dosage;
     private int duration;
     private String frequency;

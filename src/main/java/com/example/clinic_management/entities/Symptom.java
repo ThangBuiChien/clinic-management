@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -35,4 +37,20 @@ public class Symptom {
             message = "Symptom description can only contain letters, numbers, space and basic punctuations")
     @Column(unique = true)
     private String description;
+
+    @OneToMany(mappedBy = "symptom", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PrescribedDrug> prescribedDrugs;
+
+    // helper method to add prescribed drug
+    public void addPrescribedDrug(PrescribedDrug prescribedDrug) {
+        this.prescribedDrugs.add(prescribedDrug);
+        prescribedDrug.setSymptom(this);
+    }
+
+    public void addPrescribedDrugs(List<PrescribedDrug> prescribedDrugs) {
+        for (PrescribedDrug prescribedDrug : prescribedDrugs) {
+            this.addPrescribedDrug(prescribedDrug);
+        }
+    }
+
 }

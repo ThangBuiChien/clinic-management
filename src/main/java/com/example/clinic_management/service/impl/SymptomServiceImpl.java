@@ -1,7 +1,10 @@
 package com.example.clinic_management.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import com.example.clinic_management.entities.PrescribedDrug;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -67,5 +70,26 @@ public class SymptomServiceImpl implements SymptomService {
     public void deleteSymptom(Long id) {
         symptomRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Symptom", "id", id));
         symptomRepository.deleteById(id);
+    }
+
+    @Override
+    public SymptomResponseDTO createSymptomWithDrugs(SymptomRequestDTO symptomRequestDTO) {
+        Symptom symptom = autoSymptomMapper.toEntity(symptomRequestDTO);
+        List<PrescribedDrug> prescribedDrugsCopy = new ArrayList<>(symptom.getPrescribedDrugs());
+        symptom.addPrescribedDrugs(prescribedDrugsCopy);
+        symptomRepository.save(symptom);
+        return autoSymptomMapper.toResponseDTO(symptom);
+    }
+
+    @Override
+    public SymptomResponseDTO getSymptomByName(String name) {
+
+        Optional<Symptom> symptom = symptomRepository.findByName(name);
+
+        return symptomRepository
+                .findByName(name)
+                .map(autoSymptomMapper::toResponseDTO)
+                .orElseThrow(() -> new ResourceNotFoundException("Symptom not found with name + " + name));
+
     }
 }

@@ -46,7 +46,7 @@ public class SymptomController {
     public ResponseEntity<ApiResponse> addSymptom(@Valid @RequestBody SymptomRequestDTO symptomRequestDTO) {
         return ResponseEntity.ok(ApiResponse.builder()
                 .message("Symptom created successfully")
-                .result(symptomService.addSymptom(symptomRequestDTO))
+                .result(symptomService.createSymptomWithDrugs(symptomRequestDTO))
                 .build());
     }
 
@@ -64,6 +64,14 @@ public class SymptomController {
         symptomService.deleteSymptom(id);
         return ResponseEntity.ok(ApiResponse.builder()
                 .message("Symptom with id " + id + " deleted successfully")
+                .build());
+    }
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<ApiResponse> getSymptomByName(@PathVariable String name) {
+        return ResponseEntity.ok(ApiResponse.builder()
+                .message("Symptom fetched successfully")
+                .result(symptomService.getSymptomByName(name))
                 .build());
     }
 }
