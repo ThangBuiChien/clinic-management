@@ -58,12 +58,18 @@ public class SymptomServiceImpl implements SymptomService {
 
     @Override
     public SymptomResponseDTO updateSymptom(Long id, SymptomRequestDTO symptomRequestDTO) {
-        Symptom oldSymptom =
-                symptomRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Symptom", "id", id));
-        Symptom newSymptom = autoSymptomMapper.toEntity(symptomRequestDTO);
-        newSymptom.setId(oldSymptom.getId());
-        symptomRepository.save(newSymptom);
-        return autoSymptomMapper.toResponseDTO(newSymptom);
+//        Symptom oldSymptom =
+//                symptomRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Symptom", "id", id));
+//        Symptom newSymptom = autoSymptomMapper.toEntity(symptomRequestDTO);
+//        newSymptom.setId(oldSymptom.getId());
+//        symptomRepository.save(newSymptom);
+//        return autoSymptomMapper.toResponseDTO(newSymptom);
+        Symptom symptom = symptomRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Symptom", "id", id));
+        autoSymptomMapper.updateFromDTO(symptomRequestDTO, symptom);
+        symptomRepository.save(symptom);
+        return autoSymptomMapper.toResponseDTO(symptom);
     }
 
     @Override
