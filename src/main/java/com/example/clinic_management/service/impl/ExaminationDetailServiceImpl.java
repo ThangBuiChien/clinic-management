@@ -1,5 +1,6 @@
 package com.example.clinic_management.service.impl;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -146,6 +147,17 @@ public class ExaminationDetailServiceImpl implements ExaminationDetailService {
 
         return examinationRepository
                 .findByDepartmentAndImagesTestIsEmpty(allTests, pageable)
+                .map(autoExaminationDetailMapper::toResponse);
+    }
+
+    @Override
+    public Page<ExaminationDetailResponseDTO> getExaminationDetailsByDepartmentAndImagesTestIsEmptyAndCreatedAt(LabDepartment labDepartment, LocalDate createdAt, Pageable pageable) {
+        Collection<LabTest> testsInDepartment = Arrays.stream(LabTest.values())
+                .filter(test -> test.getDepartment() == labDepartment)
+                .collect(Collectors.toList());
+
+        return examinationRepository
+                .findByDepartmentAndImagesTestIsEmptyAndCreatedAt(testsInDepartment, createdAt, pageable)
                 .map(autoExaminationDetailMapper::toResponse);
     }
 
