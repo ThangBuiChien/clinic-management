@@ -17,6 +17,8 @@ public interface DoctorService {
 
     DoctorResponseDTO addDoctor(DoctorRequestDTO doctorRequestDTO);
 
+    DoctorResponseDTO addNurse(DoctorRequestDTO doctorRequestDTO);
+
     DoctorResponseDTO updateDoctor(Long id, DoctorRequestDTO doctorRequestDTO);
 
     DoctorResponseDTO updatePartialDoctor(Long id, DoctorPartialUpdateDTO doctorPartialUpdateDTO);

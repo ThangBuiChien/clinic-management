@@ -70,6 +70,25 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    public DoctorResponseDTO addNurse(DoctorRequestDTO doctorRequestDTO) {
+        Department department = departmentRepository
+                .findById(doctorRequestDTO.getDepartmentId())
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Department", "id", doctorRequestDTO.getDepartmentId()));
+
+        Doctor doctor = autoDoctorMapper.toEntity(doctorRequestDTO);
+        doctor.setRole(Role.ROLE_NURSE);
+        doctor.setStatus(AccountStatus.ACTIVE);
+        doctor.setPassword(passwordEncoder.encode(doctorRequestDTO.getPassword()));
+
+        department.addDoctor(doctor);
+
+        //        doctorRepository.save(doctor);
+
+        return autoDoctorMapper.toResponseDTO(doctorRepository.save(doctor));
+    }
+
+    @Override
     public DoctorResponseDTO updateDoctor(Long id, DoctorRequestDTO doctorRequestDTO) {
         Doctor doctor =
                 doctorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Doctor", "id", id));
