@@ -64,16 +64,6 @@ public class DoctorController {
                 .build());
     }
 
-    @PostMapping("/nurse")
-    public ResponseEntity<ApiResponse> addNurse(@RequestBody @Valid DoctorRequestDTO doctorRequestDTO) {
-        return ResponseEntity.ok(ApiResponse.builder()
-                .message("Nurse created successfully")
-                .result(doctorService.addNurse(doctorRequestDTO))
-                .build());
-    }
-
-
-
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> updateDoctor(
             @PathVariable Long id, @RequestBody @Valid DoctorRequestDTO doctorRequestDTO) {
