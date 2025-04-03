@@ -44,6 +44,14 @@ public class PatientController {
                 .build());
     }
 
+    @PostMapping("/nurse")
+    public ResponseEntity<ApiResponse> addNurse(@RequestBody @Valid PatientRequestDTO patientRequestDTO) {
+        return ResponseEntity.ok(ApiResponse.builder()
+                .message("Nurse created successfully")
+                .result(patientService.addNurse(patientRequestDTO))
+                .build());
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> updatePatient(
             @PathVariable Long id, @RequestBody @Valid PatientRequestDTO patientRequestDTO) {
