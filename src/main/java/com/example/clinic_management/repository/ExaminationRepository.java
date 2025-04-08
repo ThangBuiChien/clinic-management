@@ -29,5 +29,10 @@ public interface ExaminationRepository extends JpaRepository<ExaminationDetail, 
             @Param("labTests") Collection<LabTest> labTests,
             @Param("createdAt") LocalDate createdAt,
             Pageable pageable);
+    @Query("SELECT e FROM ExaminationDetail e WHERE e.examinationType = :examinationType AND SIZE(e.imagesTest) = 0 AND e.createdAt = :createdAt ORDER BY e.id")
+    Page<ExaminationDetail> findExaminationTypeAndImagesTestIsEmptyAndCreatedAt(
+            @Param("examinationType") LabTest examinationType,
+            @Param("createdAt") LocalDate createdAt,
+            Pageable pageable);
 
 }

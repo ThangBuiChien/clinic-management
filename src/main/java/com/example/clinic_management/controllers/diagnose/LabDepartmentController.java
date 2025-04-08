@@ -41,5 +41,13 @@ public class LabDepartmentController {
         return ResponseEntity.ok(page);
     }
 
+    @GetMapping("by_lab_type_and_created_at")
+    public ResponseEntity<Page<ExaminationDetailResponseDTO>> getExaminationDetails(
+            @RequestParam LabTest labTest, @RequestParam LocalDate createdAt, Pageable pageable) {
+        Page<ExaminationDetailResponseDTO> page = examinationDetailService
+                .getExaminationDetailsByExaminationTypeAndImagesTestIsEmptyAndCreatedAt(labTest, createdAt, pageable);
+        return ResponseEntity.ok(page);
+    }
+
 
 }

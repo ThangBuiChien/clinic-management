@@ -35,4 +35,7 @@ public interface ExaminationDetailService {
 
     Page<ExaminationDetailResponseDTO> getExaminationDetailsByDepartmentAndImagesTestIsEmptyAndCreatedAt(
             LabDepartment labDepartment, LocalDate createdAt, Pageable pageable);
+
+    Page<ExaminationDetailResponseDTO> getExaminationDetailsByExaminationTypeAndImagesTestIsEmptyAndCreatedAt(
+            LabTest examinationType, LocalDate createdAt, Pageable pageable);
 }
