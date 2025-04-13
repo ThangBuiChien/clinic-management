@@ -59,6 +59,8 @@ public class MedicalBill {
 
     private String finalDiagnosis;
 
+    private LocalDate nextAppointmentDate;
+
     public void addPrescribedDrug(PrescribedDrug prescribedDrug) {
         drugs.add(prescribedDrug);
         prescribedDrug.setMedicalBill(this);
