@@ -1,5 +1,6 @@
 package com.example.clinic_management.service.diagnose;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -31,4 +32,10 @@ public interface ExaminationDetailService {
     Page<ExaminationDetailResponseDTO> getExaminationDetailsByDepartmentAndImagesTestIsEmpty(LabDepartment labDepartment, Pageable pageable);
 
     Page<ExaminationDetailResponseDTO> getAllExaminationDetailsByImagesTestIsEmpty(Pageable pageable);
+
+    Page<ExaminationDetailResponseDTO> getExaminationDetailsByDepartmentAndImagesTestIsEmptyAndCreatedAt(
+            LabDepartment labDepartment, LocalDate createdAt, Pageable pageable);
+
+    Page<ExaminationDetailResponseDTO> getExaminationDetailsByExaminationTypeAndImagesTestIsEmptyAndCreatedAt(
+            LabTest examinationType, LocalDate createdAt, Pageable pageable);
 }
