@@ -30,4 +30,6 @@ public class MedicalBillResponseDTO {
 
     private List<PrescribedDrugResponseDTO> prescribedDrugs;
     private List<ExaminationDetailResponseDTO> examinationDetails;
+
+    private double totalUnpaidAmount;
 }

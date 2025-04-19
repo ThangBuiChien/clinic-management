@@ -3,6 +3,7 @@ package com.example.clinic_management.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.clinic_management.enums.ExaminationDetailStatus;
 import com.example.clinic_management.enums.LabTest;
 import jakarta.persistence.*;
 
@@ -34,6 +35,10 @@ public class ExaminationDetail {
     @Enumerated(EnumType.STRING)
     @Column(name = "examination_type")
     private LabTest examinationType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private ExaminationDetailStatus status = ExaminationDetailStatus.UNPAID;
 
     @Column(name = "examination_result")
     private String examinationResult;

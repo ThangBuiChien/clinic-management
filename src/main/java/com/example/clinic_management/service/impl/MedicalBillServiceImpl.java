@@ -3,6 +3,7 @@ package com.example.clinic_management.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.clinic_management.enums.ExaminationDetailStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -259,5 +260,30 @@ public class MedicalBillServiceImpl implements MedicalBillService {
                     return autoMedicalBillMapper.toResponseDTO(medicalBillRepository.save(medicalBill));
                 })
                 .orElseThrow(() -> new ResourceNotFoundException("MedicalBill", "id", id));
+    }
+
+    @Transactional
+    @Override
+    public MedicalBillResponseDTO updateExaminationDetailsStatusAndCalculateTotal(Long medicalBillId) {
+        // Fetch the medical bill by ID
+        MedicalBill medicalBill = medicalBillRepository.findById(medicalBillId)
+                .orElseThrow(() -> new IllegalArgumentException("MedicalBill not found with id: " + medicalBillId));
+
+        // Update the status of all UNPAID examination details to PAID
+        List<ExaminationDetail> examinationDetails = medicalBill.getExaminationDetails();
+        examinationDetails.stream()
+                .filter(detail -> detail.getStatus().equals(ExaminationDetailStatus.UNPAID))
+                .forEach(detail -> detail.setStatus(ExaminationDetailStatus.PAID));
+
+        // Save the updated examination details
+//        examinationRepository.saveAll(examinationDetails);
+
+        // Map the updated medical bill to a response DTO
+        MedicalBillResponseDTO responseDTO = autoMedicalBillMapper.toResponseDTO(medicalBill);
+
+        // Save the updated medical bill
+        medicalBillRepository.save(medicalBill);
+
+        return responseDTO;
     }
 }
