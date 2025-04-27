@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.clinic_management.entities.PrescribedDrug;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.clinic_management.dtos.requests.SymptomRequestDTO;
 import com.example.clinic_management.dtos.responses.SymptomResponseDTO;
+import com.example.clinic_management.entities.PrescribedDrug;
 import com.example.clinic_management.entities.Symptom;
 import com.example.clinic_management.exception.ResourceNotFoundException;
 import com.example.clinic_management.mapper.AutoSymptomMapper;
@@ -90,6 +90,5 @@ public class SymptomServiceImpl implements SymptomService {
                 .findByName(name)
                 .map(autoSymptomMapper::toResponseDTO)
                 .orElseThrow(() -> new ResourceNotFoundException("Symptom not found with name + " + name));
-
     }
 }

@@ -1,14 +1,15 @@
 package com.example.clinic_management.controllers.diagnose;
 
-import com.example.clinic_management.enums.LabDepartment;
-import com.example.clinic_management.enums.LabTest;
-import com.example.clinic_management.service.diagnose.ExaminationDetailService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import java.util.Set;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
+import com.example.clinic_management.enums.LabDepartment;
+import com.example.clinic_management.enums.LabTest;
+import com.example.clinic_management.service.diagnose.ExaminationDetailService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,6 +29,4 @@ public class LabDepartmentController {
         Set<LabTest> labTests = examinationDetailService.getLabTestsByDepartment(labDepartment);
         return ResponseEntity.ok(labTests);
     }
-
-
 }

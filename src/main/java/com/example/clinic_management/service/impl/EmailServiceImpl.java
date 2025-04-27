@@ -5,7 +5,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.example.clinic_management.repository.AppointmentRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
@@ -23,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StreamUtils;
 
 import com.example.clinic_management.entities.Appointment;
+import com.example.clinic_management.repository.AppointmentRepository;
 import com.example.clinic_management.service.booking.EmailService;
 
 import lombok.RequiredArgsConstructor;

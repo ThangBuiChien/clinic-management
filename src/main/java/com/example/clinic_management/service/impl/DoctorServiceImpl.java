@@ -1,6 +1,5 @@
 package com.example.clinic_management.service.impl;
 
-import com.example.clinic_management.specification.DoctorSpecifications;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +18,7 @@ import com.example.clinic_management.mapper.AutoDoctorMapper;
 import com.example.clinic_management.repository.DepartmentRepository;
 import com.example.clinic_management.repository.DoctorRepository;
 import com.example.clinic_management.service.user.DoctorService;
+import com.example.clinic_management.specification.DoctorSpecifications;
 
 import lombok.RequiredArgsConstructor;
 
@@ -104,9 +104,9 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public Page<DoctorResponseDTO> getDoctorsByNameAndDepartment(String name, Long departmentId,
-                                                                 Pageable pageable) {
-        return doctorRepository.findAll(doctorSpecifications.filterByNameAndDepartment(name, departmentId), pageable)
+    public Page<DoctorResponseDTO> getDoctorsByNameAndDepartment(String name, Long departmentId, Pageable pageable) {
+        return doctorRepository
+                .findAll(doctorSpecifications.filterByNameAndDepartment(name, departmentId), pageable)
                 .map(autoDoctorMapper::toResponseDTO);
     }
 }

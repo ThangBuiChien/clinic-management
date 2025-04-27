@@ -24,4 +24,3 @@ public interface AutoExaminationDetailMapper {
     @Mapping(source = "status", target = "status")
     ExaminationDetailResponseDTO toResponse(ExaminationDetail examinationDetail);
 }
- 

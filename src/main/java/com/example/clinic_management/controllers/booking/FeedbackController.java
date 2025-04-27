@@ -1,17 +1,18 @@
 package com.example.clinic_management.controllers.booking;
 
-import com.example.clinic_management.dtos.requests.FeedbackCreateDTO;
-import com.example.clinic_management.dtos.responses.ApiResponse;
-import com.example.clinic_management.dtos.responses.FeedbackResponseDTO;
-import com.example.clinic_management.service.booking.FeedbackService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.example.clinic_management.dtos.requests.FeedbackCreateDTO;
+import com.example.clinic_management.dtos.responses.ApiResponse;
+import com.example.clinic_management.dtos.responses.FeedbackResponseDTO;
+import com.example.clinic_management.service.booking.FeedbackService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,8 +31,7 @@ public class FeedbackController {
     }
 
     @GetMapping("/doctor/{doctorId}")
-    public ResponseEntity<ApiResponse> getFeedbackByDoctorId(@PathVariable Long doctorId,
-                                                             Pageable pageable) {
+    public ResponseEntity<ApiResponse> getFeedbackByDoctorId(@PathVariable Long doctorId, Pageable pageable) {
         Page<FeedbackResponseDTO> feedbackList = feedbackService.getFeedbackByDoctorId(doctorId, pageable);
         return ResponseEntity.ok(ApiResponse.builder()
                 .message("Feedback fetched successfully")
@@ -40,14 +40,11 @@ public class FeedbackController {
     }
 
     @GetMapping("/patient/{patientId}")
-    public ResponseEntity<ApiResponse> getFeedbackByPatientId(@PathVariable Long patientId,
-                                                              Pageable pageable) {
+    public ResponseEntity<ApiResponse> getFeedbackByPatientId(@PathVariable Long patientId, Pageable pageable) {
         Page<FeedbackResponseDTO> feedbackList = feedbackService.getFeedbackByPatientId(patientId, pageable);
         return ResponseEntity.ok(ApiResponse.builder()
                 .message("Feedback fetched successfully")
                 .result(feedbackList)
                 .build());
     }
-
-
 }
