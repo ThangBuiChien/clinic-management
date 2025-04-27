@@ -1,5 +1,7 @@
 package com.example.clinic_management.entities;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -9,8 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -52,5 +52,4 @@ public class Symptom {
             this.addPrescribedDrug(prescribedDrug);
         }
     }
-
 }

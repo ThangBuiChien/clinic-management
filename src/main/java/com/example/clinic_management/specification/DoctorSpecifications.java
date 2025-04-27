@@ -1,13 +1,14 @@
 package com.example.clinic_management.specification;
 
-import com.example.clinic_management.dtos.requests.AppointmentSearchCriteria;
-import com.example.clinic_management.entities.Doctor;
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.criteria.Predicate;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.example.clinic_management.entities.Doctor;
 
 @Configuration
 public class DoctorSpecifications {

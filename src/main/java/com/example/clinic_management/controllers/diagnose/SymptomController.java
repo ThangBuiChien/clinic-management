@@ -74,4 +74,12 @@ public class SymptomController {
                 .result(symptomService.getSymptomByName(name))
                 .build());
     }
+
+    @GetMapping("/names")
+    public ResponseEntity<ApiResponse> getAllSymptomNames() {
+        return ResponseEntity.ok(ApiResponse.builder()
+                .message("All symptom names fetched successfully")
+                .result(symptomService.getAllSymptomNames())
+                .build());
+    }
 }

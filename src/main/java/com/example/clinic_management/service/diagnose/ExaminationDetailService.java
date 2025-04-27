@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-import com.example.clinic_management.enums.LabDepartment;
-import com.example.clinic_management.enums.LabTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +12,8 @@ import com.example.clinic_management.dtos.requests.ExaminationDetailUploadImgReq
 import com.example.clinic_management.dtos.requests.ExaminationRequestDTO;
 import com.example.clinic_management.dtos.responses.ExaminationDetailResponseDTO;
 import com.example.clinic_management.entities.ExaminationDetail;
+import com.example.clinic_management.enums.LabDepartment;
+import com.example.clinic_management.enums.LabTest;
 
 public interface ExaminationDetailService {
     ExaminationDetail createExaminationDetail(ExaminationRequestDTO examinationRequestDTO);
@@ -25,11 +25,14 @@ public interface ExaminationDetailService {
     List<ExaminationDetailResponseDTO> updateExaminationDetailWithImages(
             List<ExaminationDetailUploadImgRequestDTO> examinationDetailUploadImgRequestDTOs,
             List<MultipartFile> files);
+
     Set<LabTest> getLabTestsByDepartment(LabDepartment labDepartment);
 
-    Page<ExaminationDetailResponseDTO> getExaminationDetailsByExaminationTypeAndImagesTestIsEmpty(LabTest examinationType, Pageable pageable);
+    Page<ExaminationDetailResponseDTO> getExaminationDetailsByExaminationTypeAndImagesTestIsEmpty(
+            LabTest examinationType, Pageable pageable);
 
-    Page<ExaminationDetailResponseDTO> getExaminationDetailsByDepartmentAndImagesTestIsEmpty(LabDepartment labDepartment, Pageable pageable);
+    Page<ExaminationDetailResponseDTO> getExaminationDetailsByDepartmentAndImagesTestIsEmpty(
+            LabDepartment labDepartment, Pageable pageable);
 
     Page<ExaminationDetailResponseDTO> getAllExaminationDetailsByImagesTestIsEmpty(Pageable pageable);
 

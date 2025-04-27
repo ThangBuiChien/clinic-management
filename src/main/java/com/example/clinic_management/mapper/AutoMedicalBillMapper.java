@@ -1,8 +1,8 @@
 package com.example.clinic_management.mapper;
 
-import com.example.clinic_management.dtos.requests.MedicalBillPartialUpdateRequestDTO;
 import org.mapstruct.*;
 
+import com.example.clinic_management.dtos.requests.MedicalBillPartialUpdateRequestDTO;
 import com.example.clinic_management.dtos.requests.MedicalBillRequestDTO;
 import com.example.clinic_management.dtos.requests.MedicalBillWithLabRequestDTO;
 import com.example.clinic_management.dtos.requests.MedicalBillWithPreExaminationDTO;

@@ -1,5 +1,17 @@
 package com.example.clinic_management.controllers.diagnose;
 
+
+import java.util.Set;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.example.clinic_management.enums.LabDepartment;
+import com.example.clinic_management.enums.LabTest;
+import com.example.clinic_management.service.diagnose.ExaminationDetailService;
+
+import lombok.RequiredArgsConstructor;
+
 import com.example.clinic_management.dtos.responses.ExaminationDetailResponseDTO;
 import com.example.clinic_management.enums.LabDepartment;
 import com.example.clinic_management.enums.LabTest;
@@ -13,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.Set;
+
 
 @RestController
 @RequiredArgsConstructor

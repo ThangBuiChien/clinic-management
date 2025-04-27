@@ -1,9 +1,9 @@
 package com.example.clinic_management.service.impl;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.example.clinic_management.enums.ExaminationDetailStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -18,6 +18,7 @@ import com.example.clinic_management.entities.ExaminationDetail;
 import com.example.clinic_management.entities.Image;
 import com.example.clinic_management.entities.MedicalBill;
 import com.example.clinic_management.entities.PrescribedDrug;
+import com.example.clinic_management.enums.ExaminationDetailStatus;
 import com.example.clinic_management.exception.ResourceNotFoundException;
 import com.example.clinic_management.mapper.AutoExaminationDetailMapper;
 import com.example.clinic_management.mapper.AutoMedicalBillMapper;
@@ -163,7 +164,8 @@ public class MedicalBillServiceImpl implements MedicalBillService {
                 .toList();
 
         medicalBill.addExaminationDetails(examinationDetails);
-        return autoMedicalBillMapper.toResponseDTO(medicalBillRepository.save(medicalBill));
+        MedicalBill savedMedicalBill = medicalBillRepository.save(medicalBill);
+        return autoMedicalBillMapper.toResponseDTO(savedMedicalBill);
     }
 
     private ExaminationDetail convertToExaminationDetail(
@@ -229,9 +231,9 @@ public class MedicalBillServiceImpl implements MedicalBillService {
                 .orElseThrow(() -> new ResourceNotFoundException("medical bill", "id", id));
         autoMedicalBillMapper.updateMedicalBillFromDTO(medicalBillRequestDTO, medicalBill);
         medicalBillRepository.save(medicalBill);
-        MedicalBillResponseDTO medicalBillResponseDTO =  autoMedicalBillMapper.toResponseDTO(medicalBill);
-        
-        return  medicalBillResponseDTO;
+        MedicalBillResponseDTO medicalBillResponseDTO = autoMedicalBillMapper.toResponseDTO(medicalBill);
+
+        return medicalBillResponseDTO;
     }
 
     @Override
@@ -266,7 +268,8 @@ public class MedicalBillServiceImpl implements MedicalBillService {
     @Override
     public MedicalBillResponseDTO updateExaminationDetailsStatusAndCalculateTotal(Long medicalBillId) {
         // Fetch the medical bill by ID
-        MedicalBill medicalBill = medicalBillRepository.findById(medicalBillId)
+        MedicalBill medicalBill = medicalBillRepository
+                .findById(medicalBillId)
                 .orElseThrow(() -> new IllegalArgumentException("MedicalBill not found with id: " + medicalBillId));
 
         // Update the status of all UNPAID examination details to PAID
@@ -276,7 +279,7 @@ public class MedicalBillServiceImpl implements MedicalBillService {
                 .forEach(detail -> detail.setStatus(ExaminationDetailStatus.PAID));
 
         // Save the updated examination details
-//        examinationRepository.saveAll(examinationDetails);
+        //        examinationRepository.saveAll(examinationDetails);
 
         // Map the updated medical bill to a response DTO
         MedicalBillResponseDTO responseDTO = autoMedicalBillMapper.toResponseDTO(medicalBill);
@@ -285,5 +288,11 @@ public class MedicalBillServiceImpl implements MedicalBillService {
         medicalBillRepository.save(medicalBill);
 
         return responseDTO;
+    }
+
+    @Override
+    public Page<MedicalBillResponseDTO> getMedicalBillsByDateAndUnpaidExaminationDetails(LocalDate date, Pageable pageable) {
+        return medicalBillRepository.findByDateAndUnpaidExaminationDetails(date, pageable)
+                .map(autoMedicalBillMapper::toResponseDTO);
     }
 }

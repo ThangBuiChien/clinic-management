@@ -85,7 +85,7 @@ public class MedicalBill {
     }
 
     public boolean checkIfAllExaminationDetailsAreDone() {
-        if(examinationDetails == null) {
+        if (examinationDetails == null) {
             return true;
         }
         return examinationDetails.stream().allMatch(ExaminationDetail::isDone);

@@ -1,11 +1,13 @@
 package com.example.clinic_management.controllers.diagnose;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.validation.Valid;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -147,5 +149,12 @@ public class MedicalBillController {
         MedicalBillResponseDTO responseDTO =
                 medicalBillService.updateExaminationDetailsStatusAndCalculateTotal(medicalBillId);
         return ResponseEntity.ok(responseDTO);
+    }
+
+    @GetMapping("/by-date-and-unpaid")
+    public Page<MedicalBillResponseDTO> getMedicalBillsByDateAndUnpaidExaminationDetails(
+            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            Pageable pageable) {
+        return medicalBillService.getMedicalBillsByDateAndUnpaidExaminationDetails(date, pageable);
     }
 }
