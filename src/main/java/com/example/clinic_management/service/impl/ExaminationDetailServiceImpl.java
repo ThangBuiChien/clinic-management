@@ -4,12 +4,6 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.example.clinic_management.entities.*;
-import com.example.clinic_management.enums.AppointmentStatus;
-import com.example.clinic_management.enums.LabDepartment;
-import com.example.clinic_management.enums.LabTest;
-import com.example.clinic_management.repository.AppointmentRepository;
-import com.example.clinic_management.service.booking.AppointmentService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,9 +14,15 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.clinic_management.dtos.requests.ExaminationDetailUploadImgRequestDTO;
 import com.example.clinic_management.dtos.requests.ExaminationRequestDTO;
 import com.example.clinic_management.dtos.responses.ExaminationDetailResponseDTO;
+import com.example.clinic_management.entities.*;
+import com.example.clinic_management.enums.AppointmentStatus;
+import com.example.clinic_management.enums.LabDepartment;
+import com.example.clinic_management.enums.LabTest;
 import com.example.clinic_management.mapper.AutoExaminationDetailMapper;
+import com.example.clinic_management.repository.AppointmentRepository;
 import com.example.clinic_management.repository.ExaminationRepository;
 import com.example.clinic_management.repository.PatientRepository;
+import com.example.clinic_management.service.booking.AppointmentService;
 import com.example.clinic_management.service.diagnose.ExaminationDetailService;
 import com.example.clinic_management.service.diagnose.ImageService;
 
@@ -47,8 +47,8 @@ public class ExaminationDetailServiceImpl implements ExaminationDetailService {
         ExaminationDetail examinationDetail = new ExaminationDetail();
         //        examinationDetail.setPatient(patient);
         examinationDetail.setPatientName(patient.getFullName());
-//        examinationDetail.setExaminationType(
-//                examinationRequestDTO.getExaminationType().trim());
+        //        examinationDetail.setExaminationType(
+        //                examinationRequestDTO.getExaminationType().trim());
         examinationDetail.setExaminationResult(
                 examinationRequestDTO.getExaminationResult().trim());
         return examinationRepository.save(examinationDetail);
@@ -109,28 +109,31 @@ public class ExaminationDetailServiceImpl implements ExaminationDetailService {
         }
 
         if (!updatedExaminationDetail.isEmpty()) {
-            checkMedicalBillDoneAllExaminationDetail(updatedExaminationDetail
-                    .get(0).getMedicalBill().getExaminationDetails());
+            checkMedicalBillDoneAllExaminationDetail(
+                    updatedExaminationDetail.get(0).getMedicalBill().getExaminationDetails());
         }
 
         return updatedExaminationDetail.stream()
                 .map(autoExaminationDetailMapper::toResponse)
                 .toList();
     }
+
     @Override
     public Set<LabTest> getLabTestsByDepartment(LabDepartment labDepartment) {
         return LabTest.getTestsByDepartment(labDepartment);
     }
 
     @Override
-    public Page<ExaminationDetailResponseDTO> getExaminationDetailsByExaminationTypeAndImagesTestIsEmpty(LabTest examinationType, Pageable pageable) {
+    public Page<ExaminationDetailResponseDTO> getExaminationDetailsByExaminationTypeAndImagesTestIsEmpty(
+            LabTest examinationType, Pageable pageable) {
         return examinationRepository
                 .findByExaminationTypeAndImagesTestIsEmpty(examinationType, pageable)
                 .map(autoExaminationDetailMapper::toResponse);
     }
 
     @Override
-    public Page<ExaminationDetailResponseDTO> getExaminationDetailsByDepartmentAndImagesTestIsEmpty(LabDepartment labDepartment, Pageable pageable) {
+    public Page<ExaminationDetailResponseDTO> getExaminationDetailsByDepartmentAndImagesTestIsEmpty(
+            LabDepartment labDepartment, Pageable pageable) {
         Collection<LabTest> testsInDepartment = Arrays.stream(LabTest.values())
                 .filter(test -> test.getDepartment() == labDepartment)
                 .collect(Collectors.toList());
@@ -142,8 +145,7 @@ public class ExaminationDetailServiceImpl implements ExaminationDetailService {
 
     @Override
     public Page<ExaminationDetailResponseDTO> getAllExaminationDetailsByImagesTestIsEmpty(Pageable pageable) {
-        Collection<LabTest> allTests = Arrays.stream(LabTest.values())
-                .toList();
+        Collection<LabTest> allTests = Arrays.stream(LabTest.values()).toList();
 
         return examinationRepository
                 .findByDepartmentAndImagesTestIsEmpty(allTests, pageable)
@@ -151,7 +153,8 @@ public class ExaminationDetailServiceImpl implements ExaminationDetailService {
     }
 
     @Override
-    public Page<ExaminationDetailResponseDTO> getExaminationDetailsByDepartmentAndImagesTestIsEmptyAndCreatedAt(LabDepartment labDepartment, LocalDate createdAt, Pageable pageable) {
+    public Page<ExaminationDetailResponseDTO> getExaminationDetailsByDepartmentAndImagesTestIsEmptyAndCreatedAt(
+            LabDepartment labDepartment, LocalDate createdAt, Pageable pageable) {
         Collection<LabTest> testsInDepartment = Arrays.stream(LabTest.values())
                 .filter(test -> test.getDepartment() == labDepartment)
                 .collect(Collectors.toList());
@@ -162,7 +165,8 @@ public class ExaminationDetailServiceImpl implements ExaminationDetailService {
     }
 
     @Override
-    public Page<ExaminationDetailResponseDTO> getExaminationDetailsByExaminationTypeAndImagesTestIsEmptyAndCreatedAt(LabTest examinationType, LocalDate createdAt, Pageable pageable) {
+    public Page<ExaminationDetailResponseDTO> getExaminationDetailsByExaminationTypeAndImagesTestIsEmptyAndCreatedAt(
+            LabTest examinationType, LocalDate createdAt, Pageable pageable) {
         return examinationRepository
                 .findExaminationTypeAndImagesTestIsEmptyAndCreatedAt(examinationType, createdAt, pageable)
                 .map(autoExaminationDetailMapper::toResponse);
@@ -198,13 +202,10 @@ public class ExaminationDetailServiceImpl implements ExaminationDetailService {
         boolean isAllDone = examinationDetails.stream().allMatch(ExaminationDetail::isDone);
         if (isAllDone) {
             MedicalBill medicalBill = examinationDetails.get(0).getMedicalBill();
-            Optional<Appointment> appointment = appointmentRepository
-                    .findTopByPatientIdOrderByIdDesc(medicalBill.getPatient().getId());
-            appointment.ifPresent(value -> appointmentService.updateAppointmentStatus(value.getId(),
-                    AppointmentStatus.LAB_TEST_COMPLETED));
+            Optional<Appointment> appointment = appointmentRepository.findTopByPatientIdOrderByIdDesc(
+                    medicalBill.getPatient().getId());
+            appointment.ifPresent(value ->
+                    appointmentService.updateAppointmentStatus(value.getId(), AppointmentStatus.LAB_TEST_COMPLETED));
         }
-
     }
-
-
 }

@@ -1,10 +1,8 @@
 package com.example.clinic_management.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.clinic_management.entities.PrescribedDrug;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -58,19 +56,19 @@ public class SymptomServiceImpl implements SymptomService {
 
     @Override
     public SymptomResponseDTO updateSymptom(Long id, SymptomRequestDTO symptomRequestDTO) {
-//        Symptom oldSymptom =
-//                symptomRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Symptom", "id", id));
-//        Symptom newSymptom = autoSymptomMapper.toEntity(symptomRequestDTO);
-//        newSymptom.setId(oldSymptom.getId());
-//        symptomRepository.save(newSymptom);
-//        return autoSymptomMapper.toResponseDTO(newSymptom);
-        Symptom symptom = symptomRepository
-                .findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Symptom", "id", id));
+        //        Symptom oldSymptom =
+        //                symptomRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Symptom",
+        // "id", id));
+        //        Symptom newSymptom = autoSymptomMapper.toEntity(symptomRequestDTO);
+        //        newSymptom.setId(oldSymptom.getId());
+        //        symptomRepository.save(newSymptom);
+        //        return autoSymptomMapper.toResponseDTO(newSymptom);
+        Symptom symptom =
+                symptomRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Symptom", "id", id));
         autoSymptomMapper.updateFromDTO(symptomRequestDTO, symptom);
-//        for(PrescribedDrug prescribedDrug : symptom.getPrescribedDrugs()) {
-//            prescribedDrug.setSymptom(symptom);
-//        }
+        //        for(PrescribedDrug prescribedDrug : symptom.getPrescribedDrugs()) {
+        //            prescribedDrug.setSymptom(symptom);
+        //        }
         symptomRepository.save(symptom);
         return autoSymptomMapper.toResponseDTO(symptom);
     }
@@ -84,8 +82,8 @@ public class SymptomServiceImpl implements SymptomService {
     @Override
     public SymptomResponseDTO createSymptomWithDrugs(SymptomRequestDTO symptomRequestDTO) {
         Symptom symptom = autoSymptomMapper.toEntity(symptomRequestDTO);
-//        List<PrescribedDrug> prescribedDrugsCopy = new ArrayList<>(symptom.getPrescribedDrugs());
-//        symptom.addPrescribedDrugs(prescribedDrugsCopy);
+        //        List<PrescribedDrug> prescribedDrugsCopy = new ArrayList<>(symptom.getPrescribedDrugs());
+        //        symptom.addPrescribedDrugs(prescribedDrugsCopy);
         symptomRepository.save(symptom);
         return autoSymptomMapper.toResponseDTO(symptom);
     }
@@ -99,6 +97,5 @@ public class SymptomServiceImpl implements SymptomService {
                 .findByName(name)
                 .map(autoSymptomMapper::toResponseDTO)
                 .orElseThrow(() -> new ResourceNotFoundException("Symptom not found with name + " + name));
-
     }
 }

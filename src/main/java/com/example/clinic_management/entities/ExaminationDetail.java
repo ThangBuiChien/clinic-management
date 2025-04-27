@@ -1,20 +1,21 @@
 package com.example.clinic_management.entities;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.*;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import com.example.clinic_management.enums.ExaminationDetailStatus;
 import com.example.clinic_management.enums.LabTest;
-import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @Setter
@@ -34,8 +35,8 @@ public class ExaminationDetail {
 
     private String doctorName;
 
-//    @Column(name = "examination_type")
-//    private String examinationType;
+    //    @Column(name = "examination_type")
+    //    private String examinationType;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "examination_type")

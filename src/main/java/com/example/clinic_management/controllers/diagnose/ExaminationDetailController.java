@@ -2,8 +2,6 @@ package com.example.clinic_management.controllers.diagnose;
 
 import java.util.List;
 
-import com.example.clinic_management.enums.LabDepartment;
-import com.example.clinic_management.enums.LabTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
@@ -17,6 +15,8 @@ import com.example.clinic_management.dtos.requests.ExaminationRequestDTO;
 import com.example.clinic_management.dtos.responses.ApiResponse;
 import com.example.clinic_management.dtos.responses.ExaminationDetailResponseDTO;
 import com.example.clinic_management.entities.ExaminationDetail;
+import com.example.clinic_management.enums.LabDepartment;
+import com.example.clinic_management.enums.LabTest;
 import com.example.clinic_management.service.diagnose.ExaminationDetailService;
 
 import lombok.RequiredArgsConstructor;
@@ -65,23 +65,24 @@ public class ExaminationDetailController {
     @GetMapping("by_department")
     public ResponseEntity<Page<ExaminationDetailResponseDTO>> getExaminationDetails(
             @RequestParam LabDepartment labDepartment, Pageable pageable) {
-        Page<ExaminationDetailResponseDTO> page = examinationDetailService
-                .getExaminationDetailsByDepartmentAndImagesTestIsEmpty(labDepartment, pageable);
+        Page<ExaminationDetailResponseDTO> page =
+                examinationDetailService.getExaminationDetailsByDepartmentAndImagesTestIsEmpty(labDepartment, pageable);
         return ResponseEntity.ok(page);
     }
 
     @GetMapping("by_examination_type")
     public ResponseEntity<Page<ExaminationDetailResponseDTO>> getExaminationDetails(
             @RequestParam LabTest examinationType, Pageable pageable) {
-        Page<ExaminationDetailResponseDTO> page = examinationDetailService
-                .getExaminationDetailsByExaminationTypeAndImagesTestIsEmpty(examinationType, pageable);
+        Page<ExaminationDetailResponseDTO> page =
+                examinationDetailService.getExaminationDetailsByExaminationTypeAndImagesTestIsEmpty(
+                        examinationType, pageable);
         return ResponseEntity.ok(page);
     }
 
     @GetMapping("all_undone")
     public ResponseEntity<Page<ExaminationDetailResponseDTO>> getAllExaminationDetails(Pageable pageable) {
-        Page<ExaminationDetailResponseDTO> page = examinationDetailService
-                .getAllExaminationDetailsByImagesTestIsEmpty(pageable);
+        Page<ExaminationDetailResponseDTO> page =
+                examinationDetailService.getAllExaminationDetailsByImagesTestIsEmpty(pageable);
         return ResponseEntity.ok(page);
     }
 }

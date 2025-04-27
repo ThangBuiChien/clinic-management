@@ -1,16 +1,15 @@
 package com.example.clinic_management.enums;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public enum LabTest {
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
+public enum LabTest {
     WHITE_BLOOD_CELL_COUNT(LabDepartment.HEMATOLOGY, 50.0),
     RED_BLOOD_CELL_COUNT(LabDepartment.HEMATOLOGY, 45.0),
     PLATELET_COUNT(LabDepartment.HEMATOLOGY, 40.0),
