@@ -1,5 +1,6 @@
 package com.example.clinic_management.service.diagnose;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -50,4 +51,5 @@ public interface MedicalBillService {
     MedicalBillResponseDTO partialUpdateMedicalBill(Long id, MedicalBillPartialUpdateRequestDTO dto);
 
     public MedicalBillResponseDTO updateExaminationDetailsStatusAndCalculateTotal(Long medicalBillId);
+    Page<MedicalBillResponseDTO> getMedicalBillsByDateAndUnpaidExaminationDetails(LocalDate date, Pageable pageable);
 }

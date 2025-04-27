@@ -1,5 +1,6 @@
 package com.example.clinic_management.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,4 +28,7 @@ public interface MedicalBillRepository extends JpaRepository<MedicalBill, Long> 
     Page<MedicalBill> findByPatientId(Long patientId, Pageable pageable);
 
     Optional<MedicalBill> findTopByPatientIdOrderByIdDesc(@Param("patientId") Long patientId);
+
+    @Query("SELECT DISTINCT mb FROM MedicalBill mb JOIN mb.examinationDetails ed WHERE mb.date = :date AND ed.status = 'UNPAID'")
+    Page<MedicalBill> findByDateAndUnpaidExaminationDetails(@Param("date") LocalDate date, Pageable pageable);
 }

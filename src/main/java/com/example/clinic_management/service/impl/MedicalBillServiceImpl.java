@@ -1,5 +1,6 @@
 package com.example.clinic_management.service.impl;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -163,7 +164,8 @@ public class MedicalBillServiceImpl implements MedicalBillService {
                 .toList();
 
         medicalBill.addExaminationDetails(examinationDetails);
-        return autoMedicalBillMapper.toResponseDTO(medicalBillRepository.save(medicalBill));
+        MedicalBill savedMedicalBill = medicalBillRepository.save(medicalBill);
+        return autoMedicalBillMapper.toResponseDTO(savedMedicalBill);
     }
 
     private ExaminationDetail convertToExaminationDetail(
@@ -286,5 +288,11 @@ public class MedicalBillServiceImpl implements MedicalBillService {
         medicalBillRepository.save(medicalBill);
 
         return responseDTO;
+    }
+
+    @Override
+    public Page<MedicalBillResponseDTO> getMedicalBillsByDateAndUnpaidExaminationDetails(LocalDate date, Pageable pageable) {
+        return medicalBillRepository.findByDateAndUnpaidExaminationDetails(date, pageable)
+                .map(autoMedicalBillMapper::toResponseDTO);
     }
 }
