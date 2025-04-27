@@ -11,6 +11,8 @@ import com.example.clinic_management.dtos.responses.PatientResponseDTO;
 public interface PatientService {
     PatientResponseDTO addPatient(PatientRequestDTO patientRequestDTO);
 
+    PatientResponseDTO addNurse(PatientRequestDTO patientRequestDTO);
+
     PatientResponseDTO updatePatient(Long id, PatientRequestDTO patientRequestDTO);
 
     void deletePatient(Long id);

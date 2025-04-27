@@ -1,5 +1,7 @@
 package com.example.clinic_management.entities;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +14,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @Setter
@@ -19,6 +23,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "examination_detail")
+@EntityListeners(AuditingEntityListener.class)
 public class ExaminationDetail {
 
     @Id
@@ -50,6 +55,10 @@ public class ExaminationDetail {
 
     @OneToMany(mappedBy = "examinationDetail", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> imagesTest = new ArrayList<>();
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDate createdAt;
 
     public void addImage(Image image) {
         this.imagesTest.add(image);

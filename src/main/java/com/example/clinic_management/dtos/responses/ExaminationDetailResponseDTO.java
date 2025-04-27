@@ -1,5 +1,6 @@
 package com.example.clinic_management.dtos.responses;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.example.clinic_management.enums.LabTest;
@@ -25,6 +26,8 @@ public class ExaminationDetailResponseDTO {
     private String status;
 
     private String examinationResult;
+
+    private LocalDate createdAt;
 
     private List<ImageResponseDTO> imageResponseDTO;
 }

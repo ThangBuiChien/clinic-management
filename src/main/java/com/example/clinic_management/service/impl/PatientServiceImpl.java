@@ -41,6 +41,17 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    public PatientResponseDTO addNurse(PatientRequestDTO patientRequestDTO) {
+        Patient newPatient = patientRepository.save(autoPatientMapper.toEntity(patientRequestDTO));
+        newPatient.setRole(Role.ROLE_NURSE);
+        newPatient.setStatus(AccountStatus.ACTIVE);
+
+        newPatient.setPassword(passwordEncoder.encode(patientRequestDTO.getPassword()));
+
+        return autoPatientMapper.toResponseDTO(patientRepository.save(newPatient));
+    }
+
+    @Override
     public PatientResponseDTO updatePatient(Long id, PatientRequestDTO patientRequestDTO) {
         Patient existingPatient =
                 patientRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Patient", "id", id));
