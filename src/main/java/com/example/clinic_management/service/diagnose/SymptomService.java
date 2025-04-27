@@ -2,6 +2,7 @@ package com.example.clinic_management.service.diagnose;
 
 import java.util.List;
 
+import com.example.clinic_management.dtos.requests.SymptomNameResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -24,4 +25,6 @@ public interface SymptomService {
     SymptomResponseDTO createSymptomWithDrugs(SymptomRequestDTO symptomRequestDTO);
 
     SymptomResponseDTO getSymptomByName(String name);
+
+    List<SymptomNameResponseDTO> getAllSymptomNames();
 }
