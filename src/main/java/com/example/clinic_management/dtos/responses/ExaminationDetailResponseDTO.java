@@ -20,6 +20,10 @@ public class ExaminationDetailResponseDTO {
 
     private String labDepartment;
 
+    private String labPrice;
+
+    private String status;
+
     private String examinationResult;
 
     private LocalDate createdAt;

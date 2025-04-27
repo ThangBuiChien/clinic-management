@@ -140,4 +140,12 @@ public class MedicalBillController {
         MedicalBillResponseDTO responseDTO = medicalBillService.partialUpdateMedicalBill(id, dto);
         return ResponseEntity.ok(responseDTO);
     }
+
+    @PutMapping("/{medicalBillId}/examination-details/update-status")
+    public ResponseEntity<MedicalBillResponseDTO> updateExaminationDetailsStatusAndCalculateTotal(
+            @PathVariable Long medicalBillId) {
+        MedicalBillResponseDTO responseDTO =
+                medicalBillService.updateExaminationDetailsStatusAndCalculateTotal(medicalBillId);
+        return ResponseEntity.ok(responseDTO);
+    }
 }

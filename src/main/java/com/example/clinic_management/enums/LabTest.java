@@ -11,27 +11,33 @@ import java.util.stream.Collectors;
 
 public enum LabTest {
 
-    WHITE_BLOOD_CELL_COUNT(LabDepartment.HEMATOLOGY),
-    RED_BLOOD_CELL_COUNT(LabDepartment.HEMATOLOGY),
-    PLATELET_COUNT(LabDepartment.HEMATOLOGY),
-    HEMOGLOBIN(LabDepartment.HEMATOLOGY),
-    LIVER_FUNCTION(LabDepartment.BIOCHEMISTRY),
-    BLOOD_GLUCOSE(LabDepartment.BIOCHEMISTRY),
-    LIPID_PROFILE(LabDepartment.BIOCHEMISTRY),
-    KIDNEY_FUNCTION(LabDepartment.BIOCHEMISTRY),
-    X_RAY(LabDepartment.RADIOLOGY),
-    MRI(LabDepartment.RADIOLOGY),
-    CT_SCAN(LabDepartment.RADIOLOGY),
-    ULTRASOUND(LabDepartment.RADIOLOGY);
+    WHITE_BLOOD_CELL_COUNT(LabDepartment.HEMATOLOGY, 50.0),
+    RED_BLOOD_CELL_COUNT(LabDepartment.HEMATOLOGY, 45.0),
+    PLATELET_COUNT(LabDepartment.HEMATOLOGY, 40.0),
+    HEMOGLOBIN(LabDepartment.HEMATOLOGY, 35.0),
+    LIVER_FUNCTION(LabDepartment.BIOCHEMISTRY, 100.0),
+    BLOOD_GLUCOSE(LabDepartment.BIOCHEMISTRY, 80.0),
+    LIPID_PROFILE(LabDepartment.BIOCHEMISTRY, 120.0),
+    KIDNEY_FUNCTION(LabDepartment.BIOCHEMISTRY, 90.0),
+    X_RAY(LabDepartment.RADIOLOGY, 150.0),
+    MRI(LabDepartment.RADIOLOGY, 500.0),
+    CT_SCAN(LabDepartment.RADIOLOGY, 400.0),
+    ULTRASOUND(LabDepartment.RADIOLOGY, 200.0);
 
     private final LabDepartment department;
+    private final double price;
 
-    LabTest(LabDepartment department) {
+    LabTest(LabDepartment department, double price) {
         this.department = department;
+        this.price = price;
     }
 
     public LabDepartment getDepartment() {
         return department;
+    }
+
+    public double getPrice() {
+        return price;
     }
 
     public static Set<LabTest> getTestsByDepartment(LabDepartment department) {

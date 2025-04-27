@@ -2,7 +2,10 @@ package com.example.clinic_management.service.impl;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.util.List;
 
+import com.example.clinic_management.repository.AppointmentRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
@@ -14,7 +17,9 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StreamUtils;
 
 import com.example.clinic_management.entities.Appointment;
@@ -27,6 +32,8 @@ import lombok.RequiredArgsConstructor;
 public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender javaMailSender;
+
+    private final AppointmentRepository appointmentRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(EmailServiceImpl.class);
 
@@ -81,6 +88,28 @@ public class EmailServiceImpl implements EmailService {
             javaMailSender.send(message);
         } catch (MessagingException | IOException e) {
             logger.error("Failed to send HTML format success payment email to {}", toEmail, e);
+        }
+    }
+
+    @Scheduled(cron = "0 0 8 * * *")
+    @Transactional
+    @Override
+    public void sendAppointmentReminders() {
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
+
+        List<Appointment> appointments = appointmentRepository.findByAppointmentDate(tomorrow);
+        for (Appointment appointment : appointments) {
+            String toEmail = appointment.getPatient().getEmail();
+            String subject = "Appointment Reminder";
+            String body = "Dear " + appointment.getPatient().getFullName() + ",\n\n"
+                    + "This is a reminder for your appointment with Dr. "
+                    + appointment.getDoctor().getFullName() + " on "
+                    + appointment.getAppointmentDate() + " at "
+                    + appointment.getTimeSlot().getSlot() + ".\n\n"
+                    + "Thank you,\n"
+                    + "Clinic Management System";
+
+            sendSimpleEmail(toEmail, subject, body);
         }
     }
 }

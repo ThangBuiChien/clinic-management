@@ -68,4 +68,15 @@ public interface AutoMedicalBillMapper {
             }
         }
     }
+
+    @AfterMapping
+    default void calculateTotalUnpaidAmount(@MappingTarget MedicalBillResponseDTO responseDTO) {
+        if (responseDTO.getExaminationDetails() != null) {
+            double totalUnpaid = responseDTO.getExaminationDetails().stream()
+                    .filter(detail -> "UNPAID".equals(detail.getStatus())) // Filter UNPAID
+                    .mapToDouble(detail -> Double.parseDouble(detail.getLabPrice())) // Extract labPrice
+                    .sum(); // Sum up the prices
+            responseDTO.setTotalUnpaidAmount(totalUnpaid); // Set the total unpaid amount
+        }
+    }
 }

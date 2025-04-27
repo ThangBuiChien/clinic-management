@@ -26,6 +26,10 @@ public class MedicalBillResponseDTO {
     private Double temperature;
     private String finalDiagnosis;
 
+    private LocalDate nextAppointmentDate;
+
     private List<PrescribedDrugResponseDTO> prescribedDrugs;
     private List<ExaminationDetailResponseDTO> examinationDetails;
+
+    private double totalUnpaidAmount;
 }

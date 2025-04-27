@@ -48,4 +48,6 @@ public interface MedicalBillService {
     MedicalBillResponseDTO getTopMedicalBillByPatientId(Long patientId);
 
     MedicalBillResponseDTO partialUpdateMedicalBill(Long id, MedicalBillPartialUpdateRequestDTO dto);
+
+    public MedicalBillResponseDTO updateExaminationDetailsStatusAndCalculateTotal(Long medicalBillId);
 }
