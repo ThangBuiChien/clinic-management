@@ -8,7 +8,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
 
-    @Value("${FE.url}")
+//    @Value("${FE.url}")
+//    private String frontendUrl;
+
+    @Value("${FE.url:https://clinic-management-fe-flame.vercel.app}")
     private String frontendUrl;
     @Override
     public void addCorsMappings(CorsRegistry registry) {
