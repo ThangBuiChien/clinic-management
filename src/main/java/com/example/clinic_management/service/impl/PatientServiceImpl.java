@@ -52,6 +52,28 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    public PatientResponseDTO addAdmin(PatientRequestDTO patientRequestDTO) {
+        Patient newPatient = patientRepository.save(autoPatientMapper.toEntity(patientRequestDTO));
+        newPatient.setRole(Role.ROLE_ADMIN);
+        newPatient.setStatus(AccountStatus.ACTIVE);
+
+        newPatient.setPassword(passwordEncoder.encode(patientRequestDTO.getPassword()));
+
+        return autoPatientMapper.toResponseDTO(patientRepository.save(newPatient));
+    }
+
+    @Override
+    public PatientResponseDTO addClinicOwner(PatientRequestDTO patientRequestDTO) {
+        Patient newPatient = patientRepository.save(autoPatientMapper.toEntity(patientRequestDTO));
+        newPatient.setRole(Role.ROLE_CLIENT_OWNER);
+        newPatient.setStatus(AccountStatus.ACTIVE);
+
+        newPatient.setPassword(passwordEncoder.encode(patientRequestDTO.getPassword()));
+
+        return autoPatientMapper.toResponseDTO(patientRepository.save(newPatient));
+    }
+
+    @Override
     public PatientResponseDTO updatePatient(Long id, PatientRequestDTO patientRequestDTO) {
         Patient existingPatient =
                 patientRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Patient", "id", id));

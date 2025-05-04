@@ -52,6 +52,22 @@ public class PatientController {
                 .build());
     }
 
+    @PostMapping("/admin")
+    public ResponseEntity<ApiResponse> addAdmin(@RequestBody @Valid PatientRequestDTO patientRequestDTO) {
+        return ResponseEntity.ok(ApiResponse.builder()
+                .message("Admin created successfully")
+                .result(patientService.addAdmin(patientRequestDTO))
+                .build());
+    }
+
+    @PostMapping("/clinic-owner")
+    public ResponseEntity<ApiResponse> addClinicOwner(@RequestBody @Valid PatientRequestDTO patientRequestDTO) {
+        return ResponseEntity.ok(ApiResponse.builder()
+                .message("Clinic Owner created successfully")
+                .result(patientService.addClinicOwner(patientRequestDTO))
+                .build());
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> updatePatient(
             @PathVariable Long id, @RequestBody @Valid PatientRequestDTO patientRequestDTO) {

@@ -13,6 +13,10 @@ public interface PatientService {
 
     PatientResponseDTO addNurse(PatientRequestDTO patientRequestDTO);
 
+    PatientResponseDTO addAdmin(PatientRequestDTO patientRequestDTO);
+
+    PatientResponseDTO addClinicOwner(PatientRequestDTO patientRequestDTO);
+
     PatientResponseDTO updatePatient(Long id, PatientRequestDTO patientRequestDTO);
 
     void deletePatient(Long id);
