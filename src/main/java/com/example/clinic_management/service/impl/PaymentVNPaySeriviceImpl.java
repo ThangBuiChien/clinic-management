@@ -8,6 +8,7 @@ import java.util.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PaymentVNPaySeriviceImpl implements PaymentVNPayService {
 
     private final AppointmentRepository appointmentRepository;
@@ -81,6 +83,7 @@ public class PaymentVNPaySeriviceImpl implements PaymentVNPayService {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
         String vnp_CreateDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
+        log.info("vnp_CreateDate: {}", vnp_CreateDate);
 
         cld.add(Calendar.MINUTE, 15);
         String vnp_ExpireDate = formatter.format(cld.getTime());
