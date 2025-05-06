@@ -9,6 +9,7 @@ import java.util.*;
 import jakarta.servlet.http.HttpServletRequest;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,9 @@ public class PaymentVNPaySeriviceImpl implements PaymentVNPayService {
     private final AppointmentRepository appointmentRepository;
     private final AutoAppointmentMapper autoAppointmentMapper;
     private final EmailService emailService;
+
+    @Value("${vnpay.return-url:http://localhost:8080/api/payment/payment_info}")
+    private String vnpReturnUrl;
 
     @Override
     public CreatePaymentRequestDTO createPaymentRequest(HttpServletRequest req, Long appointmentId)
@@ -75,7 +79,8 @@ public class PaymentVNPaySeriviceImpl implements PaymentVNPayService {
         } else {
             vnp_Params.put("vnp_Locale", "vn");
         }
-        vnp_Params.put("vnp_ReturnUrl", PaymentConfig.vnp_ReturnUrl);
+        vnp_Params.put("vnp_ReturnUrl", vnpReturnUrl);
+        log.info("vnp_ReturnUrl: {}", vnpReturnUrl);
         vnp_Params.put("vnp_IpAddr", PaymentConfig.getIpAddress(req));
 
 //        TimeZone utcTimeZone = TimeZone.getTimeZone("UTC");
