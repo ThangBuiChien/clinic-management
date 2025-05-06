@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,9 @@ import lombok.RequiredArgsConstructor;
 public class PaymentController {
     private final PaymentVNPayService paymentVNPayService;
 
+    @Value("${FE.url}")
+    private String feUrl;
+
     @GetMapping("/create_payment/{appointmentId}")
     public ResponseEntity<?> createPayment(HttpServletRequest req, @PathVariable Long appointmentId)
             throws UnsupportedEncodingException {
@@ -41,9 +45,13 @@ public class PaymentController {
         TransactionStatusResponseDTO transactionStatusDTO =
                 paymentVNPayService.handleTransactionResult(amount, bankCode, order, responseCode);
 
+//        String redirectUrl = String.format(
+//                "http://localhost:5173/payment-success?vnp_Amount=%s&vnp_BankCode=%s&vnp_OrderInfo=%s&vnp_ResponseCode=%s",
+//                amount, bankCode, order, responseCode);
+
         String redirectUrl = String.format(
-                "http://localhost:5173/payment-success?vnp_Amount=%s&vnp_BankCode=%s&vnp_OrderInfo=%s&vnp_ResponseCode=%s",
-                amount, bankCode, order, responseCode);
+                "%s/payment-success?vnp_Amount=%s&vnp_BankCode=%s&vnp_OrderInfo=%s&vnp_ResponseCode=%s",
+                feUrl, amount, bankCode, order, responseCode);
 
         return ResponseEntity.status(HttpStatus.FOUND)
                 .header("Location", redirectUrl)
