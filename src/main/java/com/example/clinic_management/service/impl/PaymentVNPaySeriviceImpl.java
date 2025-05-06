@@ -78,13 +78,14 @@ public class PaymentVNPaySeriviceImpl implements PaymentVNPayService {
         vnp_Params.put("vnp_ReturnUrl", PaymentConfig.vnp_ReturnUrl);
         vnp_Params.put("vnp_IpAddr", PaymentConfig.getIpAddress(req));
 
-        TimeZone utcTimeZone = TimeZone.getTimeZone("UTC");
-        Calendar cld = Calendar.getInstance(utcTimeZone);
-        //Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
+//        TimeZone utcTimeZone = TimeZone.getTimeZone("UTC");
+//        Calendar cld = Calendar.getInstance(utcTimeZone);
+        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
         String vnp_CreateDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
         log.info("vnp_CreateDate: {}", vnp_CreateDate);
+        log.info("timezone: {}", cld.getTimeZone().getID());
 
         cld.add(Calendar.MINUTE, 15);
         String vnp_ExpireDate = formatter.format(cld.getTime());
