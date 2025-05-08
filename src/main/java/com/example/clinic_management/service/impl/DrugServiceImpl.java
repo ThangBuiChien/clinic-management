@@ -69,4 +69,12 @@ public class DrugServiceImpl implements DrugService {
         drugRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Drug", "id", id));
         drugRepository.deleteById(id);
     }
+
+    @Override
+    public Page<DrugResponseDTO> searchDrugs(String keyword, Pageable pageable) {
+        Page<Drug> drugs = drugRepository.findByNameContainingIgnoreCase(keyword, pageable);
+        List<DrugResponseDTO> drugDTOs =
+                drugs.stream().map(autoDrugMapper::toResponseDTO).toList();
+        return new PageImpl<>(drugDTOs, pageable, drugs.getTotalElements());
+    }
 }

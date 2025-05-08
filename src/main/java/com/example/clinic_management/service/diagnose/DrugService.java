@@ -20,4 +20,7 @@ public interface DrugService {
     DrugResponseDTO updateDrug(Long id, DrugRequestDTO drugResponseDTO);
 
     void deleteDrug(Long id);
+
+    Page<DrugResponseDTO> searchDrugs(String keyword, Pageable pageable);
+
 }

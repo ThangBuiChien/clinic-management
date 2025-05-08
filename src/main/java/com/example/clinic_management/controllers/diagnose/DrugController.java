@@ -21,7 +21,7 @@ public class DrugController {
     @GetMapping("")
     public ResponseEntity<ApiResponse> getAllDrugs() {
         return ResponseEntity.ok(ApiResponse.builder()
-                .message("All departments fetched successfully")
+                .message("All drugs fetched successfully")
                 .result(drugService.getAllDrugs())
                 .build());
     }
@@ -64,6 +64,14 @@ public class DrugController {
         drugService.deleteDrug(id);
         return ResponseEntity.ok(ApiResponse.builder()
                 .message("Drug with id " + id + " deleted successfully")
+                .build());
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse> searchDrugs(@RequestParam String keyword, Pageable pageable) {
+        return ResponseEntity.ok(ApiResponse.builder()
+                .message("Drugs searched successfully")
+                .result(drugService.searchDrugs(keyword, pageable))
                 .build());
     }
 }
