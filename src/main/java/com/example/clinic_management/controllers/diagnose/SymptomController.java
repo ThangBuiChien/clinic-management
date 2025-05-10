@@ -1,7 +1,9 @@
 package com.example.clinic_management.controllers.diagnose;
 
+import com.example.clinic_management.dtos.responses.SymptomResponseDTO;
 import jakarta.validation.Valid;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -81,5 +83,11 @@ public class SymptomController {
                 .message("All symptom names fetched successfully")
                 .result(symptomService.getAllSymptomNames())
                 .build());
+    }
+
+    @GetMapping("/search")
+    public Page<SymptomResponseDTO> searchSymptomsByName(
+            @RequestParam String name, Pageable pageable) {
+        return symptomService.searchSymptomsByName(name, pageable);
     }
 }

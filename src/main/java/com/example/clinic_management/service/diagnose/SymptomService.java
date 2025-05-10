@@ -27,4 +27,6 @@ public interface SymptomService {
     SymptomResponseDTO getSymptomByName(String name);
 
     List<SymptomNameResponseDTO> getAllSymptomNames();
+
+    Page<SymptomResponseDTO> searchSymptomsByName(String name, Pageable pageable);
 }

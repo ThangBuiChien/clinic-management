@@ -112,4 +112,13 @@ public class SymptomServiceImpl implements SymptomService {
                 })
                 .toList();
     }
+
+    @Override
+    public Page<SymptomResponseDTO> searchSymptomsByName(String name, Pageable pageable) {
+        Page<Symptom> symptoms = symptomRepository.findByNameContainingIgnoreCase(name, pageable);
+        List<SymptomResponseDTO> symptomDTOs = symptoms.stream()
+                .map(autoSymptomMapper::toResponseDTO)
+                .toList();
+        return new PageImpl<>(symptomDTOs, pageable, symptoms.getTotalElements());
+    }
 }
