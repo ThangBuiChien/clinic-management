@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.example.clinic_management.security.user.EShopUserDetail;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -42,6 +45,14 @@ public class ChatBotLocalServiceImpl implements ChatBotLocalService {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
+
+            // 👇 Add userId as custom header
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            if (authentication != null && authentication.getPrincipal() instanceof EShopUserDetail userDetails) {
+                Long currentId =  userDetails.getId();
+                headers.add("X-User-Id", currentId.toString());
+            }
 
             JSONObject request = new JSONObject();
             request.put("question", question);
