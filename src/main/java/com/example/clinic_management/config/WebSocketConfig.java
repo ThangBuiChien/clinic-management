@@ -31,9 +31,8 @@ import java.util.List;
 @Slf4j
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    private final JwtUntils jwtUtils;
+    private final WebSocketAuthChannelInterceptor webSocketAuthChannelInterceptor;
 
-    private EShopUserDetailService userDetailsService;
 
     @Value("${FE.url}")
     private String frontendUrl;
@@ -54,47 +53,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(new ChannelInterceptor() {
-            @Override
-            public Message<?> preSend(Message<?> message, MessageChannel channel) {
-                log.info("Configuring WebSocket channel interceptor");
-                StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-
-                if (accessor != null && StompCommand.CONNECT.equals(accessor.getCommand())) {
-                    List<String> authorization = accessor.getNativeHeader("Authorization");
-                    if (authorization != null && !authorization.isEmpty()) {
-                        String bearerToken = authorization.get(0);
-                        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-                            String token = bearerToken.substring(7);
-
-                            try {
-                                // Use your existing JwtUtils to validate the token
-                                if (jwtUtils.validateToken(token)) {
-                                    // Get username from token
-                                    String username = jwtUtils.getUsernameFromToken(token);
-
-                                    // Load user details - reusing your existing UserDetailsService
-                                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-                                    // Create authentication token
-                                    UsernamePasswordAuthenticationToken authentication =
-                                            new UsernamePasswordAuthenticationToken(
-                                                    userDetails, null, userDetails.getAuthorities());
-
-                                    // Set authentication in SecurityContext
-                                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                                    accessor.setUser(authentication);
-                                }
-                            } catch (JwtException e) {
-                                // Token validation failed, do not authenticate
-                                log.error("Invalid JWT token: " + e.getMessage());
-                                System.err.println("Invalid JWT token: " + e.getMessage());
-                            }
-                        }
-                    }
-                }
-                return message;
-            }
-        });
+        registration.interceptors(webSocketAuthChannelInterceptor);
     }
+
 }
