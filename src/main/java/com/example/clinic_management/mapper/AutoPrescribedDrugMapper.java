@@ -16,6 +16,7 @@ import com.example.clinic_management.entities.PrescribedDrug;
 public interface AutoPrescribedDrugMapper {
 
     @Mapping(target = "drugName", source = "drug.name")
+    @Mapping(target = "drugId", source = "drug.id")
     PrescribedDrugResponseDTO toResponseDTO(PrescribedDrug prescribedDrug);
 
     //    @Mapping(target = "drug", ignore = true)

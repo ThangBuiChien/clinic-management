@@ -9,6 +9,7 @@ import lombok.Setter;
 @Data
 public class PrescribedDrugResponseDTO {
     private Long id;
+    private Long drugId;
     private String drugName;
     private int dosage;
     private int duration;
