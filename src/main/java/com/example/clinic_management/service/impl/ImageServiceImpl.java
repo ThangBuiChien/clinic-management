@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.sql.rowset.serial.SerialBlob;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,6 +35,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
+    @Transactional
     public void deleteImageById(Long id) {
         imageRepository.findById(id).ifPresentOrElse(imageRepository::delete, () -> {
             throw new ResourceNotFoundException("image", "id", id);
@@ -41,6 +43,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
+    @Transactional
     public List<ImageResponseDTO> saveImages(Long examinationId, List<MultipartFile> files) {
         ExaminationDetail product = examinationRepository
                 .findById(examinationId)
@@ -56,6 +59,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
+    @Transactional
     public void updateImage(MultipartFile file, Long imageId) {
         Image image = imageRepository
                 .findById(imageId)
@@ -84,12 +88,14 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
+    @Transactional
     public void updateUrlDownload(Image image) {
         image.setDownloadUrl("/api/images/download/" + image.getId());
         imageRepository.save(image);
     }
 
-    private Image processAndSaveImage(MultipartFile file, ExaminationDetail examinationDetail) {
+    @Transactional
+    protected Image processAndSaveImage(MultipartFile file, ExaminationDetail examinationDetail) {
         try {
             Image image = new Image();
             image.setFileName(file.getOriginalFilename());
