@@ -7,6 +7,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ public class ImageController {
 
     private final ImageService imageService;
 
+    @Transactional
     @GetMapping("/display/{imageId}")
     public ResponseEntity<Resource> displayImage(@PathVariable Long imageId) throws SQLException {
         Image image = imageService.getImageById(imageId);
@@ -35,6 +37,7 @@ public class ImageController {
                 .body(resource);
     }
 
+    @Transactional
     @GetMapping("/download/{imageId}")
     public ResponseEntity<Resource> downloadImage(@PathVariable Long imageId) throws SQLException {
         Image image = imageService.getImageById(imageId);
